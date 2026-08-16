@@ -1,6 +1,7 @@
 import { getClaims } from '@/lib/supabase';
 import { VERIFICATION } from '@/lib/format';
 import StatusChip from '@/components/StatusChip';
+import SourcePills from '@/components/SourcePills';
 import Markdown from '@/components/Markdown';
 
 export const revalidate = 60;
@@ -34,6 +35,7 @@ export default async function ClaimsPage() {
               </p>
               {cl.why_it_matters ? <p className="small dim" style={{ margin: '0 0 10px' }}>{cl.why_it_matters}</p> : null}
               <Markdown>{cl.evidence_md}</Markdown>
+              <SourcePills sources={cl.sources} />
               {history.length > 1 ? (
                 <p className="small mute" style={{ margin: '8px 0 0' }}>
                   Verdict history:{' '}
