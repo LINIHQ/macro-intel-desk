@@ -1,0 +1,106 @@
+import StatusChip from '@/components/StatusChip';
+import { VERIFICATION } from '@/lib/format';
+
+export const metadata = {
+  title: 'Sources | GenXKrypto Macro Intelligence Desk',
+};
+
+export default function SourcesPage() {
+  return (
+    <div>
+      <h1>Sources</h1>
+      <p className="page-sub">
+        Where this desk's information comes from, how it gets verified, and the rules it publishes under. This is an
+        intelligence product, not a confirmation-bias engine, and not investment advice.
+      </p>
+
+      <h2>Source hierarchy</h2>
+      <p>
+        <strong>Tier 1, primary and authoritative:</strong> the Federal Reserve, Bank of Japan, Japan Ministry of
+        Finance, U.S. Treasury, OCC, SEC, CFTC, FDIC, BIS, DTCC, official government and military statements, Ripple
+        and official XRPL sources, ETF issuer disclosures, corporate filings, and regulatory documents. Preferred
+        whenever available.
+      </p>
+      <p>
+        <strong>Tier 2, high-quality news:</strong> Reuters, CNBC, the Associated Press, and other reputable financial
+        publications, plus Bloomberg, the Financial Times, and the Wall Street Journal when their content is actually
+        accessible. Paywalled content is never cited beyond what was readable.
+      </p>
+      <p>
+        <strong>Tiers 3 and 4, social intelligence and commentary:</strong> a defined watch list of X accounts,
+        Truth Social, and YouTube commentary channels. These are treated as lead generators and narrative trackers,
+        never as confirmation. A social post is not evidence; significant claims from these tiers are independently
+        checked against Tier 1 and 2 sources before appearing in a brief, and commentary is always labeled as
+        commentary.
+      </p>
+      <p>
+        Where a verdict rests on specific sources, briefs and claims display them as clickable links so readers can
+        check the receipts directly. Source links appear on content published from August 16, 2026 onward; earlier
+        archival entries predate the practice and are never given fabricated links.
+      </p>
+
+      <h2>Verification taxonomy</h2>
+      <p>Every consequential claim in every brief carries one of five verdicts. They mean exactly this, every time:</p>
+      <div className="card">
+        <p style={{ margin: '0 0 10px' }}>
+          <StatusChip color={VERIFICATION.verified.color}>Verified</StatusChip>{' '}
+          <span className="dim">Primary documentation or multiple highly credible sources confirm it.</span>
+        </p>
+        <p style={{ margin: '0 0 10px' }}>
+          <StatusChip color={VERIFICATION.partially_verified.color}>Partially verified</StatusChip>{' '}
+          <span className="dim">Some credible evidence exists but important details remain unresolved.</span>
+        </p>
+        <p style={{ margin: '0 0 10px' }}>
+          <StatusChip color={VERIFICATION.unverified.color}>Unverified</StatusChip>{' '}
+          <span className="dim">Circulating, but reliable confirmation has not been located. Unverified means unverified.</span>
+        </p>
+        <p style={{ margin: '0 0 10px' }}>
+          <StatusChip color={VERIFICATION.contradicted.color}>Contradicted</StatusChip>{' '}
+          <span className="dim">
+            Reliable evidence contradicts the claim. Stale stories recirculated as new developments land here too.
+          </span>
+        </p>
+        <p style={{ margin: 0 }}>
+          <StatusChip color={VERIFICATION.opinion.color}>Opinion</StatusChip>{' '}
+          <span className="dim">Analysis, prediction, or interpretation rather than a factual event.</span>
+        </p>
+      </div>
+      <p>
+        Verdicts change when evidence changes, and every change is appended to the public record on the claims page
+        rather than overwritten. A verdict that moves against a popular narrative publishes with the same prominence
+        as one that supports it.
+      </p>
+
+      <h2>Dashboard classifications</h2>
+      <p>
+        The eight-category dashboard uses a four-level scale (green, yellow, orange, red). Classifications change only
+        on observable evidence, never to make a report more interesting, and every change is recorded with its reason
+        on the history page.
+      </p>
+
+      <h2>Honesty rules</h2>
+      <p>
+        No invented quotes, prices, statistics, government statements, regulatory decisions, ETF flows, partnerships,
+        military events, market movements, or social-media posts. If a number cannot be sourced, it does not appear.
+        "This could not be verified" is treated as a valuable conclusion, not a failure.
+      </p>
+      <p>
+        The desk tracks XRP and Ripple as separate variables: corporate wins are not automatically token demand, and
+        briefs say so when the connection is missing. The desk also actively searches for evidence against the theses
+        its readers like. That is the point.
+      </p>
+      <p>
+        Corrections are made by fixing the record and noting the correction. The claim tracker's verdict history is
+        append-only. Archival entries reconstructed from past runs say so explicitly, and unrecovered sections are
+        omitted rather than rewritten.
+      </p>
+
+      <h2>What this is not</h2>
+      <p>
+        Not financial advice, not investment recommendations, and not monetized. No point-price predictions are made
+        with confidence; scenarios come with assumptions and invalidation conditions. This site exists so a Discord
+        community can read verified macro and XRP intelligence with the receipts attached.
+      </p>
+    </div>
+  );
+}
