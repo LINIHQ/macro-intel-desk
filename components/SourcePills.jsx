@@ -16,7 +16,7 @@ export default function SourcePills({ sources }) {
     <span className="src-row">
       {valid.map((s, i) => (
         <a key={i} className="src-pill" href={s.url} target="_blank" rel="noopener noreferrer">
-          {labelFor(s)} <span aria-hidden="true">↗</span>
+          {labelFor(s)} <span className="ext" aria-hidden="true">↗</span>
         </a>
       ))}
     </span>
