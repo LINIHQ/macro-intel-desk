@@ -49,7 +49,7 @@ export default async function HistoryPage() {
                 <div className="tl-track">
                   {briefs.map((b) => {
                     const s = stateFor(b.dashboard_states, c.key);
-                    const tip = `${b.run_label} · ${fmtDate(b.run_date)} — ${s ? s.label : 'n/a'}${s?.change_reason ? `. ${s.change_reason}` : ''}`;
+                    const tip = `${b.run_label} · ${fmtDate(b.run_date)}: ${s ? s.label : 'n/a'}${s?.change_reason ? `. ${s.change_reason}` : ''}`;
                     return (
                       <span
                         key={b.id}
