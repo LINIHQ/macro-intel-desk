@@ -27,7 +27,9 @@ export default async function HistoryPage() {
     <div>
       <h1>Dashboard history</h1>
       <p className="page-sub">
-        Each row is one category across every published run. Outlined segments mark a classification change.
+        Each row is one category, one segment per published run, oldest to newest. Bright outlined segments are the
+        runs where a classification changed; dimmed segments carried over unchanged. Hover any segment for that
+        run's date, status, and the reason behind a change.
       </p>
       <div className="legend">
         {LEGEND.map((l) => (
