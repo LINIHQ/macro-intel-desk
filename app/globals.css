@@ -37,8 +37,18 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--acc); outline-o
 /* ---------- header ---------- */
 
 .site-head { border-bottom: 1px solid var(--line); background: var(--panel); padding: 22px 0 0; }
-.brand { display: block; color: var(--text); }
+.brand-row { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+.brand { display: flex; align-items: center; gap: 16px; color: var(--text); }
 .brand:hover { text-decoration: none; }
+.brand-avatar {
+  display: block;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  border: 1px solid var(--line);
+  flex-shrink: 0;
+}
+.brand-text { display: block; }
 .brand-main {
   display: block;
   font-weight: 700;
@@ -55,6 +65,19 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--acc); outline-o
   letter-spacing: 0.06em;
   margin-top: 7px;
 }
+.x-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 12.5px;
+  padding: 4px 11px 5px;
+  border: 1px solid var(--line);
+  border-radius: 2px;
+  color: var(--dim);
+  background: var(--panel2);
+  transition: color 120ms ease, border-color 120ms ease;
+}
+.x-link:hover { color: var(--text); border-color: var(--acc); text-decoration: none; }
 .nav {
   display: flex;
   flex-wrap: wrap;
@@ -295,6 +318,7 @@ h2 {
 .empty { border: 1px dashed var(--line); padding: 28px 20px; color: var(--dim); text-align: center; }
 
 @media (max-width: 600px) {
+  .brand-avatar { width: 48px; height: 48px; }
   .brand-main { font-size: 24px; }
   h1 { font-size: 24px; }
 }
