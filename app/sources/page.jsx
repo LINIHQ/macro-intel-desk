@@ -77,6 +77,11 @@ export default function SourcesPage() {
         on observable evidence, never to make a report more interesting, and every change is recorded with its reason
         on the history page.
       </p>
+      <p>
+        The trend lines on the dashboard tiles are stylized, not price charts: the slope reflects the latest
+        classification change (up means eased or improved, down means worsened, sideways means held), and the
+        jagged texture is visual styling only.
+      </p>
 
       <h2>Honesty rules</h2>
       <p>
