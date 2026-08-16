@@ -84,7 +84,7 @@ export default async function CrowdGauge() {
           {prev != null && week != null && Number.isFinite(week) ? ' \u00b7 ' : ''}
           {week != null && Number.isFinite(week) ? `7d ago ${week}` : ''}
         </div>
-        <div className="gauge-attr">Crypto Fear &amp; Greed Index \u00b7 alternative.me</div>
+        <div className="gauge-attr">Crypto Fear &amp; Greed Index &middot; alternative.me</div>
       </div>
     </div>
   );
