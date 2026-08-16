@@ -40,7 +40,7 @@ export default async function LivePage() {
           letterSpacing: '0.02em',
         }}
       >
-        Quick briefs Mon-Thu, 9-9:30am ET · Week-ending brief Friday after US market close
+        Quick briefs Mon-Thu, 9-10am ET · Week-ending brief Friday after US market close
       </p>
       <DashboardGrid states={brief.dashboard_states} history={history} />
 
