@@ -20,7 +20,7 @@ const NAV = [
   { href: '/history', label: 'History' },
   { href: '/claims', label: 'Claims' },
   { href: '/watch', label: 'Watch list' },
-  { href: '/methodology', label: 'Methodology' },
+  { href: '/sources', label: 'Sources' },
 ];
 
 export default async function RootLayout({ children }) {
