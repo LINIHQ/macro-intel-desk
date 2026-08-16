@@ -1,6 +1,7 @@
 import './globals.css';
 import Link from 'next/link';
 import { IBM_Plex_Mono } from 'next/font/google';
+import NavLinks from '@/components/NavLinks';
 
 const mono = IBM_Plex_Mono({ subsets: ['latin'], weight: ['400', '500', '600', '700'], variable: '--font-mono' });
 
@@ -10,15 +11,6 @@ export const metadata = {
   title: 'GenXKrypto | XRP Macro Intelligence Desk',
   description: 'Verified XRP and macro intelligence briefs. Evidence over narrative.',
 };
-
-const NAV = [
-  { href: '/', label: 'Live' },
-  { href: '/archive', label: 'Archive' },
-  { href: '/history', label: 'History' },
-  { href: '/claims', label: 'Claims' },
-  { href: '/watch', label: 'Watch List' },
-  { href: '/sources', label: 'Sources' },
-];
 
 export default function RootLayout({ children }) {
   return (
@@ -47,11 +39,7 @@ export default function RootLayout({ children }) {
                 <span className="x-label">@GenXKrypto</span>
               </a>
             </div>
-            <nav className="nav">
-              {NAV.map((n) => (
-                <Link key={n.href} href={n.href}>{n.label}</Link>
-              ))}
-            </nav>
+            <NavLinks />
           </div>
         </header>
         <main className="wrap main">{children}</main>
