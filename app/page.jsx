@@ -4,6 +4,7 @@ import { fmtDate } from '@/lib/format';
 import DashboardGrid from '@/components/DashboardGrid';
 import BriefItems from '@/components/BriefItems';
 import Markdown from '@/components/Markdown';
+import CrowdGauge from '@/components/CrowdGauge';
 
 export const revalidate = 60;
 
@@ -26,6 +27,8 @@ export default async function LivePage() {
         {brief.run_label} · {fmtDate(brief.run_date)} · {brief.brief_mode} brief
       </p>
       <DashboardGrid states={brief.dashboard_states} history={history} />
+
+      <CrowdGauge />
 
       {brief.headline ? (
         <div className="term-box">
