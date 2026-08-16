@@ -27,64 +27,74 @@ function colorFor(v) {
   return 'var(--g)';
 }
 
-async function getFng() {
+async function fromCmc() {
+  const key = process.env.CMC_API_KEY;
+  if (!key) return null;
   try {
-    const res = await fetch('https://api.alternative.me/fng/?limit=8', {
+    const res = await fetch('https://pro-api.coinmarketcap.com/v3/fear-and-greed/latest', {
+      headers: { 'X-CMC_PRO_API_KEY': key },
       next: { revalidate: 1800 },
     });
     if (!res.ok) return null;
     const json = await res.json();
-    return Array.isArray(json?.data) && json.data.length ? json.data : null;
+    const value = Number(json?.data?.value);
+    if (!Number.isFinite(value)) return null;
+    return { value, cls: json.data.value_classification || '' };
+  } catch {
+    return null;
+  }
+}
+
+async function fromAlternative() {
+  try {
+    const res = await fetch('https://api.alternative.me/fng/?limit=1', {
+      next: { revalidate: 1800 },
+    });
+    if (!res.ok) return null;
+    const json = await res.json();
+    const row = Array.isArray(json?.data) ? json.data[0] : null;
+    const value = Number(row?.value);
+    if (!Number.isFinite(value)) return null;
+    return { value, cls: row.value_classification || '' };
   } catch {
     return null;
   }
 }
 
 export default async function CrowdGauge() {
-  const data = await getFng();
-  if (!data) return null;
+  const reading = (await fromCmc()) || (await fromAlternative());
+  if (!reading) return null;
 
-  const value = Number(data[0].value);
-  if (!Number.isFinite(value)) return null;
-
-  const cls = data[0].value_classification || '';
-  const prev = data[1] ? Number(data[1].value) : null;
-  const week = data[7] ? Number(data[7].value) : null;
+  const { value, cls } = reading;
   const color = colorFor(value);
   const [mx, my] = pt(Math.min(99, Math.max(1, value)));
 
   return (
-    <div className="gauge-box">
-      <svg
-        className="gauge-svg"
-        viewBox="0 0 100 60"
-        role="img"
-        aria-label={`Crypto Fear and Greed Index: ${value}, ${cls}`}
-      >
-        {BANDS.map((b) => (
-          <path
-            key={b.from}
-            d={arc(b.from, b.to)}
-            stroke={b.color}
-            strokeWidth="7"
-            fill="none"
-            strokeLinecap="round"
-          />
-        ))}
-        <circle cx={mx.toFixed(2)} cy={my.toFixed(2)} r="4.5" fill="var(--text)" stroke="var(--bg)" strokeWidth="2" />
-      </svg>
-      <div>
-        <div className="gauge-num">{value}</div>
-        <div className="gauge-class" style={{ color }}>{cls}</div>
-      </div>
-      <div className="gauge-meta">
-        <div className="gauge-label">Crowd Pulse</div>
-        <div className="gauge-hist">
-          {prev != null && Number.isFinite(prev) ? `24h ago ${prev}` : ''}
-          {prev != null && week != null && Number.isFinite(week) ? ' \u00b7 ' : ''}
-          {week != null && Number.isFinite(week) ? `7d ago ${week}` : ''}
+    <div className="fng">
+      <div className="fng-label">Crypto Market Fear &amp; Greed</div>
+      <div className="fng-row">
+        <svg
+          className="fng-svg"
+          viewBox="0 0 100 60"
+          role="img"
+          aria-label={`Crypto market fear and greed: ${value}, ${cls}`}
+        >
+          {BANDS.map((b) => (
+            <path
+              key={b.from}
+              d={arc(b.from, b.to)}
+              stroke={b.color}
+              strokeWidth="8"
+              fill="none"
+              strokeLinecap="round"
+            />
+          ))}
+          <circle cx={mx.toFixed(2)} cy={my.toFixed(2)} r="5" fill="var(--text)" stroke="var(--bg)" strokeWidth="2" />
+        </svg>
+        <div className="fng-read">
+          <span className="fng-num">{value}</span>
+          <span className="fng-class" style={{ color }}>{cls}</span>
         </div>
-        <div className="gauge-attr">Crypto Fear &amp; Greed Index &middot; alternative.me</div>
       </div>
     </div>
   );
