@@ -83,9 +83,11 @@ export default function SourcesPage() {
         on the history page.
       </p>
       <p>
-        The trend lines on the dashboard tiles are stylized, not price charts: the slope reflects the latest
-        classification change (up means eased or improved, down means worsened, sideways means held), and the
-        jagged texture is visual styling only.
+        The trend lines on the dashboard tiles are stylized, not price charts: the slope reflects the current
+        classification. On the risk gauges (yen carry trade, oil shock, Hormuz, bond stress) an upward slope means the
+        risk is running at orange or red. On the condition gauges (liquidity, risk appetite, XRP fundamentals, XRP
+        macro environment) an upward slope means healthy, a downward slope means deteriorating, and a level line means
+        a mid-scale reading. The jagged texture is visual styling only.
       </p>
 
       <h2>Honesty rules</h2>
