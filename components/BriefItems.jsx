@@ -1,5 +1,6 @@
 import Markdown from '@/components/Markdown';
 import StatusChip from '@/components/StatusChip';
+import SourcePills from '@/components/SourcePills';
 import { IMPORTANCE, VERIFICATION } from '@/lib/format';
 
 export default function BriefItems({ items }) {
@@ -20,6 +21,7 @@ export default function BriefItems({ items }) {
               </span>
             </div>
             <Markdown>{it.body_md}</Markdown>
+            <SourcePills sources={it.sources} />
           </div>
         );
       })}
