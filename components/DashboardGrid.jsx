@@ -15,8 +15,8 @@ export default function DashboardGrid({ states, history }) {
               <span className="tile-icon">{CATEGORY_ICONS[c.key]}</span>
               <span className="tile-cat">{c.label}</span>
             </div>
-            <div className="tile-mid">
-              <div className="tile-val">{s ? s.label : '—'}</div>
+            <div className="tile-val">{s ? s.label : '—'}</div>
+            <div className="tile-spark">
               <Sparkline levels={levels} />
             </div>
             {s?.changed_from_prior ? <div className="tile-badge">changed this run</div> : null}
