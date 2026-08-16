@@ -130,6 +130,13 @@ h2 {
   overflow: hidden;
   text-overflow: ellipsis;
 }
+.tile-mid {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 10px;
+}
 .tile-val {
   font-weight: 700;
   font-size: 17px;
@@ -137,14 +144,20 @@ h2 {
   letter-spacing: 0.03em;
   text-transform: uppercase;
   color: var(--tile-c, var(--text));
-  margin-top: 10px;
+  min-width: 0;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
+.trend {
+  width: 56px;
+  height: 22px;
+  flex-shrink: 0;
+  color: var(--tile-c, var(--mute));
+}
 .tile-badge {
   align-self: flex-start;
-  margin-top: 8px;
+  margin-top: 9px;
   font-size: 9.5px;
   font-weight: 600;
   letter-spacing: 0.1em;
@@ -154,15 +167,6 @@ h2 {
   color: var(--tile-c, var(--dim));
   border-radius: 2px;
 }
-.tile-hist { display: flex; gap: 3px; margin-top: auto; padding-top: 12px; }
-.hist-block {
-  flex: 1;
-  min-width: 0;
-  height: 6px;
-  border-radius: 1px;
-  opacity: 0.45;
-}
-.hist-block.now { opacity: 1; }
 
 /* ---------- terminal summary ---------- */
 
