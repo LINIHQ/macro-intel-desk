@@ -12,7 +12,8 @@ export default async function ArchivePage() {
     <div>
       <h1>Brief archive</h1>
       <p className="page-sub">
-        Every published run, complete and permanent. Dots show that run's eight dashboard states.
+        Every published run, complete and permanent. Click any run to open the full brief with its dashboard, ranked
+        items, and sources. The dots show that run's eight dashboard states at publish time.
       </p>
       {briefs.length ? (
         <div className="row-list">
