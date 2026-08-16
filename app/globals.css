@@ -177,7 +177,7 @@ h2 {
   margin-top: 3px;
 }
 @media (max-width: 600px) {
-  .fng { text-align: left; }
+  .fng { text-align: left; margin-bottom: 22px; }
   .fng-row { justify-content: flex-start; }
 }
 
