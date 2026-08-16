@@ -163,9 +163,10 @@ h2 {
 }
 .tile-val {
   font-weight: 700;
-  font-size: 17px;
+  font-size: 18px;
   line-height: 1.2;
-  letter-spacing: 0.03em;
+  letter-spacing: 0;
+  -webkit-text-stroke: 0.3px currentColor;
   text-transform: uppercase;
   color: var(--tile-c, var(--text));
   min-width: 0;
