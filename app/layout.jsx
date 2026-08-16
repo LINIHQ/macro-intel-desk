@@ -1,9 +1,9 @@
 import './globals.css';
 import Link from 'next/link';
-import { IBM_Plex_Mono, Anton } from 'next/font/google';
+import { IBM_Plex_Mono, IBM_Plex_Sans_Condensed } from 'next/font/google';
 
 const mono = IBM_Plex_Mono({ subsets: ['latin'], weight: ['400', '500', '600'], variable: '--font-mono' });
-const display = Anton({ subsets: ['latin'], weight: '400', variable: '--font-display' });
+const display = IBM_Plex_Sans_Condensed({ subsets: ['latin'], weight: ['600', '700'], variable: '--font-display' });
 
 export const revalidate = 60;
 
