@@ -22,13 +22,16 @@ export default async function LivePage() {
 
   return (
     <div>
-      <h1>Macro dashboard</h1>
-      <p className="page-meta">
-        {brief.run_label} · {fmtDate(brief.run_date)} · {brief.brief_mode} brief
-      </p>
+      <div className="page-head">
+        <div>
+          <h1>Macro dashboard</h1>
+          <p className="page-meta">
+            {brief.run_label} · {fmtDate(brief.run_date)} · {brief.brief_mode} brief
+          </p>
+        </div>
+        <CrowdGauge />
+      </div>
       <DashboardGrid states={brief.dashboard_states} history={history} />
-
-      <CrowdGauge />
 
       {brief.headline ? (
         <div className="term-box">
