@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { getLatestBrief } from '@/lib/supabase';
+import { getLatestBrief, getStateHistory } from '@/lib/supabase';
 import { fmtDate } from '@/lib/format';
 import DashboardGrid from '@/components/DashboardGrid';
 import BriefItems from '@/components/BriefItems';
@@ -8,7 +8,7 @@ import Markdown from '@/components/Markdown';
 export const revalidate = 60;
 
 export default async function LivePage() {
-  const brief = await getLatestBrief();
+  const [brief, history] = await Promise.all([getLatestBrief(), getStateHistory()]);
 
   if (!brief) {
     return (
@@ -21,15 +21,18 @@ export default async function LivePage() {
 
   return (
     <div>
-      <div className="card-head" style={{ marginBottom: 14 }}>
-        <h1>Macro dashboard</h1>
-        <span className="mono small mute">
-          {brief.run_label} · {fmtDate(brief.run_date)} · {brief.brief_mode} brief
-        </span>
-      </div>
-      <DashboardGrid states={brief.dashboard_states} />
+      <h1>Macro dashboard</h1>
+      <p className="page-meta">
+        {brief.run_label} · {fmtDate(brief.run_date)} · {brief.brief_mode} brief
+      </p>
+      <DashboardGrid states={brief.dashboard_states} history={history} />
 
-      {brief.headline ? <p className="page-sub" style={{ marginTop: 18 }}>{brief.headline}</p> : null}
+      {brief.headline ? (
+        <div className="term-box">
+          <span className="term-prompt">&gt;_</span>
+          <p>{brief.headline}</p>
+        </div>
+      ) : null}
 
       <h2>Top things that matter</h2>
       <BriefItems items={brief.brief_items} />
