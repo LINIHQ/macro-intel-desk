@@ -16,7 +16,7 @@ const NAV = [
   { href: '/archive', label: 'Archive' },
   { href: '/history', label: 'History' },
   { href: '/claims', label: 'Claims' },
-  { href: '/watch', label: 'Watch' },
+  { href: '/watch', label: 'Watch List' },
   { href: '/sources', label: 'Sources' },
 ];
 
