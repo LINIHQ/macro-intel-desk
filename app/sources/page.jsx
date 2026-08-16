@@ -34,6 +34,11 @@ export default function SourcesPage() {
         commentary.
       </p>
       <p>
+        <strong>Live data feeds:</strong> the Crypto Market Fear &amp; Greed reading on the dashboard is supplied by
+        CoinMarketCap's Fear &amp; Greed Index, with Alternative.me's index as fallback when CMC is unavailable.
+        Sentiment gauges are crowd readings, not desk verdicts, and they carry no evidentiary weight in briefs.
+      </p>
+      <p>
         Where a verdict rests on specific sources, briefs and claims display them as clickable links so readers can
         check the receipts directly. Source links appear on content published from August 16, 2026 onward; earlier
         archival entries predate the practice and are never given fabricated links.
