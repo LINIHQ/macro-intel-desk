@@ -2,7 +2,7 @@ import StatusChip from '@/components/StatusChip';
 import { VERIFICATION } from '@/lib/format';
 
 export const metadata = {
-  title: 'Sources | GenXKrypto Macro Intelligence Desk',
+  title: 'Sources | GenXKrypto XRP Macro Intelligence Desk',
 };
 
 export default function SourcesPage() {
@@ -98,8 +98,8 @@ export default function SourcesPage() {
       <h2>What this is not</h2>
       <p>
         Not financial advice, not investment recommendations, and not monetized. No point-price predictions are made
-        with confidence; scenarios come with assumptions and invalidation conditions. This site exists so a Discord
-        community can read verified macro and XRP intelligence with the receipts attached.
+        with confidence; scenarios come with assumptions and invalidation conditions. This desk exists so anyone
+        tracking XRP and the macro forces around it can read verified intelligence with the receipts attached.
       </p>
     </div>
   );
