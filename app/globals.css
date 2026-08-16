@@ -142,6 +142,45 @@ h2 {
 .mute { color: var(--mute); }
 .small { font-size: 13px; }
 
+/* ---------- page head + fear/greed dial ---------- */
+
+.page-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+  flex-wrap: wrap;
+}
+.fng { flex-shrink: 0; text-align: right; }
+.fng-label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--mute);
+}
+.fng-row {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 6px;
+}
+.fng-svg { width: 64px; height: 38px; flex-shrink: 0; }
+.fng-read { display: flex; flex-direction: column; align-items: flex-start; }
+.fng-num { font-weight: 700; font-size: 24px; line-height: 1; color: var(--text); }
+.fng-class {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-top: 3px;
+}
+@media (max-width: 600px) {
+  .fng { text-align: left; }
+  .fng-row { justify-content: flex-start; }
+}
+
 /* ---------- dashboard tiles ---------- */
 
 .dash-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
@@ -203,42 +242,6 @@ h2 {
   border: 1px solid color-mix(in srgb, var(--tile-c, var(--dim)) 60%, transparent);
   color: var(--tile-c, var(--dim));
   border-radius: 2px;
-}
-
-/* ---------- crowd pulse gauge ---------- */
-
-.gauge-box {
-  display: flex;
-  align-items: center;
-  gap: 22px;
-  flex-wrap: wrap;
-  background: var(--panel);
-  border: 1px solid var(--line);
-  padding: 14px 18px;
-  margin-top: 12px;
-}
-.gauge-svg { width: 118px; height: 70px; flex-shrink: 0; }
-.gauge-num { font-weight: 700; font-size: 30px; line-height: 1; color: var(--text); }
-.gauge-class {
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.13em;
-  text-transform: uppercase;
-  margin-top: 6px;
-}
-.gauge-meta { margin-left: auto; text-align: right; min-width: 0; }
-.gauge-label {
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 0.13em;
-  text-transform: uppercase;
-  color: var(--dim);
-}
-.gauge-hist { font-size: 12px; color: var(--mute); margin-top: 4px; }
-.gauge-attr { font-size: 10.5px; color: var(--mute); margin-top: 6px; }
-@media (max-width: 600px) {
-  .gauge-box { gap: 16px; }
-  .gauge-meta { margin-left: 0; text-align: left; }
 }
 
 /* ---------- terminal summary ---------- */
