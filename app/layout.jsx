@@ -10,8 +10,8 @@ const mono = IBM_Plex_Mono({ subsets: ['latin'], weight: ['400', '500', '600'], 
 export const revalidate = 60;
 
 export const metadata = {
-  title: 'GenXKrypto | Macro Intelligence Desk',
-  description: 'Verified macro and XRP intelligence briefs. Evidence over narrative.',
+  title: 'GenXKrypto | XRP Macro Intelligence Desk',
+  description: 'Verified XRP and macro intelligence briefs. Evidence over narrative.',
 };
 
 const NAV = [
@@ -36,7 +36,7 @@ export default async function RootLayout({ children }) {
           <div className="wrap head-row">
             <Link href="/" className="brand">
               <span className="brand-main">GENXKRYPTO</span>
-              <span className="brand-sub">macro intelligence desk</span>
+              <span className="brand-sub">xrp macro intelligence desk</span>
             </Link>
             <nav className="nav">
               {NAV.map((n) => (
