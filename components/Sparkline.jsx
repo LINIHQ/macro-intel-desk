@@ -15,7 +15,7 @@ export default function Sparkline({ levels }) {
         points={d}
         fill="none"
         stroke="currentColor"
-        strokeWidth="1.5"
+        strokeWidth="2"
         strokeLinejoin="round"
         strokeLinecap="round"
       />
