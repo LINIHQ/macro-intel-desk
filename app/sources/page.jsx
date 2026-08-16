@@ -16,7 +16,7 @@ export default function SourcesPage() {
 
       <h2>Publishing cadence</h2>
       <p>
-        Quick briefs publish Monday through Thursday, 9-9:30am ET. A full week-ending brief publishes Friday after US
+        Quick briefs publish Monday through Thursday, 9-10am ET. A full week-ending brief publishes Friday after US
         market close. Breaking developments material enough to warrant it are folded into the next scheduled run.
       </p>
 
