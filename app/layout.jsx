@@ -1,8 +1,7 @@
 import './globals.css';
 import Link from 'next/link';
-import { Inter, IBM_Plex_Mono, Anton } from 'next/font/google';
+import { IBM_Plex_Mono, Anton } from 'next/font/google';
 
-const inter = Inter({ subsets: ['latin'], variable: '--font-sans' });
 const mono = IBM_Plex_Mono({ subsets: ['latin'], weight: ['400', '500', '600'], variable: '--font-mono' });
 const display = Anton({ subsets: ['latin'], weight: '400', variable: '--font-display' });
 
@@ -24,7 +23,7 @@ const NAV = [
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className={`${inter.variable} ${mono.variable} ${display.variable}`}>
+    <html lang="en" className={`${mono.variable} ${display.variable}`}>
       <body>
         <header className="site-head">
           <div className="wrap">
