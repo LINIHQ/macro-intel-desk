@@ -1,9 +1,8 @@
 import './globals.css';
 import Link from 'next/link';
-import { IBM_Plex_Mono, IBM_Plex_Sans_Condensed } from 'next/font/google';
+import { IBM_Plex_Mono } from 'next/font/google';
 
-const mono = IBM_Plex_Mono({ subsets: ['latin'], weight: ['400', '500', '600'], variable: '--font-mono' });
-const display = IBM_Plex_Sans_Condensed({ subsets: ['latin'], weight: ['600', '700'], variable: '--font-display' });
+const mono = IBM_Plex_Mono({ subsets: ['latin'], weight: ['400', '500', '600', '700'], variable: '--font-mono' });
 
 export const revalidate = 60;
 
@@ -23,7 +22,7 @@ const NAV = [
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className={`${mono.variable} ${display.variable}`}>
+    <html lang="en" className={mono.variable}>
       <body>
         <header className="site-head">
           <div className="wrap">
