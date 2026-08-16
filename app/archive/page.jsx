@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { getAllBriefs } from '@/lib/supabase';
-import { fmtDate, CATEGORIES } from '@/lib/format';
+import { fmtDate } from '@/lib/format';
 import DotStrip from '@/components/DotStrip';
 
 export const revalidate = 60;
@@ -15,10 +15,6 @@ export default async function ArchivePage() {
         Every published run, complete and permanent. Click any run to open the full brief with its dashboard, ranked
         items, and sources.
       </p>
-      <p className="small mute" style={{ margin: '0 0 18px' }}>
-        The dots are that run's dashboard, in order: {CATEGORIES.map((c) => c.label).join(' · ')}. Color is the
-        classification level, green through red.
-      </p>
       {briefs.length ? (
         <div className="row-list">
           {briefs.map((b) => (
@@ -30,7 +26,7 @@ export default async function ArchivePage() {
                 <br />
                 <span className="small dim">{b.headline || `${b.brief_mode} brief`}</span>
               </span>
-              <DotStrip states={b.dashboard_states} />
+              <DotStrip states={b.dashboard_states} labeled />
             </Link>
           ))}
         </div>
