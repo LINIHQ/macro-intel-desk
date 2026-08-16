@@ -37,8 +37,8 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--acc); outline-o
 /* ---------- header ---------- */
 
 .site-head { border-bottom: 1px solid var(--line); background: var(--panel); padding: 22px 0 0; }
-.brand-row { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
-.brand { display: flex; align-items: center; gap: 16px; color: var(--text); }
+.brand-row { display: flex; align-items: center; gap: 16px; }
+.brand { display: flex; align-items: center; gap: 16px; color: var(--text); min-width: 0; }
 .brand:hover { text-decoration: none; }
 .brand-avatar {
   display: block;
@@ -48,7 +48,7 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--acc); outline-o
   border: 1px solid var(--line);
   flex-shrink: 0;
 }
-.brand-text { display: block; }
+.brand-text { display: block; min-width: 0; }
 .brand-main {
   display: block;
   font-weight: 700;
@@ -70,6 +70,7 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--acc); outline-o
   align-items: center;
   gap: 7px;
   margin-left: auto;
+  flex-shrink: 0;
   font-size: 12.5px;
   padding: 4px 11px 5px;
   border: 1px solid var(--line);
@@ -81,14 +82,19 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--acc); outline-o
 .x-link:hover { color: var(--text); border-color: var(--acc); text-decoration: none; }
 .nav {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
   margin-top: 16px;
   font-size: 13.5px;
 }
+.nav::-webkit-scrollbar { display: none; }
 .nav a {
   color: var(--dim);
   padding: 8px 16px 10px;
   border-left: 1px solid var(--line);
+  white-space: nowrap;
   transition: color 120ms ease;
 }
 .nav a:first-child { border-left: none; padding-left: 0; }
@@ -349,8 +355,20 @@ h2 {
 .empty { border: 1px dashed var(--line); padding: 28px 20px; color: var(--dim); text-align: center; }
 
 @media (max-width: 600px) {
+  .site-head { padding-top: 16px; }
+  .brand-row { gap: 12px; }
+  .brand { gap: 12px; }
   .brand-avatar { width: 48px; height: 48px; }
-  .brand-main { font-size: 24px; }
+  .brand-main { font-size: 22px; letter-spacing: 0.05em; }
+  .brand-sub { font-size: 11.5px; margin-top: 5px; }
+  .x-link { padding: 7px 9px; }
+  .x-link .x-label { display: none; }
+  .x-link svg { width: 14px; height: 14px; }
+
+  .tile-mid { display: block; }
+  .tile-val { font-size: 16px; }
+  .trend { display: block; width: 100%; max-width: 120px; margin-top: 7px; }
+
   h1 { font-size: 24px; }
 }
 
