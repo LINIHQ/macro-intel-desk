@@ -92,9 +92,14 @@ export default function SourcesPage() {
       <p>
         The trend lines on the dashboard tiles are stylized, not price charts: the slope reflects the current
         classification. On the risk gauges (yen carry trade, oil shock, Hormuz, bond stress) an upward slope means the
-        risk is running at orange or red. On the condition gauges (liquidity, risk appetite, XRP fundamentals, XRP
-        macro environment) an upward slope means healthy, a downward slope means deteriorating, and a level line means
-        a mid-scale reading. The jagged texture is visual styling only.
+        risk is running at orange or red. On the condition gauges (liquidity, risk appetite, XRP flows, XRP macro
+        environment) an upward slope means healthy, a downward slope means deteriorating, and a level line means a
+        mid-scale reading. The jagged texture is visual styling only.
+      </p>
+      <p>
+        The XRP flows gauge is a composite of demand-side signals: ETF flows and institutional holdings, exchange
+        balances, market structure and liquidity, plus XRPL utility and regulatory posture where they touch the token.
+        It measures buying and selling pressure around XRP, not the health of the ledger itself.
       </p>
 
       <h2>Honesty rules</h2>
