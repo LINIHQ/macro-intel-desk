@@ -7,7 +7,7 @@ const ABBREV = {
   hormuz_risk: 'HRMZ',
   global_risk_appetite: 'RISK',
   bond_market_stress: 'BOND',
-  xrp_fundamentals: 'XRP',
+  xrp_fundamentals: 'FLOW',
   xrp_macro_environment: 'MACRO',
 };
 
