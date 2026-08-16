@@ -1,9 +1,8 @@
 import './globals.css';
 import Link from 'next/link';
-import { IBM_Plex_Mono, IBM_Plex_Sans_Condensed } from 'next/font/google';
+import { IBM_Plex_Mono } from 'next/font/google';
 
-const mono = IBM_Plex_Mono({ subsets: ['latin'], weight: ['400', '500', '600'], variable: '--font-mono' });
-const display = IBM_Plex_Sans_Condensed({ subsets: ['latin'], weight: ['600', '700'], variable: '--font-display' });
+const mono = IBM_Plex_Mono({ subsets: ['latin'], weight: ['400', '500', '600', '700'], variable: '--font-mono' });
 
 export const revalidate = 60;
 
@@ -23,14 +22,31 @@ const NAV = [
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className={`${mono.variable} ${display.variable}`}>
+    <html lang="en" className={mono.variable}>
       <body>
         <header className="site-head">
           <div className="wrap">
-            <Link href="/" className="brand">
-              <span className="brand-main">GENXKRYPTO</span>
-              <span className="brand-sub">xrp macro intelligence desk</span>
-            </Link>
+            <div className="brand-row">
+              <Link href="/" className="brand">
+                <img src="/avatar.png" alt="GenXKrypto" className="brand-avatar" width="64" height="64" />
+                <span className="brand-text">
+                  <span className="brand-main">GENXKRYPTO</span>
+                  <span className="brand-sub">xrp macro intelligence desk</span>
+                </span>
+              </Link>
+              <a
+                className="x-link"
+                href="https://x.com/GenXKrypto"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="GenXKrypto on X"
+              >
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231L18.244 2.25Zm-1.161 17.52h1.833L7.084 4.126H5.117L17.083 19.77Z" />
+                </svg>
+                @GenXKrypto
+              </a>
+            </div>
             <nav className="nav">
               {NAV.map((n) => (
                 <Link key={n.href} href={n.href}>{n.label}</Link>

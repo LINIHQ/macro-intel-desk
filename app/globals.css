@@ -37,15 +37,24 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--acc); outline-o
 /* ---------- header ---------- */
 
 .site-head { border-bottom: 1px solid var(--line); background: var(--panel); padding: 22px 0 0; }
-.brand { display: block; color: var(--text); }
+.brand-row { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+.brand { display: flex; align-items: center; gap: 16px; color: var(--text); }
 .brand:hover { text-decoration: none; }
+.brand-avatar {
+  display: block;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  border: 1px solid var(--line);
+  flex-shrink: 0;
+}
+.brand-text { display: block; }
 .brand-main {
   display: block;
-  font-family: var(--font-display), sans-serif;
   font-weight: 700;
-  font-size: 42px;
+  font-size: 30px;
   line-height: 1;
-  letter-spacing: 0.01em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--text);
 }
@@ -54,8 +63,21 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--acc); outline-o
   color: var(--mute);
   font-size: 13px;
   letter-spacing: 0.06em;
-  margin-top: 6px;
+  margin-top: 7px;
 }
+.x-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 12.5px;
+  padding: 4px 11px 5px;
+  border: 1px solid var(--line);
+  border-radius: 2px;
+  color: var(--dim);
+  background: var(--panel2);
+  transition: color 120ms ease, border-color 120ms ease;
+}
+.x-link:hover { color: var(--text); border-color: var(--acc); text-decoration: none; }
 .nav {
   display: flex;
   flex-wrap: wrap;
@@ -76,14 +98,13 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--acc); outline-o
 /* ---------- type ---------- */
 
 h1 {
-  font-family: var(--font-display), sans-serif;
   font-weight: 700;
-  font-size: 44px;
-  line-height: 1.05;
-  letter-spacing: 0.01em;
+  font-size: 30px;
+  line-height: 1.15;
+  letter-spacing: 0.05em;
   text-transform: uppercase;
   color: var(--text);
-  margin: 0 0 6px;
+  margin: 0 0 8px;
 }
 h2 {
   font-size: 12px;
@@ -113,6 +134,8 @@ h2 {
 .dash-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
 @media (max-width: 900px) { .dash-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 .tile {
+  display: flex;
+  flex-direction: column;
   background: color-mix(in srgb, var(--tile-c, var(--mute)) 7%, var(--panel));
   border: 1px solid color-mix(in srgb, var(--tile-c, var(--mute)) 26%, var(--line));
   border-left: 3px solid var(--tile-c, var(--mute));
@@ -130,20 +153,33 @@ h2 {
   overflow: hidden;
   text-overflow: ellipsis;
 }
-.tile-mid { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 11px; }
+.tile-mid {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 10px;
+}
 .tile-val {
-  font-family: var(--font-display), sans-serif;
   font-weight: 700;
-  font-size: 25px;
-  line-height: 1.05;
-  letter-spacing: 0;
+  font-size: 17px;
+  line-height: 1.2;
+  letter-spacing: 0.03em;
   text-transform: uppercase;
   color: var(--tile-c, var(--text));
   min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
-.spark { color: var(--tile-c, var(--mute)); opacity: 1; flex-shrink: 0; }
+.trend {
+  width: 56px;
+  height: 22px;
+  flex-shrink: 0;
+  color: var(--tile-c, var(--mute));
+}
 .tile-badge {
-  display: inline-block;
+  align-self: flex-start;
   margin-top: 9px;
   font-size: 9.5px;
   font-weight: 600;
@@ -249,7 +285,6 @@ h2 {
   font-weight: 600;
   letter-spacing: -0.01em;
   text-transform: none;
-  font-family: var(--font-mono), monospace;
   color: var(--text);
   margin: 30px 0 8px;
 }
@@ -283,8 +318,9 @@ h2 {
 .empty { border: 1px dashed var(--line); padding: 28px 20px; color: var(--dim); text-align: center; }
 
 @media (max-width: 600px) {
-  .brand-main { font-size: 33px; }
-  h1 { font-size: 34px; }
+  .brand-avatar { width: 48px; height: 48px; }
+  .brand-main { font-size: 24px; }
+  h1 { font-size: 24px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
