@@ -14,10 +14,15 @@ export default function BriefItems({ items }) {
         return (
           <div key={it.id} className="card">
             <div className="card-head">
-              <p className="card-title">{it.title}</p>
+              <p className="card-title">
+                <span className="card-rank">{it.rank}.</span> {it.title}
+              </p>
               <span style={{ display: 'flex', gap: 8 }}>
                 <StatusChip color={imp.color}>{imp.label}</StatusChip>
-                <StatusChip color={ver.color}>{ver.label}</StatusChip>
+                <StatusChip color={ver.color}>
+                  {it.verification === 'verified' ? '\u2713 ' : ''}
+                  {ver.label}
+                </StatusChip>
               </span>
             </div>
             <Markdown>{it.body_md}</Markdown>
