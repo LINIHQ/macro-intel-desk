@@ -98,17 +98,13 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--acc); outline-o
 }
 .nav a:first-child { border-left: none; padding-left: 0; }
 .nav a:hover { color: var(--text); text-decoration: none; }
-.nav a.on { color: var(--text); }
-.nav a.on::after {
-  content: "";
-  position: absolute;
-  left: 16px;
-  right: 16px;
-  bottom: 0;
-  height: 2px;
-  background: linear-gradient(90deg, var(--pfp-blue), var(--pfp-red));
+.nav a.on {
+  font-weight: 600;
+  background-image: linear-gradient(90deg, var(--pfp-blue), var(--pfp-red));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
-.nav a.on:first-child::after { left: 0; }
 
 .site-foot { border-top: 1px solid var(--line); padding: 20px 0 32px; color: var(--mute); font-size: 13px; }
 
@@ -391,8 +387,6 @@ h2 {
   }
   .nav a:first-child { padding-left: 4px; }
   .nav a:nth-child(-n+3) { border-bottom: 1px solid var(--line); }
-  .nav a.on::after { left: 18%; right: 18%; }
-  .nav a.on:first-child::after { left: 18%; }
 
   .tile-mid { display: block; }
   .tile-val { font-size: 16px; }
