@@ -28,12 +28,20 @@ export default async function LivePage() {
           <p className="page-meta">
             {brief.run_label} · {fmtDate(brief.run_date)} · {brief.brief_mode} brief
           </p>
-          <p className="small mute" style={{ margin: '4px 0 0' }}>
-            Quick briefs Mon-Thu, 9-9:30am ET. Week-ending brief Friday after US market close.
-          </p>
         </div>
         <CrowdGauge />
       </div>
+      <p
+        className="small mute"
+        style={{
+          margin: '10px 0 22px',
+          padding: '6px 12px',
+          borderLeft: '2px solid rgba(255,255,255,0.25)',
+          letterSpacing: '0.02em',
+        }}
+      >
+        Quick briefs Mon-Thu, 9-9:30am ET · Week-ending brief Friday after US market close
+      </p>
       <DashboardGrid states={brief.dashboard_states} history={history} />
 
       {brief.headline ? (
