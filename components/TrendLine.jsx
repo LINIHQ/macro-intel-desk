@@ -1,7 +1,10 @@
 // Stylized trend motif for dashboard tiles.
-// The SLOPE is real: 'up' = classification improved/eased since the prior run,
-// 'down' = worsened, 'flat' = held. The jaggedness is decorative texture only
-// (deterministic per category so it doesn't shift between renders).
+// The SLOPE reflects the CURRENT classification, not a run-over-run diff:
+// risk gauges slope 'up' when the risk is orange/red (running hot),
+// condition gauges slope 'up' when green (healthy) and 'down' when orange/red
+// (deteriorating), and 'flat' means a mid-scale reading. The jaggedness is
+// decorative texture only (deterministic per category so it doesn't shift
+// between renders).
 function hashStr(str) {
   let h = 0;
   for (const ch of String(str)) h = (h * 31 + ch.charCodeAt(0)) | 0;
