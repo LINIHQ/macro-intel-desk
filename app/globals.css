@@ -83,13 +83,9 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--acc); outline-o
 .nav {
   display: flex;
   flex-wrap: nowrap;
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
   margin-top: 16px;
   font-size: 13.5px;
 }
-.nav::-webkit-scrollbar { display: none; }
 .nav a {
   color: var(--dim);
   padding: 8px 16px 10px;
@@ -364,6 +360,23 @@ h2 {
   .x-link { padding: 7px 9px; }
   .x-link .x-label { display: none; }
   .x-link svg { width: 14px; height: 14px; }
+
+  .nav {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    margin-top: 14px;
+    border-top: 1px solid var(--line);
+    font-size: 13px;
+  }
+  .nav a {
+    border-left: none;
+    padding: 10px 4px 11px;
+    text-align: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .nav a:first-child { padding-left: 4px; }
+  .nav a:nth-child(-n+3) { border-bottom: 1px solid var(--line); }
 
   .tile-mid { display: block; }
   .tile-val { font-size: 16px; }
