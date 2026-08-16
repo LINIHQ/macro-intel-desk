@@ -7,9 +7,31 @@ const mono = IBM_Plex_Mono({ subsets: ['latin'], weight: ['400', '500', '600', '
 
 export const revalidate = 60;
 
+const TITLE = 'GenXKrypto | XRP Macro Intelligence Desk';
+const DESCRIPTION = 'Verified XRP and macro intelligence briefs. Evidence over narrative.';
+
 export const metadata = {
-  title: 'GenXKrypto | XRP Macro Intelligence Desk',
-  description: 'Verified XRP and macro intelligence briefs. Evidence over narrative.',
+  metadataBase: new URL('https://brief.genxkrypto.com'),
+  title: TITLE,
+  description: DESCRIPTION,
+  openGraph: {
+    title: TITLE,
+    description: DESCRIPTION,
+    url: '/',
+    siteName: 'GenXKrypto XRP Macro Intelligence Desk',
+    type: 'website',
+    images: [{ url: '/avatar.png', width: 288, height: 288, alt: 'GenXKrypto' }],
+  },
+  twitter: {
+    card: 'summary',
+    title: TITLE,
+    description: DESCRIPTION,
+    images: ['/avatar.png'],
+  },
+};
+
+export const viewport = {
+  themeColor: '#d2a65f',
 };
 
 export default function RootLayout({ children }) {
