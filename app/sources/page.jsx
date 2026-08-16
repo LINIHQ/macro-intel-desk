@@ -14,6 +14,12 @@ export default function SourcesPage() {
         intelligence product, not a confirmation-bias engine, and not investment advice.
       </p>
 
+      <h2>Publishing cadence</h2>
+      <p>
+        Quick briefs publish Monday through Thursday, 9-9:30am ET. A full week-ending brief publishes Friday after US
+        market close. Breaking developments material enough to warrant it are folded into the next scheduled run.
+      </p>
+
       <h2>Source hierarchy</h2>
       <p>
         <strong>Tier 1, primary and authoritative:</strong> the Federal Reserve, Bank of Japan, Japan Ministry of
