@@ -41,11 +41,10 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--acc); outline-o
 .brand:hover { text-decoration: none; }
 .brand-main {
   display: block;
-  font-family: var(--font-display), sans-serif;
   font-weight: 700;
-  font-size: 42px;
+  font-size: 30px;
   line-height: 1;
-  letter-spacing: 0.01em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--text);
 }
@@ -54,7 +53,7 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--acc); outline-o
   color: var(--mute);
   font-size: 13px;
   letter-spacing: 0.06em;
-  margin-top: 6px;
+  margin-top: 7px;
 }
 .nav {
   display: flex;
@@ -76,14 +75,13 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--acc); outline-o
 /* ---------- type ---------- */
 
 h1 {
-  font-family: var(--font-display), sans-serif;
   font-weight: 700;
-  font-size: 44px;
-  line-height: 1.05;
-  letter-spacing: 0.01em;
+  font-size: 30px;
+  line-height: 1.15;
+  letter-spacing: 0.05em;
   text-transform: uppercase;
   color: var(--text);
-  margin: 0 0 6px;
+  margin: 0 0 8px;
 }
 h2 {
   font-size: 12px;
@@ -116,7 +114,7 @@ h2 {
   background: color-mix(in srgb, var(--tile-c, var(--mute)) 7%, var(--panel));
   border: 1px solid color-mix(in srgb, var(--tile-c, var(--mute)) 26%, var(--line));
   border-left: 3px solid var(--tile-c, var(--mute));
-  padding: 13px 15px 13px;
+  padding: 13px 15px 12px;
 }
 .tile-top { display: flex; align-items: center; gap: 8px; }
 .tile-icon { display: inline-flex; color: var(--tile-c, var(--dim)); flex-shrink: 0; }
@@ -130,18 +128,20 @@ h2 {
   overflow: hidden;
   text-overflow: ellipsis;
 }
-.tile-mid { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 11px; }
 .tile-val {
-  font-family: var(--font-display), sans-serif;
   font-weight: 700;
-  font-size: 25px;
-  line-height: 1.05;
-  letter-spacing: 0;
+  font-size: 17px;
+  line-height: 1.2;
+  letter-spacing: 0.03em;
   text-transform: uppercase;
   color: var(--tile-c, var(--text));
-  min-width: 0;
+  margin-top: 10px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
-.spark { color: var(--tile-c, var(--mute)); opacity: 1; flex-shrink: 0; }
+.tile-spark { margin-top: 8px; }
+.spark { display: block; width: 100%; height: 16px; color: var(--tile-c, var(--mute)); opacity: 1; }
 .tile-badge {
   display: inline-block;
   margin-top: 9px;
@@ -249,7 +249,6 @@ h2 {
   font-weight: 600;
   letter-spacing: -0.01em;
   text-transform: none;
-  font-family: var(--font-mono), monospace;
   color: var(--text);
   margin: 30px 0 8px;
 }
@@ -283,8 +282,8 @@ h2 {
 .empty { border: 1px dashed var(--line); padding: 28px 20px; color: var(--dim); text-align: center; }
 
 @media (max-width: 600px) {
-  .brand-main { font-size: 33px; }
-  h1 { font-size: 34px; }
+  .brand-main { font-size: 24px; }
+  h1 { font-size: 24px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
