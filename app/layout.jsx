@@ -42,10 +42,10 @@ export default function RootLayout({ children }) {
         <header className="site-head">
           <div className="wrap">
             <div className="brand-row">
-              <Link href="/" className="brand">
+              <Link href="/" className="brand" aria-label="GenXKrypto home">
                 <img src="/avatar.png" alt="GenXKrypto" className="brand-avatar" width="64" height="64" />
                 <span className="brand-text">
-                  <span className="brand-main">GENXKRYPTO</span>
+                  <span className="brand-main">Gen&#x1D54F;Krypto</span>
                   <span className="brand-sub">xrp macro intelligence desk</span>
                 </span>
               </Link>
