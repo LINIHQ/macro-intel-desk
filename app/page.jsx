@@ -21,7 +21,7 @@ export default async function LivePage() {
     );
   }
 
-  const permalink = `https://brief.genxkrypto.com/brief/${brief.id}`;
+  const shareUrl = 'https://brief.genxkrypto.com';
   const shareText = brief.headline
     ? `${brief.run_label}: ${brief.headline}`
     : `${brief.run_label}, XRP Macro Intelligence Desk`;
@@ -63,7 +63,7 @@ export default async function LivePage() {
       <h2>Full brief</h2>
       <Markdown>{brief.full_brief_md}</Markdown>
 
-      <ShareBlock url={permalink} text={shareText} />
+      <ShareBlock url={shareUrl} text={shareText} />
 
       <p className="small mute" style={{ marginTop: 28 }}>
         Prior runs live in the <Link href="/archive">archive</Link>. Status shifts over time are on the{' '}
