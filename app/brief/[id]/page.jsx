@@ -4,6 +4,7 @@ import { fmtDate } from '@/lib/format';
 import DashboardGrid from '@/components/DashboardGrid';
 import BriefItems from '@/components/BriefItems';
 import Markdown from '@/components/Markdown';
+import ShareBlock from '@/components/ShareBlock';
 
 export const revalidate = 300;
 
@@ -21,6 +22,11 @@ export default async function BriefPage({ params }) {
     );
   }
 
+  const permalink = `https://brief.genxkrypto.com/brief/${brief.id}`;
+  const shareText = brief.headline
+    ? `${brief.run_label}: ${brief.headline}`
+    : `${brief.run_label}, XRP Macro Intelligence Desk`;
+
   return (
     <div>
       <div className="card-head" style={{ marginBottom: 14 }}>
@@ -36,6 +42,8 @@ export default async function BriefPage({ params }) {
 
       <h2>Full brief</h2>
       <Markdown>{brief.full_brief_md}</Markdown>
+
+      <ShareBlock url={permalink} text={shareText} />
     </div>
   );
 }
