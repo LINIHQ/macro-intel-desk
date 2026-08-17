@@ -56,8 +56,11 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--acc); outline-o
   font-weight: 700;
   font-size: 30px;
   line-height: 1;
-  letter-spacing: 0.06em;
-  color: var(--text);
+  letter-spacing: 0.02em;
+  background-image: linear-gradient(90deg, var(--pfp-blue), var(--pfp-red));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
 .brand-sub {
   display: block;
@@ -454,7 +457,7 @@ button.tile.open {
   .brand-row { gap: 12px; }
   .brand { gap: 12px; }
   .brand-avatar { width: 48px; height: 48px; }
-  .brand-main { font-size: 22px; letter-spacing: 0.05em; }
+  .brand-main { font-size: 22px; letter-spacing: 0.02em; }
   .brand-sub { font-size: 11.5px; margin-top: 5px; }
   .x-link { padding: 7px 9px; }
   .x-link .x-label { display: none; }
