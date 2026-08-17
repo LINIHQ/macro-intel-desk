@@ -10,6 +10,7 @@ export const revalidate = 60;
 
 const TITLE = 'GenXKrypto | XRP Macro Intelligence Desk';
 const DESCRIPTION = 'Verified XRP and macro intelligence briefs. Evidence over narrative.';
+const OG_IMAGE = 'https://brief.genxkrypto.com/og-card.jpg?v=2';
 
 export const metadata = {
   metadataBase: new URL('https://brief.genxkrypto.com'),
@@ -21,13 +22,13 @@ export const metadata = {
     url: '/',
     siteName: 'GenXKrypto XRP Macro Intelligence Desk',
     type: 'website',
-    images: [{ url: '/og-card.jpg', width: 1200, height: 675, alt: 'GenXKrypto XRP Macro Intelligence Desk' }],
+    images: [{ url: OG_IMAGE, width: 1200, height: 675, alt: 'GenXKrypto XRP Macro Intelligence Desk' }],
   },
   twitter: {
     card: 'summary_large_image',
     title: TITLE,
     description: DESCRIPTION,
-    images: ['/og-card.jpg'],
+    images: [OG_IMAGE],
   },
 };
 
