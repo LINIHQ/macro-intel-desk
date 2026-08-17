@@ -29,7 +29,7 @@ export default function ShareBlock({ url, text }) {
           Share on X <span className="ext">&#8599;</span>
         </a>
         <button type="button" className="src-pill share-btn" onClick={copy}>
-          {copied ? 'Copied' : 'Copy link'}
+          {copied ? 'Link copied' : 'Copy link for Discord & anywhere else'}
         </button>
       </div>
     </div>
