@@ -21,13 +21,13 @@ export const metadata = {
     url: '/',
     siteName: 'GenXKrypto XRP Macro Intelligence Desk',
     type: 'website',
-    images: [{ url: '/avatar.png', width: 288, height: 288, alt: 'GenXKrypto' }],
+    images: [{ url: '/og-card.jpg', width: 1200, height: 675, alt: 'GenXKrypto XRP Macro Intelligence Desk' }],
   },
   twitter: {
-    card: 'summary',
+    card: 'summary_large_image',
     title: TITLE,
     description: DESCRIPTION,
-    images: ['/avatar.png'],
+    images: ['/og-card.jpg'],
   },
 };
 
