@@ -1,6 +1,7 @@
 import './globals.css';
 import Link from 'next/link';
 import { IBM_Plex_Mono } from 'next/font/google';
+import { Analytics } from '@vercel/analytics/next';
 import NavLinks from '@/components/NavLinks';
 
 const mono = IBM_Plex_Mono({ subsets: ['latin'], weight: ['400', '500', '600', '700'], variable: '--font-mono' });
@@ -70,6 +71,7 @@ export default function RootLayout({ children }) {
             <p>Intelligence, not investment advice. Every consequential claim carries a verification status; unverified means unverified.</p>
           </div>
         </footer>
+        <Analytics />
       </body>
     </html>
   );
