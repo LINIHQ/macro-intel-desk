@@ -25,12 +25,12 @@ export default function ShareBlock({ url, text }) {
         This desk publishes free, with receipts. If you found this useful, the best support is sharing it.
       </p>
       <div className="share-actions">
-        <a className="src-pill" href={intent} target="_blank" rel="noopener noreferrer">
-          Share on X <span className="ext">&#8599;</span>
-        </a>
-        <button type="button" className="src-pill share-btn" onClick={copy}>
-          {copied ? 'Link copied' : 'Copy link for Discord & anywhere else'}
+        <button type="button" className="share-cta share-cta-primary" onClick={copy}>
+          {copied ? 'Link copied \u2713' : 'Copy link'}
         </button>
+        <a className="share-cta" href={intent} target="_blank" rel="noopener noreferrer">
+          Share on X <span className="ext" aria-hidden="true">&#8599;</span>
+        </a>
       </div>
     </div>
   );
