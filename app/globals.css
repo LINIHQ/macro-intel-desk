@@ -384,7 +384,7 @@ button.tile.open {
 .row-list { border: 1px solid var(--line); overflow: hidden; }
 .row-item { display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 14px 16px; border-bottom: 1px solid var(--line); background: var(--panel); transition: background 120ms ease; }
 .row-item:last-child { border-bottom: none; }
-.row-item:hover { background: var(--pan2); background: var(--panel2); }
+.row-item:hover { background: var(--panel2); }
 
 .dots { display: flex; gap: 5px; flex-shrink: 0; }
 .dot { width: 10px; height: 10px; border-radius: 50%; }
