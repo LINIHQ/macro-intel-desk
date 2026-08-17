@@ -90,6 +90,26 @@ export default function SourcesPage() {
         on the history page.
       </p>
       <p>
+        <strong>What the four levels mean.</strong> Green is baseline: conditions normal or supportive, nothing
+        demanding attention. Yellow is watch: early signals worth tracking, not yet confirmed by hard evidence. Orange
+        is elevated: verified evidence of active stress or deterioration, the variable is moving. Red is regime-level:
+        disruption or stress severe enough to change the macro picture, declared only on confirmed events, never on
+        headlines alone.
+      </p>
+      <p>
+        <strong>How a level gets set.</strong> Every classification rests on evidence verified during that run from
+        Tier 1 and 2 sources: actual prices, yields, flows, official statements, and confirmed events, never social
+        sentiment or narrative volume. A category does not move because the news cycle got loud.
+      </p>
+      <p>
+        <strong>Pre-registered criteria.</strong> Any category sitting at orange or red publishes its "Moves if"
+        conditions in the brief: the specific, checkable evidence (numeric levels or named events) that would move it
+        one level in either direction. When a classification later changes, the recorded reason on the history page
+        states whether a pre-registered criterion fired or whether the move came from evidence that was not
+        pre-registered. The criteria are written before the move, so the desk cannot quietly rationalize a change
+        after the fact.
+      </p>
+      <p>
         The trend lines on the dashboard tiles are stylized, not price charts: the slope reflects the current
         classification. On the risk gauges (yen carry trade, oil shock, Hormuz, bond stress) an upward slope means the
         risk is running at orange or red. On the condition gauges (liquidity, risk appetite, XRP flows, XRP macro
