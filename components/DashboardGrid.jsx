@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { CATEGORIES, LEVEL_COLORS, stateFor } from '@/lib/format';
 import { CATEGORY_ICONS } from '@/components/Icons';
@@ -30,13 +30,33 @@ function directionFor(key, level) {
 
 export default function DashboardGrid({ states }) {
   const [openKey, setOpenKey] = useState(null);
+  const rootRef = useRef(null);
+
+  // Clicking anywhere outside the grid or panel, or pressing Escape, closes the panel.
+  useEffect(() => {
+    if (!openKey) return;
+    function onDocClick(e) {
+      if (rootRef.current && !rootRef.current.contains(e.target)) {
+        setOpenKey(null);
+      }
+    }
+    function onKeyDown(e) {
+      if (e.key === 'Escape') setOpenKey(null);
+    }
+    document.addEventListener('click', onDocClick);
+    document.addEventListener('keydown', onKeyDown);
+    return () => {
+      document.removeEventListener('click', onDocClick);
+      document.removeEventListener('keydown', onKeyDown);
+    };
+  }, [openKey]);
 
   const openCat = openKey ? CATEGORIES.find((c) => c.key === openKey) : null;
   const openState = openKey ? stateFor(states, openKey) : null;
   const openColor = openState ? LEVEL_COLORS[openState.level] : 'var(--mute)';
 
   return (
-    <div>
+    <div ref={rootRef}>
       <div className="dash-grid">
         {CATEGORIES.map((c) => {
           const s = stateFor(states, c.key);
