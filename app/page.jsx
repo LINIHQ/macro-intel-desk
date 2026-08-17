@@ -5,6 +5,7 @@ import DashboardGrid from '@/components/DashboardGrid';
 import BriefItems from '@/components/BriefItems';
 import Markdown from '@/components/Markdown';
 import CrowdGauge from '@/components/CrowdGauge';
+import ShareBlock from '@/components/ShareBlock';
 
 export const revalidate = 60;
 
@@ -19,6 +20,11 @@ export default async function LivePage() {
       </div>
     );
   }
+
+  const permalink = `https://brief.genxkrypto.com/brief/${brief.id}`;
+  const shareText = brief.headline
+    ? `${brief.run_label}: ${brief.headline}`
+    : `${brief.run_label}, XRP Macro Intelligence Desk`;
 
   return (
     <div>
@@ -56,6 +62,8 @@ export default async function LivePage() {
 
       <h2>Full brief</h2>
       <Markdown>{brief.full_brief_md}</Markdown>
+
+      <ShareBlock url={permalink} text={shareText} />
 
       <p className="small mute" style={{ marginTop: 28 }}>
         Prior runs live in the <Link href="/archive">archive</Link>. Status shifts over time are on the{' '}
