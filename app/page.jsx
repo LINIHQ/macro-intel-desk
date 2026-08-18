@@ -58,9 +58,12 @@ export default async function LivePage() {
       ) : null}
 
       <h2>Top things that matter</h2>
+      <p className="small mute" style={{ margin: '2px 0 14px' }}>
+        The quick-scan layer. <a href="#full-brief">Full detail in the brief below.</a>
+      </p>
       <BriefItems items={brief.brief_items} />
 
-      <h2>Full brief</h2>
+      <h2 id="full-brief">Full brief</h2>
       <Markdown>{brief.full_brief_md}</Markdown>
 
       <ShareBlock url={shareUrl} text={shareText} />
