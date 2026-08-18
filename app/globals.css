@@ -84,6 +84,21 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--acc); outline-o
   transition: color 120ms ease, border-color 120ms ease;
 }
 .x-link:hover { color: var(--text); border-color: var(--acc); text-decoration: none; }
+.menu-btn {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+  border: 1px solid var(--line);
+  border-radius: 2px;
+  background: var(--panel2);
+  color: var(--dim);
+  cursor: pointer;
+  transition: color 120ms ease, border-color 120ms ease;
+}
+.menu-btn:hover { color: var(--text); border-color: var(--acc); }
 .nav {
   display: flex;
   flex-wrap: nowrap;
@@ -101,6 +116,51 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--acc); outline-o
 .nav a:first-child { border-left: none; padding-left: 0; }
 .nav a:hover { color: var(--text); text-decoration: none; }
 .nav a.on {
+  font-weight: 600;
+  background-image: linear-gradient(90deg, var(--pfp-blue), var(--pfp-red));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* ---------- mobile menu overlay ---------- */
+
+.m-menu {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: var(--bg);
+  display: flex;
+  flex-direction: column;
+  padding: 0 24px 28px;
+  overflow-y: auto;
+}
+.m-menu .menu-btn { display: inline-flex; }
+.m-menu-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--line);
+}
+.m-menu-title {
+  font-weight: 700;
+  font-size: 19px;
+  letter-spacing: 0.02em;
+  background-image: linear-gradient(90deg, var(--pfp-blue), var(--pfp-red));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.m-menu-nav { display: flex; flex-direction: column; margin-top: 6px; }
+.m-menu-nav a {
+  font-size: 17px;
+  color: var(--dim);
+  padding: 15px 0 16px;
+  border-bottom: 1px solid var(--line);
+}
+.m-menu-nav a:hover { color: var(--text); text-decoration: none; }
+.m-menu-nav a.on {
   font-weight: 600;
   background-image: linear-gradient(90deg, var(--pfp-blue), var(--pfp-red));
   -webkit-background-clip: text;
@@ -470,6 +530,25 @@ button.tile.open {
 
 .empty { border: 1px dashed var(--line); padding: 28px 20px; color: var(--dim); text-align: center; }
 
+/* ---------- install page ---------- */
+
+.install-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 22px;
+}
+@media (max-width: 700px) {
+  .install-grid { grid-template-columns: 1fr; }
+}
+.install-steps {
+  margin: 10px 0 2px;
+  padding-left: 20px;
+  font-size: 13.5px;
+}
+.install-steps li { margin-bottom: 8px; }
+.install-steps li::marker { color: var(--acc); font-weight: 600; }
+
 /* ---------- share block ---------- */
 
 .share-block {
@@ -515,32 +594,23 @@ button.tile.open {
 }
 
 @media (max-width: 600px) {
-  .site-head { padding-top: 16px; }
+  .site-head {
+    position: sticky;
+    top: 0;
+    z-index: 90;
+    padding: 10px 0;
+  }
   .brand-row { gap: 12px; }
   .brand { gap: 12px; }
-  .brand-avatar { width: 48px; height: 48px; }
-  .brand-main { font-size: 22px; letter-spacing: 0.02em; }
-  .brand-sub { font-size: 11.5px; margin-top: 5px; }
-  .x-link { padding: 7px 9px; }
+  .brand-avatar { width: 44px; height: 44px; }
+  .brand-main { font-size: 20px; letter-spacing: 0.02em; }
+  .brand-sub { font-size: 11px; margin-top: 4px; }
+  .x-link { padding: 8px 9px; }
   .x-link .x-label { display: none; }
   .x-link svg { width: 14px; height: 14px; }
+  .menu-btn { display: inline-flex; }
 
-  .nav {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    margin-top: 14px;
-    border-top: 1px solid var(--line);
-    font-size: 13px;
-  }
-  .nav a {
-    border-left: none;
-    padding: 10px 4px 11px;
-    text-align: center;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  .nav a:first-child { padding-left: 4px; }
-  .nav a:nth-child(-n+3) { border-bottom: 1px solid var(--line); }
+  .nav { display: none; }
 
   .tile-mid { display: block; }
   .tile-val { font-size: 16px; }
