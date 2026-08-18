@@ -15,6 +15,14 @@ const TITLE = 'GenXKrypto | XRP Macro Intelligence Desk';
 const DESCRIPTION = 'Verified XRP and macro intelligence briefs. Evidence over narrative.';
 const OG_IMAGE = 'https://brief.genxkrypto.com/og-card.jpg?v=3';
 
+// X only. X paints twitter:title as a fixed overlay chip at the bottom left of a
+// summary_large_image card. Position is not controllable and the field cannot be
+// empty (an empty value falls back to og:title, then to the page title), so a
+// single period is the shortest legal string and keeps the chip minimal.
+// Do not reuse this anywhere else: TITLE and openGraph.title carry the real name
+// for the browser tab, search results, and every non-X unfurl including Discord.
+const X_CARD_TITLE = '.';
+
 export const metadata = {
   metadataBase: new URL('https://brief.genxkrypto.com'),
   title: TITLE,
@@ -43,7 +51,7 @@ export const metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: TITLE,
+    title: X_CARD_TITLE,
     description: DESCRIPTION,
     images: [OG_IMAGE],
   },
