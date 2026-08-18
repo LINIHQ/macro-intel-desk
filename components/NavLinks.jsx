@@ -3,16 +3,17 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
-const NAV = [
+export const NAV = [
   { href: '/', label: 'Live' },
   { href: '/archive', label: 'Archive' },
   { href: '/history', label: 'History' },
   { href: '/claims', label: 'Claims' },
   { href: '/watch', label: 'Watch List' },
   { href: '/sources', label: 'Sources' },
+  { href: '/install', label: 'App', menuLabel: 'Add to Phone' },
 ];
 
-function isActive(pathname, href) {
+export function isActive(pathname, href) {
   if (href === '/') return pathname === '/' || pathname.startsWith('/brief');
   return pathname === href || pathname.startsWith(href + '/');
 }
