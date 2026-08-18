@@ -240,12 +240,28 @@ h2 {
 .dash-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
 @media (max-width: 900px) { .dash-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 .tile {
+  position: relative;
   display: flex;
   flex-direction: column;
   background: color-mix(in srgb, var(--tile-c, var(--mute)) 7%, var(--panel));
   border: 1px solid color-mix(in srgb, var(--tile-c, var(--mute)) 26%, var(--line));
   border-left: 3px solid var(--tile-c, var(--mute));
   padding: 13px 15px 13px;
+}
+.tile-chevron {
+  position: absolute;
+  right: 10px;
+  bottom: 9px;
+  color: var(--mute);
+  opacity: 0.55;
+  transition: transform 140ms ease, opacity 120ms ease;
+}
+button.tile:hover .tile-chevron,
+button.tile.open .tile-chevron {
+  opacity: 0.9;
+}
+button.tile.open .tile-chevron {
+  transform: rotate(180deg);
 }
 .tile-top { display: flex; align-items: center; gap: 8px; }
 .tile-icon { display: inline-flex; color: var(--tile-c, var(--dim)); flex-shrink: 0; }
