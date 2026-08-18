@@ -63,7 +63,7 @@ export default async function LivePage() {
       </p>
       <BriefItems items={brief.brief_items} />
 
-      <h2 id="full-brief">Full brief</h2>
+      <h2 id="full-brief">The brief</h2>
       <Markdown>{brief.full_brief_md}</Markdown>
 
       <ShareBlock url={shareUrl} text={shareText} />
