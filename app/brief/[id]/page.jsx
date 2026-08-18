@@ -40,7 +40,7 @@ export default async function BriefPage({ params }) {
       <h2>Top things that matter</h2>
       <BriefItems items={brief.brief_items} />
 
-      <h2>Full brief</h2>
+      <h2>The brief</h2>
       <Markdown>{brief.full_brief_md}</Markdown>
 
       <ShareBlock url={permalink} text={shareText} />
