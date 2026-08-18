@@ -30,8 +30,9 @@ export default function InstallPage() {
           <ol className="install-steps">
             <li>Open brief.genxkrypto.com in Chrome</li>
             <li>Tap the three-dot menu in the top right</li>
-            <li>Tap &quot;Add to Home Screen&quot;</li>
-            <li>Tap Add to confirm</li>
+            <li>Scroll down past Downloads, Bookmarks, and Share until you reach &quot;Install and create shortcut&quot;, then tap it</li>
+            <li>Confirm when prompted. XRP Brief will appear on your home screen</li>
+            <li>On older versions of Chrome the same option is named &quot;Add to Home screen&quot; and sits higher in the menu</li>
           </ol>
         </div>
       </div>
