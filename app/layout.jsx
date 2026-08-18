@@ -30,12 +30,19 @@ const OG_IMAGE = 'https://brief.genxkrypto.com/og-card.jpg?v=3';
 // a real word here.
 const X_CARD_TITLE = 'XRP Macro Brief';
 
-// Separate art for X at 1200x628 (2:1, the ratio X actually wants) with the
-// bottom strip left clear and the baked domain line removed, so the title chip
-// lands on empty background instead of on top of the design. X also prints
-// "From brief.genxkrypto.com" beneath the card, which makes a baked domain line
-// redundant there. The 1200x675 default keeps its domain line for other sites.
-const X_CARD_IMAGE = 'https://brief.genxkrypto.com/og-card-x.jpg?v=1';
+// Separate art for X, 1200x675 with the baked domain line removed and the bottom
+// strip left clear, so the fixed title chip lands on empty background instead of
+// on top of the design. X prints "From brief.genxkrypto.com" beneath the card,
+// which is why the baked line is redundant here but kept on the default image.
+//
+// Crop budget: X fits summary_large_image to 2:1, so this file loses 37.5px off
+// the top and bottom, leaving a visible band of y=37.5 to y=637.5. Measured
+// Aug 18, 2026: lowest content on the left side is EVIDENCE OVER NARRATIVE.
+// ending at y=530, giving 107px of clear runway to the cropped bottom edge, and
+// the chip footprint samples at 4.5/255 mean luminance. If the left column ever
+// grows downward past y=530 the chip starts clipping again and nothing in the
+// build will warn about it.
+const X_CARD_IMAGE = 'https://brief.genxkrypto.com/og-card-x.jpg?v=2';
 
 export const metadata = {
   metadataBase: new URL('https://brief.genxkrypto.com'),
