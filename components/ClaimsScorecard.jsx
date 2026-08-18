@@ -32,7 +32,7 @@ export default function ClaimsScorecard({ claims }) {
         {order.map((k) => (
           <span key={k}>
             <span className="dim">{VERIFICATION[k].label.toUpperCase()}</span>{' '}
-            <strong style={{ color: VERIFICATION[k].color }}>{counts[k]}</strong>
+            <strong style={{ color: counts[k] > 0 ? VERIFICATION[k].color : 'var(--mute)' }}>{counts[k]}</strong>
           </span>
         ))}
       </div>
