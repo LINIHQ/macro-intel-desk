@@ -39,7 +39,7 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--acc); outline-o
 /* ---------- header ---------- */
 
 .site-head { border-bottom: 1px solid var(--line); background: var(--panel); padding: 22px 0 0; }
-.brand-row { display: flex; align-items: center; gap: 16px; }
+.brand-row { display: flex; align-items: center; gap: 16px; position: relative; }
 .brand { display: flex; align-items: center; gap: 16px; color: var(--text); min-width: 0; }
 .brand:hover { text-decoration: none; }
 .brand-avatar {
@@ -136,6 +136,7 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--acc); outline-o
   top: 100%;
   left: 0;
   right: 0;
+  z-index: 81;
   display: flex;
   flex-direction: column;
   background: var(--panel);
