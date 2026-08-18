@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { IBM_Plex_Mono } from 'next/font/google';
 import { Analytics } from '@vercel/analytics/next';
 import NavLinks from '@/components/NavLinks';
+import MobileMenu from '@/components/MobileMenu';
 
 const mono = IBM_Plex_Mono({ subsets: ['latin'], weight: ['400', '500', '600', '700'], variable: '--font-mono' });
 
@@ -76,6 +77,7 @@ export default function RootLayout({ children }) {
                 </svg>
                 <span className="x-label">@GenXKrypto</span>
               </a>
+              <MobileMenu />
             </div>
             <NavLinks />
           </div>
