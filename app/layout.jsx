@@ -28,7 +28,7 @@ export const metadata = {
   appleWebApp: {
     capable: true,
     statusBarStyle: 'black-translucent',
-    title: 'GenXKrypto',
+    title: 'XRP Brief',
   },
   openGraph: {
     title: TITLE,
