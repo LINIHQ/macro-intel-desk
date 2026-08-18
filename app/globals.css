@@ -235,6 +235,31 @@ h2 {
   .fng-row { justify-content: flex-start; }
 }
 
+/* ---------- pull to refresh (standalone PWA only) ---------- */
+
+.ptr-indicator {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 95;
+  height: 0;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--panel);
+  border-bottom: 1px solid var(--line);
+  transition: height 90ms linear;
+}
+.ptr-indicator-visible { border-bottom-color: var(--line); }
+.ptr-spin { display: inline-flex; color: var(--mute); transition: color 120ms ease; }
+.ptr-indicator-armed .ptr-spin { color: var(--acc); }
+.ptr-spin-loading { color: var(--acc); animation: ptr-rotate 0.7s linear infinite; }
+@keyframes ptr-rotate {
+  to { transform: rotate(360deg); }
+}
+
 /* ---------- dashboard tiles ---------- */
 
 .dash-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
