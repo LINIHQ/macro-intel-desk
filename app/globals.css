@@ -310,7 +310,8 @@ button.tile {
   transition: box-shadow 140ms ease, border-color 140ms ease;
 }
 button.tile:hover,
-button.tile.open {
+button.tile.open,
+button.tile.changed {
   border-color: color-mix(in srgb, var(--tile-c, var(--mute)) 60%, var(--line));
   border-left-color: var(--tile-c, var(--mute));
   box-shadow: 0 0 16px color-mix(in srgb, var(--tile-c, var(--mute)) 28%, transparent);
