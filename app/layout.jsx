@@ -13,17 +13,29 @@ export const revalidate = 60;
 
 const TITLE = 'GenXKrypto | XRP Macro Intelligence Desk';
 const DESCRIPTION = 'Verified XRP and macro intelligence briefs. Evidence over narrative.';
+
+// Default card art, 1200x675. Used by Discord, Slack, iMessage, LinkedIn, and
+// every unfurl that is not X. Bump the ?v= buster whenever the file changes.
 const OG_IMAGE = 'https://brief.genxkrypto.com/og-card.jpg?v=3';
 
-// X only. X paints twitter:title as a fixed overlay chip at the bottom left of a
+// X only, below. X reads twitter:* first and falls back to the og:* equivalent
+// only when the twitter tag is absent, so these two constants override the
+// defaults on X and nowhere else.
+
+// X paints twitter:title as a fixed overlay chip at the bottom left of a
 // summary_large_image card. The position is not controllable and the chip cannot
 // be suppressed, so the only lever is length: a shorter string means a narrower
 // chip. Tested on Aug 18, 2026: a single period ('.') caused X to stop building
 // the card entirely rather than falling back to og:title. Do not go shorter than
 // a real word here.
-// Scope note: this value is X only. TITLE and openGraph.title keep the full name
-// for the browser tab, search results, and every non-X unfurl including Discord.
 const X_CARD_TITLE = 'XRP Macro Brief';
+
+// Separate art for X at 1200x628 (2:1, the ratio X actually wants) with the
+// bottom strip left clear and the baked domain line removed, so the title chip
+// lands on empty background instead of on top of the design. X also prints
+// "From brief.genxkrypto.com" beneath the card, which makes a baked domain line
+// redundant there. The 1200x675 default keeps its domain line for other sites.
+const X_CARD_IMAGE = 'https://brief.genxkrypto.com/og-card-x.jpg?v=1';
 
 export const metadata = {
   metadataBase: new URL('https://brief.genxkrypto.com'),
@@ -55,7 +67,7 @@ export const metadata = {
     card: 'summary_large_image',
     title: X_CARD_TITLE,
     description: DESCRIPTION,
-    images: [OG_IMAGE],
+    images: [X_CARD_IMAGE],
   },
 };
 
