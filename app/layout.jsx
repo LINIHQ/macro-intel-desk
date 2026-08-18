@@ -16,12 +16,14 @@ const DESCRIPTION = 'Verified XRP and macro intelligence briefs. Evidence over n
 const OG_IMAGE = 'https://brief.genxkrypto.com/og-card.jpg?v=3';
 
 // X only. X paints twitter:title as a fixed overlay chip at the bottom left of a
-// summary_large_image card. Position is not controllable and the field cannot be
-// empty (an empty value falls back to og:title, then to the page title), so a
-// single period is the shortest legal string and keeps the chip minimal.
-// Do not reuse this anywhere else: TITLE and openGraph.title carry the real name
+// summary_large_image card. The position is not controllable and the chip cannot
+// be suppressed, so the only lever is length: a shorter string means a narrower
+// chip. Tested on Aug 18, 2026: a single period ('.') caused X to stop building
+// the card entirely rather than falling back to og:title. Do not go shorter than
+// a real word here.
+// Scope note: this value is X only. TITLE and openGraph.title keep the full name
 // for the browser tab, search results, and every non-X unfurl including Discord.
-const X_CARD_TITLE = '.';
+const X_CARD_TITLE = 'XRP Macro Brief';
 
 export const metadata = {
   metadataBase: new URL('https://brief.genxkrypto.com'),
