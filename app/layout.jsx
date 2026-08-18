@@ -5,6 +5,7 @@ import { Analytics } from '@vercel/analytics/next';
 import NavLinks from '@/components/NavLinks';
 import MobileMenu from '@/components/MobileMenu';
 import PullToRefresh from '@/components/PullToRefresh';
+import RefreshOnReturn from '@/components/RefreshOnReturn';
 
 const mono = IBM_Plex_Mono({ subsets: ['latin'], weight: ['400', '500', '600', '700'], variable: '--font-mono' });
 
@@ -56,6 +57,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" className={mono.variable}>
       <body>
+        <RefreshOnReturn />
         <PullToRefresh />
         <header className="site-head">
           <div className="wrap">
