@@ -4,6 +4,7 @@ import { IBM_Plex_Mono } from 'next/font/google';
 import { Analytics } from '@vercel/analytics/next';
 import NavLinks from '@/components/NavLinks';
 import MobileMenu from '@/components/MobileMenu';
+import PullToRefresh from '@/components/PullToRefresh';
 
 const mono = IBM_Plex_Mono({ subsets: ['latin'], weight: ['400', '500', '600', '700'], variable: '--font-mono' });
 
@@ -55,6 +56,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" className={mono.variable}>
       <body>
+        <PullToRefresh />
         <header className="site-head">
           <div className="wrap">
             <div className="brand-row">
