@@ -51,11 +51,6 @@ export default function DashboardGrid({ states }) {
     };
   }, [openKey]);
 
-  // When at least one gauge moved this run, unchanged tiles step back so the mover
-  // reads first. When nothing moved (or a first run has no prior), every tile stays
-  // at full weight: a uniformly calm grid is the honest read of an unchanged regime.
-  const anyChanged = CATEGORIES.some((c) => stateFor(states, c.key)?.changed_from_prior);
-
   const openCat = openKey ? CATEGORIES.find((c) => c.key === openKey) : null;
   const openState = openKey ? stateFor(states, openKey) : null;
   const openColor = openState ? LEVEL_COLORS[openState.level] : 'var(--mute)';
@@ -68,13 +63,17 @@ export default function DashboardGrid({ states }) {
           const color = s ? LEVEL_COLORS[s.level] : 'var(--mute)';
           const direction = directionFor(c.key, s?.level ?? null);
           const isOpen = openKey === c.key;
-          const dimmed = anyChanged && !s?.changed_from_prior && !isOpen;
+          // The tile that moved this run carries the persistent glow; everything else
+          // sits at normal weight. A grid with no glow means nothing changed.
+          const tileClass = ['tile', isOpen ? 'open' : '', s?.changed_from_prior ? 'changed' : '']
+            .filter(Boolean)
+            .join(' ');
           return (
             <button
               key={c.key}
               type="button"
-              className={isOpen ? 'tile open' : 'tile'}
-              style={{ '--tile-c': color, opacity: dimmed ? 0.55 : 1, transition: 'opacity 0.2s ease' }}
+              className={tileClass}
+              style={{ '--tile-c': color }}
               onClick={() => {
                 if (!s) return;
                 setOpenKey(isOpen ? null : c.key);
