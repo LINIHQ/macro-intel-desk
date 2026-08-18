@@ -59,7 +59,7 @@ export default async function LivePage() {
 
       <h2>Top things that matter</h2>
       <p className="small mute" style={{ margin: '2px 0 14px' }}>
-        Ranked by weight, tagged by verdict. <a href="#full-brief">Full detail in the brief below.</a>
+        Ranked by weight, tagged by verdict. <a className="quiet-link" href="#full-brief">Full detail in the brief below.</a>
       </p>
       <BriefItems items={brief.brief_items} />
 
