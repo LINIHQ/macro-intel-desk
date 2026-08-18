@@ -27,11 +27,11 @@ export default function ClaimsScorecard({ claims }) {
     <div className="card" style={{ padding: '14px 16px' }}>
       <div className="mono small" style={{ display: 'flex', flexWrap: 'wrap', columnGap: '18px', rowGap: '6px' }}>
         <span>
-          <span className="mute">CLAIMS TRACKED</span> <strong>{claims.length}</strong>
+          <span className="dim">CLAIMS TRACKED</span> <strong>{claims.length}</strong>
         </span>
         {order.map((k) => (
           <span key={k}>
-            <span className="mute">{VERIFICATION[k].label.toUpperCase()}</span>{' '}
+            <span className="dim">{VERIFICATION[k].label.toUpperCase()}</span>{' '}
             <strong style={{ color: VERIFICATION[k].color }}>{counts[k]}</strong>
           </span>
         ))}
