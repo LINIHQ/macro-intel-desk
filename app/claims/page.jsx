@@ -28,7 +28,9 @@ export default async function ClaimsPage() {
             <div key={cl.id} className="card">
               <div className="card-head">
                 <p className="card-title">{cl.claim_text}</p>
-                <StatusChip color={ver.color}>{ver.label}</StatusChip>
+                <span className="card-chips">
+                  <StatusChip color={ver.color}>{ver.label}</StatusChip>
+                </span>
               </div>
               <p className="small mute mono" style={{ margin: '4px 0 10px' }}>
                 First seen {cl.first_seen_date}
