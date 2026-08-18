@@ -425,6 +425,16 @@ button.tile.open {
   text-underline-offset: 3px;
 }
 
+/* ---------- quiet inline link (for muted body lines) ---------- */
+
+.quiet-link {
+  color: var(--dim);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: color 120ms ease;
+}
+.quiet-link:hover { color: var(--text); text-decoration: underline; }
+
 /* ---------- cards + rows ---------- */
 
 .card { background: var(--panel); border: 1px solid var(--line); padding: 16px 18px; margin-bottom: 12px; transition: border-color 120ms ease; }
