@@ -16,6 +16,20 @@ export const metadata = {
   metadataBase: new URL('https://brief.genxkrypto.com'),
   title: TITLE,
   description: DESCRIPTION,
+  manifest: '/manifest.webmanifest',
+  icons: {
+    icon: [
+      { url: '/favicon-16.png', sizes: '16x16', type: 'image/png' },
+      { url: '/favicon-32.png', sizes: '32x32', type: 'image/png' },
+      { url: '/favicon-48.png', sizes: '48x48', type: 'image/png' },
+    ],
+    apple: [{ url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' }],
+  },
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'black-translucent',
+    title: 'GenXKrypto',
+  },
   openGraph: {
     title: TITLE,
     description: DESCRIPTION,
@@ -33,7 +47,7 @@ export const metadata = {
 };
 
 export const viewport = {
-  themeColor: '#2f7df6',
+  themeColor: '#070d18',
 };
 
 export default function RootLayout({ children }) {
