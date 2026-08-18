@@ -28,6 +28,15 @@ function directionFor(key, level) {
   return 'flat';
 }
 
+// Small down-chevron: signals a tile is expandable. Rotates to point up when open.
+function TileChevron() {
+  return (
+    <svg className="tile-chevron" width="10" height="10" viewBox="0 0 16 16" aria-hidden="true">
+      <path d="M3 6l5 5 5-5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+    </svg>
+  );
+}
+
 export default function DashboardGrid({ states }) {
   const [openKey, setOpenKey] = useState(null);
   const rootRef = useRef(null);
@@ -89,6 +98,7 @@ export default function DashboardGrid({ states }) {
                 <TrendLine direction={direction} seedKey={c.key} />
               </div>
               {s?.changed_from_prior ? <div className="tile-badge">changed this run</div> : null}
+              {s ? <TileChevron /> : null}
             </button>
           );
         })}
