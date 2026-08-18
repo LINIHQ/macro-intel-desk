@@ -12,7 +12,7 @@ export const revalidate = 60;
 
 const TITLE = 'GenXKrypto | XRP Macro Intelligence Desk';
 const DESCRIPTION = 'Verified XRP and macro intelligence briefs. Evidence over narrative.';
-const OG_IMAGE = 'https://brief.genxkrypto.com/og-card.jpg?v=2';
+const OG_IMAGE = 'https://brief.genxkrypto.com/og-card.jpg?v=3';
 
 export const metadata = {
   metadataBase: new URL('https://brief.genxkrypto.com'),
