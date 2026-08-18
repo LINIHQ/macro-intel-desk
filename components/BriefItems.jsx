@@ -17,7 +17,7 @@ export default function BriefItems({ items }) {
               <p className="card-title">
                 <span className="card-rank">{it.rank}.</span> {it.title}
               </p>
-              <span style={{ display: 'flex', gap: 8 }}>
+              <span className="card-chips">
                 <StatusChip color={imp.color}>{imp.label}</StatusChip>
                 <StatusChip color={ver.color}>
                   {it.verification === 'verified' ? '\u2713 ' : ''}
