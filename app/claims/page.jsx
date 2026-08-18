@@ -3,6 +3,7 @@ import { VERIFICATION } from '@/lib/format';
 import StatusChip from '@/components/StatusChip';
 import SourcePills from '@/components/SourcePills';
 import Markdown from '@/components/Markdown';
+import ClaimsScorecard from '@/components/ClaimsScorecard';
 
 export const revalidate = 60;
 
@@ -16,6 +17,7 @@ export default async function ClaimsPage() {
         Every consequential claim the desk has checked, with its current verdict. Verdicts change when evidence
         changes, and the history stays public.
       </p>
+      <ClaimsScorecard claims={claims} />
       {claims.length ? (
         claims.map((cl) => {
           const ver = VERIFICATION[cl.current_status] || VERIFICATION.opinion;
