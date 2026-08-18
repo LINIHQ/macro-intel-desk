@@ -10,43 +10,44 @@ export default function MobileMenu() {
   const pathname = usePathname() || '/';
 
   useEffect(() => {
-    document.body.style.overflow = open ? 'hidden' : '';
-    return () => {
-      document.body.style.overflow = '';
-    };
-  }, [open]);
-
-  useEffect(() => {
     setOpen(false);
   }, [pathname]);
+
+  useEffect(() => {
+    if (!open) return;
+    function onKey(e) {
+      if (e.key === 'Escape') setOpen(false);
+    }
+    document.addEventListener('keydown', onKey);
+    return () => document.removeEventListener('keydown', onKey);
+  }, [open]);
 
   return (
     <>
       <button
         type="button"
         className="menu-btn"
-        aria-label="Open menu"
+        aria-label={open ? 'Close menu' : 'Open menu'}
         aria-expanded={open}
-        onClick={() => setOpen(true)}
+        onClick={() => setOpen(!open)}
       >
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
-          <line x1="4" y1="7" x2="20" y2="7" />
-          <line x1="4" y1="12" x2="20" y2="12" />
-          <line x1="4" y1="17" x2="20" y2="17" />
-        </svg>
+        {open ? (
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
+            <line x1="6" y1="6" x2="18" y2="18" />
+            <line x1="18" y1="6" x2="6" y2="18" />
+          </svg>
+        ) : (
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
+            <line x1="4" y1="7" x2="20" y2="7" />
+            <line x1="4" y1="12" x2="20" y2="12" />
+            <line x1="4" y1="17" x2="20" y2="17" />
+          </svg>
+        )}
       </button>
       {open && (
-        <div className="m-menu" role="dialog" aria-modal="true" aria-label="Site menu">
-          <div className="m-menu-head">
-            <span className="m-menu-title">GenXKrypto</span>
-            <button type="button" className="menu-btn" aria-label="Close menu" onClick={() => setOpen(false)}>
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
-                <line x1="6" y1="6" x2="18" y2="18" />
-                <line x1="18" y1="6" x2="6" y2="18" />
-              </svg>
-            </button>
-          </div>
-          <nav className="m-menu-nav">
+        <>
+          <div className="m-scrim" onClick={() => setOpen(false)} aria-hidden="true" />
+          <nav className="m-menu" aria-label="Site menu">
             {NAV.map((n) => (
               <Link
                 key={n.href}
@@ -59,7 +60,7 @@ export default function MobileMenu() {
               </Link>
             ))}
           </nav>
-        </div>
+        </>
       )}
     </>
   );
