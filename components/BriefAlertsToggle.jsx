@@ -27,6 +27,7 @@ function urlBase64ToUint8Array(base64String) {
 // working      subscribe/unsubscribe in flight
 export default function BriefAlertsToggle() {
   const [state, setState] = useState('loading');
+  const [wasOn, setWasOn] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -59,6 +60,7 @@ export default function BriefAlertsToggle() {
   }, []);
 
   async function enable() {
+    setWasOn(false);
     setState('working');
     try {
       const reg = await navigator.serviceWorker.register('/sw.js');
@@ -96,6 +98,7 @@ export default function BriefAlertsToggle() {
   }
 
   async function disable() {
+    setWasOn(true);
     setState('working');
     try {
       const reg = await navigator.serviceWorker.getRegistration();
@@ -111,75 +114,65 @@ export default function BriefAlertsToggle() {
 
   if (state === 'loading') return null;
 
-  const rowStyle = {
-    margin: '0 0 22px',
-    padding: '6px 12px',
-    borderLeft: '2px solid rgba(255,255,255,0.25)',
-    letterSpacing: '0.02em',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    gap: 12,
-    flexWrap: 'wrap',
-  };
-
   if (state === 'unsupported') {
     return (
-      <p className="small mute" style={rowStyle}>
-        <span>
+      <div className="alerts-row">
+        <p className="alerts-text">
           Brief alerts: install the app to your device first (instructions on the{' '}
           <Link className="quiet-link" href="/install">
             install page
           </Link>
-          ), then open it and flip the alerts switch to get a notification when a new brief drops.
-        </span>
-      </p>
+          ). Once installed, open the app and a toggle will appear here to turn on notifications for new
+          briefs.
+        </p>
+      </div>
     );
   }
 
   if (state === 'denied') {
     return (
-      <p className="small mute" style={rowStyle}>
-        <span>Brief alerts: notifications are blocked for this app in your device settings. Allow them there to enable alerts.</span>
-      </p>
+      <div className="alerts-row">
+        <p className="alerts-text">
+          Brief alerts: notifications are blocked for this app in your device settings. Allow them there,
+          then come back and flip the toggle.
+        </p>
+      </div>
     );
   }
 
   const on = state === 'on';
+  const busy = state === 'working';
+  const showAsOn = on || (busy && !wasOn);
 
   return (
-    <p className="small mute" style={rowStyle}>
-      <span>
-        {on
-          ? 'Brief alerts are on. One notification per brief, when it drops.'
-          : (
-            <>
-              Brief alerts: installed the app from the{' '}
-              <Link className="quiet-link" href="/install">
-                install page
-              </Link>
-              ? Flip this switch to get a notification when a new brief drops.
-            </>
-          )}
+    <div className="alerts-row">
+      <p className="alerts-text">
+        {on ? (
+          'Brief alerts are on. One notification per brief, right when it drops.'
+        ) : (
+          <>
+            Brief alerts: installed the app from the{' '}
+            <Link className="quiet-link" href="/install">
+              install page
+            </Link>
+            ? Tap the toggle to turn on a notification whenever a new brief drops.
+          </>
+        )}
+      </p>
+      <span className="alerts-control">
+        <span className={showAsOn ? 'alerts-state on' : 'alerts-state'}>
+          {busy ? 'working' : on ? 'alerts on' : 'alerts off'}
+        </span>
+        <button
+          type="button"
+          className={showAsOn ? 'switch on' : 'switch'}
+          onClick={on ? disable : enable}
+          disabled={busy}
+          role="switch"
+          aria-checked={on}
+          aria-label="Brief alerts"
+        />
       </span>
-      <button
-        type="button"
-        onClick={on ? disable : enable}
-        disabled={state === 'working'}
-        aria-pressed={on}
-        style={{
-          background: 'transparent',
-          border: '1px solid rgba(255,255,255,0.35)',
-          color: 'inherit',
-          font: 'inherit',
-          letterSpacing: 'inherit',
-          padding: '3px 10px',
-          cursor: state === 'working' ? 'wait' : 'pointer',
-          whiteSpace: 'nowrap',
-        }}
-      >
-        {state === 'working' ? 'working' : on ? 'alerts: on' : 'alerts: off'}
-      </button>
-    </p>
+    </div>
   );
 }
