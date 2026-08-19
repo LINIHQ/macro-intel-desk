@@ -237,27 +237,42 @@ h2 {
 
 /* ---------- pull to refresh (standalone PWA only) ---------- */
 
-.ptr-indicator {
+.ptr-layer {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   z-index: 95;
   height: 0;
-  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  pointer-events: none;
+}
+.ptr-puck {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--panel);
-  border-bottom: 1px solid var(--line);
-  transition: height 90ms linear;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--panel2);
+  border: 1px solid var(--line);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45);
+  transform: translateY(-40px);
+  will-change: transform, opacity;
+  transition: opacity 120ms ease, box-shadow 140ms ease;
 }
-.ptr-indicator-visible { border-bottom-color: var(--line); }
-.ptr-spin { display: inline-flex; color: var(--mute); transition: color 120ms ease; }
-.ptr-indicator-armed .ptr-spin { color: var(--acc); }
-.ptr-spin-loading { color: var(--acc); animation: ptr-rotate 0.7s linear infinite; }
+.ptr-puck-ready { box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5); border-color: var(--acc); }
+.ptr-puck-loading { transition: transform 180ms cubic-bezier(0.2, 0.8, 0.3, 1), opacity 120ms ease; }
+.ptr-ring { transform: rotate(-90deg); }
+.ptr-ring-track { stroke: var(--line); }
+.ptr-ring-arc { stroke: var(--mute); transition: stroke 140ms ease; }
+.ptr-puck-ready .ptr-ring-arc { stroke: var(--acc); }
+.ptr-puck-loading .ptr-ring { animation: ptr-rotate 0.75s linear infinite; transform-origin: 50% 50%; }
+.ptr-puck-loading .ptr-ring-arc { stroke: var(--acc); stroke-dasharray: 14 50; }
 @keyframes ptr-rotate {
-  to { transform: rotate(360deg); }
+  from { transform: rotate(-90deg); }
+  to { transform: rotate(270deg); }
 }
 
 /* ---------- dashboard tiles ---------- */
