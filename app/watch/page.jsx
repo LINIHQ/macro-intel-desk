@@ -5,6 +5,24 @@ import Markdown from '@/components/Markdown';
 
 export const revalidate = 60;
 
+// Escalated items lead, then open items. Within each group, the most recently
+// touched item sits on top, so an item that moved in the latest run surfaces
+// and an item that has gone quiet drifts down.
+const STATUS_RANK = { escalated: 0, open: 1, resolved: 2 };
+
+function byStatusThenActivity(a, b) {
+  const rank = (STATUS_RANK[a.status] ?? 1) - (STATUS_RANK[b.status] ?? 1);
+  if (rank !== 0) return rank;
+  return new Date(b.updated_at || b.opened_date) - new Date(a.updated_at || a.opened_date);
+}
+
+function byResolvedDate(a, b) {
+  return (
+    new Date(b.status_changed_date || b.updated_at || b.opened_date) -
+    new Date(a.status_changed_date || a.updated_at || a.opened_date)
+  );
+}
+
 function WatchCard({ item }) {
   const st = WATCH_STATUS[item.status] || WATCH_STATUS.open;
   return (
@@ -25,8 +43,8 @@ function WatchCard({ item }) {
 
 export default async function WatchPage() {
   const items = await getWatchItems();
-  const active = items.filter((i) => i.status !== 'resolved');
-  const resolved = items.filter((i) => i.status === 'resolved');
+  const active = items.filter((i) => i.status !== 'resolved').sort(byStatusThenActivity);
+  const resolved = items.filter((i) => i.status === 'resolved').sort(byResolvedDate);
 
   return (
     <div>
