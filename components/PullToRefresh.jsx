@@ -6,7 +6,8 @@ import { useRouter } from 'next/navigation';
 // Only meaningful in standalone/home-screen mode: a normal browser tab already
 // has native pull-to-refresh, and this would just fight it.
 const THRESHOLD = 68;
-const MAX_PULL = 88;
+const MAX_PULL = 96;
+const RING = 2 * Math.PI * 8; // r=8 in the 20x20 viewBox
 
 export default function PullToRefresh() {
   const router = useRouter();
@@ -55,6 +56,7 @@ export default function PullToRefresh() {
       active.current = false;
       startY.current = null;
       if (armed.current) {
+        if (window.navigator.vibrate) window.navigator.vibrate(8);
         startTransition(() => {
           router.refresh();
         });
@@ -73,22 +75,41 @@ export default function PullToRefresh() {
   }, [router]);
 
   const visible = pull > 0 || isPending;
-  const height = isPending ? 40 : Math.round(pull);
-  const containerClass = ['ptr-indicator', visible ? 'ptr-indicator-visible' : '', armed.current ? 'ptr-indicator-armed' : '']
+  const progress = Math.min(1, pull / THRESHOLD);
+  const ready = progress >= 1;
+
+  const translate = isPending ? 58 : 8 + pull * 0.62;
+  const scale = isPending ? 1 : 0.55 + 0.45 * progress;
+  const opacity = isPending ? 1 : Math.min(1, pull / 26);
+
+  const puckClass = ['ptr-puck', ready ? 'ptr-puck-ready' : '', isPending ? 'ptr-puck-loading' : '']
     .filter(Boolean)
     .join(' ');
 
   return (
-    <div className={containerClass} style={{ height }} aria-hidden={!visible}>
-      <span
-        className={`ptr-spin${isPending ? ' ptr-spin-loading' : ''}`}
-        style={!isPending ? { transform: `rotate(${Math.round(pull * 2.4)}deg)` } : undefined}
+    <div className="ptr-layer" aria-hidden={!visible}>
+      <div
+        className={puckClass}
+        style={{ transform: `translateY(${translate}px) scale(${scale})`, opacity }}
       >
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-          <path d="M4 12a8 8 0 0 1 8-8 8 8 0 0 1 7.4 5" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" />
-          <path d="M19.5 4.5v5h-5" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
+        <svg className="ptr-ring" width="20" height="20" viewBox="0 0 20 20" aria-hidden="true">
+          <circle className="ptr-ring-track" cx="10" cy="10" r="8" fill="none" strokeWidth="2" />
+          <circle
+            className="ptr-ring-arc"
+            cx="10"
+            cy="10"
+            r="8"
+            fill="none"
+            strokeWidth="2"
+            strokeLinecap="round"
+            style={
+              isPending
+                ? undefined
+                : { strokeDasharray: RING, strokeDashoffset: RING * (1 - progress * 0.92) }
+            }
+          />
         </svg>
-      </span>
+      </div>
     </div>
   );
 }
