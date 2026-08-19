@@ -6,6 +6,7 @@ import BriefItems from '@/components/BriefItems';
 import Markdown from '@/components/Markdown';
 import CrowdGauge from '@/components/CrowdGauge';
 import ShareBlock from '@/components/ShareBlock';
+import BriefAlertsToggle from '@/components/BriefAlertsToggle';
 
 export const revalidate = 60;
 
@@ -40,7 +41,7 @@ export default async function LivePage() {
       <p
         className="small mute"
         style={{
-          margin: '10px 0 22px',
+          margin: '10px 0 8px',
           padding: '6px 12px',
           borderLeft: '2px solid rgba(255,255,255,0.25)',
           letterSpacing: '0.02em',
@@ -48,6 +49,7 @@ export default async function LivePage() {
       >
         Quick brief drops each morning Mon-Thu, 9-10am ET · Week-ending brief Friday after US market close
       </p>
+      <BriefAlertsToggle />
       <DashboardGrid states={brief.dashboard_states} history={history} />
 
       {brief.headline ? (
