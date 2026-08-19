@@ -594,6 +594,73 @@ button.tile.changed {
 .install-steps li { margin-bottom: 8px; }
 .install-steps li::marker { color: var(--acc); font-weight: 600; }
 
+/* ---------- brief alerts toggle ---------- */
+
+.alerts-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px 18px;
+  flex-wrap: wrap;
+  margin: 0 0 22px;
+  padding: 8px 12px 9px;
+  border-left: 2px solid rgba(255, 255, 255, 0.25);
+}
+.alerts-text {
+  font-size: 13px;
+  color: var(--mute);
+  letter-spacing: 0.02em;
+  margin: 0;
+  flex: 1 1 260px;
+}
+.alerts-control {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+.alerts-state {
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--mute);
+}
+.alerts-state.on { color: var(--g); }
+.switch {
+  position: relative;
+  width: 46px;
+  height: 24px;
+  flex-shrink: 0;
+  border: 1px solid color-mix(in srgb, var(--dim) 45%, var(--line));
+  border-radius: 999px;
+  background: var(--panel2);
+  cursor: pointer;
+  padding: 0;
+  transition: background 140ms ease, border-color 140ms ease;
+}
+.switch::after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--dim);
+  transition: transform 140ms ease, background 140ms ease;
+}
+.switch:hover { border-color: var(--dim); }
+.switch.on {
+  background: color-mix(in srgb, var(--g) 22%, var(--panel2));
+  border-color: color-mix(in srgb, var(--g) 60%, var(--line));
+}
+.switch.on::after {
+  transform: translateX(22px);
+  background: var(--g);
+}
+.switch:disabled { cursor: wait; opacity: 0.6; }
+
 /* ---------- share block ---------- */
 
 .share-block {
