@@ -21,7 +21,7 @@ export default async function ArchivePage() {
             <Link key={b.id} href={`/brief/${b.id}`} className="row-item" style={{ color: 'inherit' }}>
               <span>
                 <span className="mono" style={{ fontWeight: 500 }}>
-                  {fmtDate(b.run_date)} · {b.run_label}
+                  {fmtDate(b.run_date)} · {b.brief_mode} brief
                 </span>
                 <br />
                 <span className="small dim">{b.headline || `${b.brief_mode} brief`}</span>
