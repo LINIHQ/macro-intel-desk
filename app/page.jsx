@@ -24,8 +24,8 @@ export default async function LivePage() {
 
   const shareUrl = 'https://brief.genxkrypto.com';
   const shareText = brief.headline
-    ? `${brief.run_label}: ${brief.headline}`
-    : `${brief.run_label}, XRP Macro Intelligence Desk`;
+    ? `XRP Macro Brief: ${brief.headline}`
+    : 'XRP Macro Intelligence Desk';
 
   return (
     <div>
@@ -33,7 +33,7 @@ export default async function LivePage() {
         <div>
           <h1>Macro dashboard</h1>
           <p className="page-meta">
-            {brief.run_label} · {fmtDate(brief.run_date)} · {brief.brief_mode} brief
+            {fmtDate(brief.run_date)} · {brief.brief_mode} brief
           </p>
         </div>
         <CrowdGauge />
