@@ -24,15 +24,13 @@ export default async function BriefPage({ params }) {
 
   const permalink = `https://brief.genxkrypto.com/brief/${brief.id}`;
   const shareText = brief.headline
-    ? `${brief.run_label}: ${brief.headline}`
-    : `${brief.run_label}, XRP Macro Intelligence Desk`;
+    ? `XRP Macro Brief: ${brief.headline}`
+    : 'XRP Macro Intelligence Desk';
 
   return (
     <div>
       <div className="card-head" style={{ marginBottom: 14 }}>
-        <h1>
-          {brief.run_label} · {fmtDate(brief.run_date)}
-        </h1>
+        <h1>{fmtDate(brief.run_date)}</h1>
         <span className="mono small mute">{brief.brief_mode} brief</span>
       </div>
       <DashboardGrid states={brief.dashboard_states} />
