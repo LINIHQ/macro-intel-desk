@@ -47,7 +47,7 @@ export default async function LivePage() {
           letterSpacing: '0.02em',
         }}
       >
-        Morning brief drops Mon-Fri, 9-10am ET · Week-ending brief Friday after US market close
+        Morning brief drops Mon-Fri, 9-10am ET · Week-ending brief Friday evening, after ETF flow data prints
       </p>
       <BriefAlertsToggle />
       <DashboardGrid states={brief.dashboard_states} history={history} />
