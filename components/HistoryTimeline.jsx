@@ -2,6 +2,8 @@
 
 import { useEffect, useRef, useState } from 'react';
 
+const HOVER_MQ = '(hover: hover) and (pointer: fine)';
+
 export default function HistoryTimeline({ rows, dates }) {
   const scrollRef = useRef(null);
   const panelRef = useRef(null);
@@ -38,6 +40,7 @@ export default function HistoryTimeline({ rows, dates }) {
   const active = activeRow ? activeRow.segs[sel.i] : null;
 
   const toggle = (key, i) => {
+    if (typeof window !== 'undefined' && window.matchMedia(HOVER_MQ).matches) return;
     setSel((prev) => (prev && prev.key === key && prev.i === i ? null : { key, i }));
   };
 
