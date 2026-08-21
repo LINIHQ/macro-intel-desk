@@ -494,6 +494,23 @@ button.tile.changed {
 }
 .quiet-link:hover { color: var(--text); text-decoration: underline; }
 
+/* ---------- inline share line (mid page) ---------- */
+
+.share-inline {
+  margin: 16px 0 4px;
+  letter-spacing: 0.02em;
+}
+.share-inline-btn {
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+.share-inline-sep { color: var(--mute); margin: 0 8px; }
+
 /* ---------- cards + rows ---------- */
 
 .card { background: var(--panel); border: 1px solid var(--line); padding: 16px 18px; margin-bottom: 12px; transition: border-color 120ms ease; }
@@ -697,10 +714,10 @@ button.tile.changed {
   letter-spacing: 0.04em;
   line-height: 1.4;
   padding: 8px 18px 9px;
-  border: 1px solid var(--dim);
+  border: 1px solid var(--line);
   border-radius: 2px;
-  color: var(--text);
-  background: transparent;
+  color: var(--dim);
+  background: var(--panel2);
   cursor: pointer;
   transition: background 120ms ease, border-color 120ms ease, color 120ms ease;
 }
@@ -712,14 +729,14 @@ button.tile.changed {
 }
 .share-cta .ext { font-size: 11px; color: inherit; }
 .share-cta-primary {
-  background: var(--text);
-  border-color: var(--text);
-  color: var(--bg);
+  background: color-mix(in srgb, var(--acc) 10%, var(--panel2));
+  border-color: color-mix(in srgb, var(--acc) 65%, var(--line));
+  color: var(--acc);
 }
 .share-cta-primary:hover {
-  background: var(--acc);
+  background: color-mix(in srgb, var(--acc) 18%, var(--panel2));
   border-color: var(--acc);
-  color: var(--bg);
+  color: var(--acc);
 }
 
 @media (max-width: 600px) {
