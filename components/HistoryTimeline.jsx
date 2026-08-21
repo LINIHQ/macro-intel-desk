@@ -4,12 +4,35 @@ import { useEffect, useRef, useState } from 'react';
 
 export default function HistoryTimeline({ rows, dates }) {
   const scrollRef = useRef(null);
+  const panelRef = useRef(null);
   const [sel, setSel] = useState(null);
 
   useEffect(() => {
     const el = scrollRef.current;
     if (el) el.scrollLeft = el.scrollWidth;
   }, []);
+
+  useEffect(() => {
+    if (!sel) return;
+
+    const onDocClick = (e) => {
+      if (panelRef.current && panelRef.current.contains(e.target)) return;
+      if (e.target.closest && e.target.closest('.tl-seg')) return;
+      setSel(null);
+    };
+    const onScroll = () => setSel(null);
+
+    document.addEventListener('click', onDocClick);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    const sc = scrollRef.current;
+    if (sc) sc.addEventListener('scroll', onScroll, { passive: true });
+
+    return () => {
+      document.removeEventListener('click', onDocClick);
+      window.removeEventListener('scroll', onScroll);
+      if (sc) sc.removeEventListener('scroll', onScroll);
+    };
+  }, [sel]);
 
   const activeRow = sel ? rows.find((r) => r.key === sel.key) : null;
   const active = activeRow ? activeRow.segs[sel.i] : null;
@@ -53,7 +76,7 @@ export default function HistoryTimeline({ rows, dates }) {
       </div>
 
       {active ? (
-        <div className="tl-panel" role="dialog" aria-label="Brief detail">
+        <div className="tl-panel" role="dialog" aria-label="Brief detail" ref={panelRef}>
           <div className="tl-panel-head">
             <span className="tl-panel-date">{active.date}</span>
             <button
