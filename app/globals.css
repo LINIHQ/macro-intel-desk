@@ -523,18 +523,36 @@ button.tile.changed {
 .row-list { border: 1px solid var(--line); overflow: hidden; }
 .row-item { display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 14px 16px; border-bottom: 1px solid var(--line); background: var(--panel); transition: background 120ms ease; }
 .row-item:last-child { border-bottom: none; }
-.row-item:hover { background: var(--panel2); }
+.row-item:hover { background: var(--pan2); }
 
 .dots { display: flex; gap: 5px; flex-shrink: 0; }
 .dot { width: 10px; height: 10px; border-radius: 50%; }
 
-.tl-grid { display: grid; grid-template-columns: 150px minmax(0, 1fr); gap: 10px 14px; align-items: center; }
-.tl-label { font-size: 13px; color: var(--dim); }
-.tl-track { display: flex; gap: 4px; height: 14px; }
+/* ---------- history timeline ---------- */
+
+.tl-scroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  padding-top: 110px;
+  margin-top: -110px;
+}
+.tl-grid { display: grid; grid-template-columns: 150px max-content; gap: 10px 0; align-items: center; }
+.tl-label {
+  font-size: 13px;
+  color: var(--dim);
+  position: sticky;
+  left: 0;
+  z-index: 7;
+  background: var(--bg);
+  padding-right: 14px;
+  align-self: stretch;
+  display: flex;
+  align-items: center;
+}
+.tl-track { display: flex; gap: 4px; height: 14px; width: max-content; }
 .tl-seg {
   position: relative;
-  flex: 1;
-  min-width: 0;
+  flex: 0 0 26px;
   border-radius: 1px;
   opacity: 0.4;
   transition: opacity 120ms ease;
@@ -558,13 +576,13 @@ button.tile.changed {
   line-height: 1.55;
   padding: 8px 11px;
   pointer-events: none;
-  z-index: 6;
+  z-index: 8;
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45);
 }
 .tl-track > .tl-seg:first-child:hover::after { left: 0; transform: none; }
 .tl-track > .tl-seg:last-child:hover::after { left: auto; right: 0; transform: none; }
-.tl-dates { display: flex; gap: 4px; font-size: 11px; color: var(--mute); margin-top: 6px; }
-.tl-dates span { flex: 1; text-align: center; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.tl-dates { display: flex; gap: 4px; font-size: 11px; color: var(--mute); margin-top: 6px; width: max-content; }
+.tl-dates span { flex: 0 0 26px; text-align: left; white-space: nowrap; }
 
 .legend { display: flex; gap: 16px; flex-wrap: wrap; font-size: 12px; color: var(--dim); margin: 10px 0 18px; }
 .legend .dot { display: inline-block; margin-right: 5px; vertical-align: middle; }
@@ -766,6 +784,9 @@ button.tile.changed {
 
   .card-head { flex-direction: column; align-items: flex-start; gap: 8px; }
   .card-chips { padding-top: 0; }
+
+  .tl-grid { grid-template-columns: 112px max-content; }
+  .tl-label { font-size: 11px; padding-right: 10px; }
 
   .share-actions { flex-direction: column; align-items: stretch; }
   .share-cta { justify-content: center; }
