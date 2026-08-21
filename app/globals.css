@@ -473,13 +473,15 @@ button.tile.changed {
 .src-link {
   font-size: 12px;
   color: var(--dim);
-  text-decoration: none;
-  transition: color 120ms ease;
+  text-decoration: underline;
+  text-decoration-color: color-mix(in srgb, var(--dim) 45%, transparent);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  transition: color 120ms ease, text-decoration-color 120ms ease;
 }
 .src-link:hover {
   color: var(--acc);
-  text-decoration: underline;
-  text-underline-offset: 3px;
+  text-decoration-color: var(--acc);
 }
 
 /* ---------- quiet inline link (for muted body lines) ---------- */
