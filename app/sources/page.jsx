@@ -19,7 +19,7 @@ export default function SourcesPage() {
         A morning brief drops each weekday, Monday through Friday, 9-10am ET. A full week-ending brief publishes
         Friday after US market close, covering the week as a whole including Friday's session and the weekly flow
         data the morning brief cannot capture. Breaking developments material enough to warrant it are folded into
-        the next scheduled run.
+        the next scheduled brief.
       </p>
 
       <h2>Source hierarchy</h2>
@@ -98,7 +98,7 @@ export default function SourcesPage() {
         headlines alone.
       </p>
       <p>
-        <strong>How a level gets set.</strong> Every classification rests on evidence verified during that run from
+        <strong>How a level gets set.</strong> Every classification rests on evidence verified during that brief from
         Tier 1 and 2 sources: actual prices, yields, flows, official statements, and confirmed events, never social
         sentiment or narrative volume. A category does not move because the news cycle got loud.
       </p>
@@ -136,7 +136,7 @@ export default function SourcesPage() {
       </p>
       <p>
         Corrections are made by fixing the record and noting the correction. The claim tracker's verdict history is
-        append-only. Archival entries reconstructed from past runs say so explicitly, and unrecovered sections are
+        append-only. Archival entries reconstructed from past briefs say so explicitly, and unrecovered sections are
         omitted rather than rewritten.
       </p>
 
