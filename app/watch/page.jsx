@@ -49,7 +49,7 @@ export default async function WatchPage() {
   return (
     <div>
       <h1>Watch list</h1>
-      <p className="page-sub">Standing items the desk tracks across runs until they resolve.</p>
+      <p className="page-sub">Standing items the desk tracks from brief to brief until they resolve.</p>
       {active.length ? active.map((i) => <WatchCard key={i.id} item={i} />) : <div className="empty">Nothing open right now.</div>}
       {resolved.length ? (
         <>
