@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 
-export default function ShareBlock({ url, text }) {
+export default function ShareBlock({ url, text, variant = 'block' }) {
   const [copied, setCopied] = useState(false);
 
   const intent = `https://x.com/intent/post?text=${encodeURIComponent(text)}&url=${encodeURIComponent(
@@ -17,6 +17,23 @@ export default function ShareBlock({ url, text }) {
     } catch {
       // clipboard unavailable in this context; do nothing
     }
+  }
+
+  if (variant === 'inline') {
+    return (
+      <p className="share-inline small mute">
+        Worth sharing?{' '}
+        <button type="button" className="quiet-link share-inline-btn" onClick={copy}>
+          {copied ? 'Link copied \u2713' : 'Copy link'}
+        </button>
+        <span className="share-inline-sep" aria-hidden="true">
+          ·
+        </span>
+        <a className="quiet-link" href={intent} target="_blank" rel="noopener noreferrer">
+          Share on X
+        </a>
+      </p>
+    );
   }
 
   return (
