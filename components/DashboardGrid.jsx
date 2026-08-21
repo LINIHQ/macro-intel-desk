@@ -97,7 +97,7 @@ export default function DashboardGrid({ states }) {
                 <div className="tile-val">{s ? s.label : '--'}</div>
                 <TrendLine direction={direction} seedKey={c.key} />
               </div>
-              {s?.changed_from_prior ? <div className="tile-badge">changed this run</div> : null}
+              {s?.changed_from_prior ? <div className="tile-badge">changed</div> : null}
               {s ? <TileChevron /> : null}
             </button>
           );
@@ -112,7 +112,7 @@ export default function DashboardGrid({ states }) {
           <p>{LEVEL_MEANINGS[openState.level]}</p>
           {openState.changed_from_prior ? (
             <p>
-              <strong>Changed this run{openState.change_reason ? ':' : '.'}</strong>
+              <strong>Changed in this brief{openState.change_reason ? ':' : '.'}</strong>
               {openState.change_reason ? ` ${openState.change_reason}` : ''}
             </p>
           ) : null}
