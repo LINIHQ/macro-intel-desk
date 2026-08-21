@@ -17,7 +17,7 @@ export default async function HistoryPage() {
   for (const b of briefs) {
     for (const s of b.dashboard_states || []) {
       if (s.changed_from_prior) {
-        changes.push({ date: b.run_date, label: b.run_label, state: s });
+        changes.push({ date: b.run_date, state: s });
       }
     }
   }
@@ -27,9 +27,9 @@ export default async function HistoryPage() {
     <div>
       <h1>Dashboard history</h1>
       <p className="page-sub">
-        Each row is one category, one segment per published run, oldest to newest. Bright outlined segments are the
-        runs where a classification changed; dimmed segments carried over unchanged. Hover any segment for that
-        run's date, status, and the reason behind a change.
+        Each row is one category, one segment per published brief, oldest to newest. Bright outlined segments are the
+        briefs where a classification changed; dimmed segments carried over unchanged. Hover any segment for that
+        brief's date, status, and the reason behind a change.
       </p>
       <div className="legend">
         {LEGEND.map((l) => (
@@ -49,7 +49,7 @@ export default async function HistoryPage() {
                 <div className="tl-track">
                   {briefs.map((b) => {
                     const s = stateFor(b.dashboard_states, c.key);
-                    const tip = `${b.run_label} · ${fmtDate(b.run_date)}: ${s ? s.label : 'n/a'}${s?.change_reason ? `. ${s.change_reason}` : ''}`;
+                    const tip = `${fmtDate(b.run_date)}: ${s ? s.label : 'n/a'}${s?.change_reason ? `. ${s.change_reason}` : ''}`;
                     return (
                       <span
                         key={b.id}
@@ -84,7 +84,7 @@ export default async function HistoryPage() {
                       <br />
                       <span className="small dim">{ch.state.change_reason || 'No reason recorded.'}</span>
                     </span>
-                    <span className="mono small mute">{ch.label} · {fmtDate(ch.date)}</span>
+                    <span className="mono small mute">{fmtDate(ch.date)}</span>
                   </div>
                 ))}
               </div>
