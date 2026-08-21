@@ -17,7 +17,7 @@ export default async function LivePage() {
     return (
       <div>
         <h1>Macro dashboard</h1>
-        <div className="empty">No published briefs yet. The first run will appear here.</div>
+        <div className="empty">No published briefs yet. The first brief will appear here.</div>
       </div>
     );
   }
@@ -71,7 +71,7 @@ export default async function LivePage() {
       <ShareBlock url={shareUrl} text={shareText} />
 
       <p className="small mute" style={{ marginTop: 28 }}>
-        Prior runs live in the <Link href="/archive">archive</Link>. Status shifts over time are on the{' '}
+        Past briefs live in the <Link href="/archive">archive</Link>. Status shifts over time are on the{' '}
         <Link href="/history">history</Link> page.
       </p>
     </div>
