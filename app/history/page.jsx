@@ -1,6 +1,6 @@
 import { getAllBriefs } from '@/lib/supabase';
 import { CATEGORIES, LEVEL_COLORS, fmtDate, stateFor } from '@/lib/format';
-import HistoryScroll from '@/components/HistoryScroll';
+import HistoryTimeline from '@/components/HistoryTimeline';
 
 export const revalidate = 60;
 
@@ -34,13 +34,35 @@ export default async function HistoryPage() {
     (b, i) => i === 0 || weekStart(b.run_date) !== weekStart(briefs[i - 1].run_date)
   );
 
+  const rows = CATEGORIES.map((c) => ({
+    key: c.key,
+    label: c.label,
+    segs: briefs.map((b) => {
+      const s = stateFor(b.dashboard_states, c.key);
+      const date = fmtDate(b.run_date);
+      const status = s ? s.label : 'n/a';
+      const reason = s?.change_reason || '';
+      return {
+        id: b.id,
+        date,
+        status,
+        reason,
+        changed: !!s?.changed_from_prior,
+        color: s ? LEVEL_COLORS[s.level] : 'var(--line)',
+        tip: `${date}: ${status}${reason ? `. ${reason}` : ''}`,
+      };
+    }),
+  }));
+
+  const dates = briefs.map((b, i) => (ticks[i] ? fmtDate(b.run_date).replace(/, \d{4}$/, '') : ''));
+
   return (
     <div>
       <h1>Dashboard history</h1>
       <p className="page-sub">
         Each row is one category, one segment per published brief, oldest to newest. The timeline opens at the most
         recent brief; scroll left for older runs. Bright outlined segments are the briefs where a classification
-        changed; dimmed segments carried over unchanged. Hover or tap any segment for that brief's date, status, and
+        changed; dimmed segments carried over unchanged. Tap or hover any segment for that brief's date, status, and
         the reason behind a change. Date ticks mark the first brief of each week.
       </p>
       <div className="legend">
@@ -54,36 +76,7 @@ export default async function HistoryPage() {
 
       {briefs.length ? (
         <>
-          <HistoryScroll>
-            <div className="tl-grid">
-              {CATEGORIES.map((c) => (
-                <div key={c.key} style={{ display: 'contents' }}>
-                  <span className="tl-label">{c.label}</span>
-                  <div className="tl-track">
-                    {briefs.map((b) => {
-                      const s = stateFor(b.dashboard_states, c.key);
-                      const tip = `${fmtDate(b.run_date)}: ${s ? s.label : 'n/a'}${s?.change_reason ? `. ${s.change_reason}` : ''}`;
-                      return (
-                        <span
-                          key={b.id}
-                          className={`tl-seg${s?.changed_from_prior ? ' changed' : ''}`}
-                          data-tip={tip}
-                          aria-label={tip}
-                          style={{ background: s ? LEVEL_COLORS[s.level] : 'var(--line)' }}
-                        />
-                      );
-                    })}
-                  </div>
-                </div>
-              ))}
-              <span className="tl-label" />
-              <div className="tl-dates">
-                {briefs.map((b, i) => (
-                  <span key={b.id}>{ticks[i] ? fmtDate(b.run_date).replace(/, \d{4}$/, '') : ''}</span>
-                ))}
-              </div>
-            </div>
-          </HistoryScroll>
+          <HistoryTimeline rows={rows} dates={dates} />
 
           {changes.length ? (
             <>
