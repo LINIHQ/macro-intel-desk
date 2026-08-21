@@ -12,8 +12,8 @@ export default async function ArchivePage() {
     <div>
       <h1>Brief archive</h1>
       <p className="page-sub">
-        Every published run, complete and permanent. Click any run to open the full brief with its dashboard, ranked
-        items, and sources.
+        Every published brief, complete and permanent. Click any date to open the full brief with its dashboard,
+        ranked items, and sources.
       </p>
       {briefs.length ? (
         <div className="row-list">
