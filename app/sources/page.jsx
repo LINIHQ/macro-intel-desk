@@ -111,16 +111,28 @@ export default function SourcesPage() {
         after the fact.
       </p>
       <p>
+        <strong>Trend arrows.</strong> A small arrow and note on a dashboard tile mean a pre-registered criterion is
+        partially met or a tracked level is converging on a trigger. The arrow describes movement toward or away from
+        a threshold; the classification itself changes only when the criterion actually fires. No arrow means no
+        criterion is in motion.
+      </p>
+      <p>
         The trend lines on the dashboard tiles are stylized, not price charts: the slope reflects the current
         classification. On the risk gauges (yen carry trade, oil shock, Hormuz, bond stress) an upward slope means the
-        risk is running at orange or red. On the condition gauges (liquidity, risk appetite, XRP flows, XRP macro
-        environment) an upward slope means healthy, a downward slope means deteriorating, and a level line means a
+        risk is running at orange or red. On the condition gauges (liquidity, risk appetite, XRP flows, macro
+        backdrop) an upward slope means healthy, a downward slope means deteriorating, and a level line means a
         mid-scale reading. The jagged texture is visual styling only.
       </p>
       <p>
         The XRP flows gauge is a composite of demand-side signals: ETF flows and institutional holdings, exchange
         balances, market structure and liquidity, plus XRPL utility and regulatory posture where they touch the token.
         It measures buying and selling pressure around XRP, not the health of the ledger itself.
+      </p>
+      <p>
+        The macro backdrop gauge grades the macro conditions surrounding XRP: rates, oil, liquidity, and policy. It is
+        a verdict on the environment, not on XRP itself, which is why it can sit at unfavorable while XRP rallies, or
+        favorable while XRP falls. It displayed as "XRP macro environment" until August 21, 2026; the rename changed
+        the display label only, and the category's criteria, scale, and full history are unchanged.
       </p>
 
       <h2>Honesty rules</h2>
