@@ -22,16 +22,18 @@ export default function ShareBlock({ url, text, variant = 'block' }) {
   if (variant === 'inline') {
     return (
       <p className="share-inline small mute">
-        Worth dropping in Discord?{' '}
+        Worth sharing?{' '}
         <button type="button" className="quiet-link share-inline-btn" onClick={copy}>
           {copied ? 'Link copied \u2713' : 'Copy link'}
-        </button>
+        </button>{' '}
+        (Discord, socials, anywhere)
         <span className="share-inline-sep" aria-hidden="true">
           ·
         </span>
         <a className="quiet-link" href={intent} target="_blank" rel="noopener noreferrer">
           Share on X
-        </a>
+        </a>{' '}
+        (prefilled post)
       </p>
     );
   }
@@ -39,7 +41,7 @@ export default function ShareBlock({ url, text, variant = 'block' }) {
   return (
     <div className="share-block">
       <p className="share-copy">
-        This desk publishes free, with receipts. If it's useful, drop it in Discord, that's how new readers find it.
+        This desk publishes free, with receipts. If it's useful, drop or share it in Discord and on your socials, that's how new readers find it. Share on X below gives you a prefilled post, ready to send.
       </p>
       <div className="share-actions">
         <button type="button" className="share-cta share-cta-primary" onClick={copy}>
