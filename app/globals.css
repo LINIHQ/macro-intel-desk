@@ -353,6 +353,26 @@ button.tile.open .tile-chevron {
   color: var(--tile-c, var(--dim));
   border-radius: 2px;
 }
+.tile-trend {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  margin-top: 8px;
+  font-size: 10px;
+  line-height: 1.5;
+  letter-spacing: 0.02em;
+  text-align: left;
+}
+.tile-trend svg { flex-shrink: 0; margin-top: 2px; }
+.tile-trend-up { color: var(--g); }
+.tile-trend-down { color: var(--r); }
+.tile-detail-trend {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+}
 
 /* ---------- dashboard tile glow + detail panel ---------- */
 
