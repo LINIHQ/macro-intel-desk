@@ -275,6 +275,20 @@ h2 {
   to { transform: rotate(270deg); }
 }
 
+/* ---------- gauge hint line ---------- */
+
+.gauge-hint {
+  margin: -8px 0 10px;
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  color: var(--mute);
+}
+.gauge-hint .hint-pointer { display: none; }
+@media (hover: hover) and (pointer: fine) {
+  .gauge-hint .hint-touch { display: none; }
+  .gauge-hint .hint-pointer { display: inline; }
+}
+
 /* ---------- dashboard tiles ---------- */
 
 .dash-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
