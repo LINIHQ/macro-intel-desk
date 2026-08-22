@@ -50,6 +50,9 @@ export default async function LivePage() {
         Morning brief drops Mon-Fri, 9-10am ET · Week-ending summary Saturday morning
       </p>
       <BriefAlertsToggle />
+      <p className="gauge-hint">
+        <span className="hint-touch">Tap</span><span className="hint-pointer">Click</span> any gauge for analysis ↓
+      </p>
       <DashboardGrid states={brief.dashboard_states} history={history} />
 
       {brief.headline ? (
