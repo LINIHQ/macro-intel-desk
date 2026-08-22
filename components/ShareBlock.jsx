@@ -22,7 +22,7 @@ export default function ShareBlock({ url, text, variant = 'block' }) {
   if (variant === 'inline') {
     return (
       <p className="share-inline small mute">
-        Worth sharing?{' '}
+        Worth dropping in Discord?{' '}
         <button type="button" className="quiet-link share-inline-btn" onClick={copy}>
           {copied ? 'Link copied \u2713' : 'Copy link'}
         </button>
@@ -39,7 +39,7 @@ export default function ShareBlock({ url, text, variant = 'block' }) {
   return (
     <div className="share-block">
       <p className="share-copy">
-        This desk publishes free, with receipts. If you found this useful, the best support is sharing it.
+        This desk publishes free, with receipts. If it's useful, drop it in Discord, that's how new readers find it.
       </p>
       <div className="share-actions">
         <button type="button" className="share-cta share-cta-primary" onClick={copy}>
