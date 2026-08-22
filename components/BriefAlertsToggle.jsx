@@ -118,12 +118,12 @@ export default function BriefAlertsToggle() {
     return (
       <div className="alerts-row">
         <p className="alerts-text">
-          Brief alerts: install the app first (instructions on the{' '}
+          Get a notification the moment a new brief drops. Install the app first (instructions on the{' '}
           <Link className="quiet-link" href="/install">
             install page
           </Link>
           ). Reading this inside another app, like X? Use its menu to open in your browser, then
-          install. Once installed, a toggle appears here to turn on notifications for new briefs.
+          install. Once installed, a toggle appears here.
         </p>
       </div>
     );
