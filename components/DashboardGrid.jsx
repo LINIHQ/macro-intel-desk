@@ -56,6 +56,7 @@ function TrendArrow({ trend }) {
 export default function DashboardGrid({ states }) {
   const [openKey, setOpenKey] = useState(null);
   const rootRef = useRef(null);
+  const detailRef = useRef(null);
 
   // Clicking anywhere outside the grid or panel, or pressing Escape, closes the panel.
   useEffect(() => {
@@ -74,6 +75,24 @@ export default function DashboardGrid({ states }) {
       document.removeEventListener('click', onDocClick);
       document.removeEventListener('keydown', onKeyDown);
     };
+  }, [openKey]);
+
+  // The detail panel renders once, below the full tile grid. On a phone screen that
+  // means opening any tile above the last row can put the panel off-screen with no
+  // indication it appeared. Scroll it into view on open, minimal distance only
+  // ('nearest' is a no-op if the panel is already fully visible), and skip the
+  // animation for anyone with reduced-motion set.
+  useEffect(() => {
+    if (!openKey) return;
+    const prefersReduced =
+      typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const id = requestAnimationFrame(() => {
+      detailRef.current?.scrollIntoView({
+        behavior: prefersReduced ? 'auto' : 'smooth',
+        block: 'nearest',
+      });
+    });
+    return () => cancelAnimationFrame(id);
   }, [openKey]);
 
   const openCat = openKey ? CATEGORIES.find((c) => c.key === openKey) : null;
@@ -126,7 +145,7 @@ export default function DashboardGrid({ states }) {
         })}
       </div>
       {openCat && openState ? (
-        <div className="tile-detail" style={{ '--tile-c': openColor }}>
+        <div ref={detailRef} className="tile-detail" style={{ '--tile-c': openColor }}>
           <div className="tile-detail-head">
             <span className="tile-detail-cat">{openCat.label}</span>
             <span className="tile-detail-val">{openState.label}</span>
