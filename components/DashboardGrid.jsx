@@ -37,6 +37,22 @@ function TileChevron() {
   );
 }
 
+// Criterion-gated trend arrow: rendered only when a run wrote a trend to the database,
+// which happens only when a pre-registered movement criterion is partially met or a
+// tracked level is converging on a trigger. Direction refers to the criterion, not price.
+function TrendArrow({ trend }) {
+  const up = trend === 'improving';
+  return (
+    <svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true">
+      {up ? (
+        <path d="M1 12 L6 7 L9 10 L14 5 M9.5 4.5 H14.5 V9.5" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+      ) : (
+        <path d="M1 4 L6 9 L9 6 L14 11 M9.5 11.5 H14.5 V6.5" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+      )}
+    </svg>
+  );
+}
+
 export default function DashboardGrid({ states }) {
   const [openKey, setOpenKey] = useState(null);
   const rootRef = useRef(null);
@@ -97,6 +113,12 @@ export default function DashboardGrid({ states }) {
                 <div className="tile-val">{s ? s.label : '--'}</div>
                 <TrendLine direction={direction} seedKey={c.key} />
               </div>
+              {s?.trend ? (
+                <div className={`tile-trend ${s.trend === 'improving' ? 'tile-trend-up' : 'tile-trend-down'}`}>
+                  <TrendArrow trend={s.trend} />
+                  <span>{s.trend_note || s.trend}</span>
+                </div>
+              ) : null}
               {s?.changed_from_prior ? <div className="tile-badge">changed</div> : null}
               {s ? <TileChevron /> : null}
             </button>
@@ -108,8 +130,18 @@ export default function DashboardGrid({ states }) {
           <div className="tile-detail-head">
             <span className="tile-detail-cat">{openCat.label}</span>
             <span className="tile-detail-val">{openState.label}</span>
+            {openState.trend ? (
+              <span className={`tile-detail-trend ${openState.trend === 'improving' ? 'tile-trend-up' : 'tile-trend-down'}`}>
+                <TrendArrow trend={openState.trend} /> {openState.trend}
+              </span>
+            ) : null}
           </div>
           <p>{LEVEL_MEANINGS[openState.level]}</p>
+          {openState.trend && openState.trend_note ? (
+            <p>
+              <strong>Trend, criterion-gated:</strong> {openState.trend_note} An arrow appears only when a pre-registered movement criterion is partially met or a tracked level is converging on a trigger; the classification itself moves only when the criterion fires.
+            </p>
+          ) : null}
           {openState.changed_from_prior ? (
             <p>
               <strong>Changed in this brief{openState.change_reason ? ':' : '.'}</strong>

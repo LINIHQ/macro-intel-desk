@@ -42,6 +42,7 @@ export default async function HistoryPage() {
       const date = fmtDate(b.run_date);
       const status = s ? s.label : 'n/a';
       const reason = s?.change_reason || '';
+      const trendBit = s?.trend && s?.trend_note ? ` Trend (${s.trend}): ${s.trend_note}` : '';
       return {
         id: b.id,
         date,
@@ -49,7 +50,7 @@ export default async function HistoryPage() {
         reason,
         changed: !!s?.changed_from_prior,
         color: s ? LEVEL_COLORS[s.level] : 'var(--line)',
-        tip: `${date}: ${status}${reason ? `. ${reason}` : ''}`,
+        tip: `${date}: ${status}${reason ? `. ${reason}` : ''}${trendBit}`,
       };
     }),
   }));
