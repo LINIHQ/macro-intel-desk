@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { getBriefById } from '@/lib/supabase';
-import { fmtDate } from '@/lib/format';
+import { fmtDate, fmtRunStamp } from '@/lib/format';
 import DashboardGrid from '@/components/DashboardGrid';
 import BriefItems from '@/components/BriefItems';
 import Markdown from '@/components/Markdown';
@@ -26,12 +26,15 @@ export default async function BriefPage({ params }) {
   const shareText = brief.headline
     ? `XRP Macro Brief: ${brief.headline}`
     : 'XRP Macro Intelligence Desk';
+  const runStamp = fmtRunStamp(brief.created_at, brief.run_date);
 
   return (
     <div>
       <div className="card-head" style={{ marginBottom: 14 }}>
         <h1>{fmtDate(brief.run_date)}</h1>
-        <span className="mono small mute">{brief.brief_mode} brief</span>
+        <span className="mono small mute">
+          {brief.brief_mode} brief{runStamp ? ` · published ${runStamp}` : ''}
+        </span>
       </div>
       <DashboardGrid states={brief.dashboard_states} />
 
