@@ -49,6 +49,13 @@ export default async function LivePage() {
       >
         Morning brief drops Mon-Fri, 9-10am ET · Week-ending summary Saturday morning
       </p>
+      <p className="small mute" style={{ margin: '0 0 8px', padding: '0 12px', letterSpacing: '0.02em' }}>
+        Built and run independently by{' '}
+        <a className="quiet-link" href="https://x.com/GenXKrypto" target="_blank" rel="noopener noreferrer">
+          GenXKrypto
+        </a>
+        {' '}· Free · Independent · Not financial advice
+      </p>
       <BriefAlertsToggle />
       <p className="gauge-hint">
         <span className="hint-touch">Tap</span><span className="hint-pointer">Click</span> any gauge for analysis ↓
