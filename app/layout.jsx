@@ -4,6 +4,7 @@ import { IBM_Plex_Mono } from 'next/font/google';
 import { Analytics } from '@vercel/analytics/next';
 import NavLinks from '@/components/NavLinks';
 import MobileMenu from '@/components/MobileMenu';
+import BottomNav from '@/components/BottomNav';
 import PullToRefresh from '@/components/PullToRefresh';
 import RefreshOnReturn from '@/components/RefreshOnReturn';
 
@@ -121,6 +122,7 @@ export default function RootLayout({ children }) {
             <p>Intelligence, not investment advice. Every consequential claim carries a verification status; unverified means unverified.</p>
           </div>
         </footer>
+        <BottomNav />
         <Analytics />
       </body>
     </html>
