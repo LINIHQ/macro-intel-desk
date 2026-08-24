@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { getLatestBrief, getStateHistory } from '@/lib/supabase';
-import { fmtDate } from '@/lib/format';
+import { fmtDate, fmtRunStamp } from '@/lib/format';
 import DashboardGrid from '@/components/DashboardGrid';
 import BriefItems from '@/components/BriefItems';
 import Markdown from '@/components/Markdown';
@@ -26,6 +26,7 @@ export default async function LivePage() {
   const shareText = brief.headline
     ? `XRP Macro Brief: ${brief.headline}`
     : 'XRP Macro Intelligence Desk';
+  const runStamp = fmtRunStamp(brief.created_at, brief.run_date);
 
   return (
     <div>
@@ -35,6 +36,11 @@ export default async function LivePage() {
           <p className="page-meta">
             {fmtDate(brief.run_date)} · {brief.brief_mode} brief
           </p>
+          {runStamp ? (
+            <p className="page-meta" style={{ marginTop: 4 }}>
+              Published {runStamp}
+            </p>
+          ) : null}
         </div>
         <CrowdGauge />
       </div>
