@@ -14,6 +14,17 @@ export default function SourcesPage() {
         intelligence product, not a confirmation-bias engine, and not investment advice.
       </p>
 
+      <h2>Who runs this</h2>
+      <p>
+        The XRP Macro Intelligence Desk is built and run independently by{' '}
+        <a href="https://x.com/GenXKrypto" target="_blank" rel="noopener noreferrer">GenXKrypto</a>, who has been in
+        crypto since 2016. Free. Independent. Not financial advice.
+      </p>
+      <p>
+        The desk currently runs with no ads and no sponsors. If that ever changes it will be disclosed here, and no
+        sponsor will ever influence a gauge, verdict, or claim.
+      </p>
+
       <h2>Publishing cadence</h2>
       <p>
         A morning brief drops each weekday, Monday through Friday, 9-10am ET. A full week-ending brief publishes
