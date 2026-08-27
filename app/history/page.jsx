@@ -1,5 +1,5 @@
 import { getAllBriefs } from '@/lib/supabase';
-import { CATEGORIES, LEVEL_COLORS, fmtDate, stateFor } from '@/lib/format';
+import { CATEGORIES, LEVEL_COLORS, fmtDate, fmtDateShort, stateFor } from '@/lib/format';
 import HistoryTimeline from '@/components/HistoryTimeline';
 
 export const revalidate = 60;
@@ -55,7 +55,7 @@ export default async function HistoryPage() {
     }),
   }));
 
-  const dates = briefs.map((b, i) => (ticks[i] ? fmtDate(b.run_date).replace(/, \d{4}$/, '') : ''));
+  const dates = briefs.map((b, i) => (ticks[i] ? fmtDateShort(b.run_date) : ''));
 
   return (
     <div>
