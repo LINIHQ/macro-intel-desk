@@ -120,12 +120,12 @@ export default function ShareCard({ dateLabel, modeLabel, runDate, gauges, items
       ctx.fillRect(x, y, 4, tileH);
 
       try { ctx.letterSpacing = '1.5px'; } catch (e) {}
-      ctx.font = font(600, 12);
+      ctx.font = font(600, 13);
       ctx.fillStyle = C.dim;
-      ctx.fillText(truncate(ctx, (g.label || '').toUpperCase(), tileW - 30), x + 17, y + 30);
+      ctx.fillText(truncate(ctx, (g.label || '').toUpperCase(), tileW - 30), x + 17, y + 29);
 
       try { ctx.letterSpacing = '0.5px'; } catch (e) {}
-      ctx.font = font(700, 19);
+      ctx.font = font(700, 20);
       ctx.fillStyle = lc;
       ctx.fillText(truncate(ctx, (g.value || '').toUpperCase(), tileW - 30), x + 17, y + 62);
     });
