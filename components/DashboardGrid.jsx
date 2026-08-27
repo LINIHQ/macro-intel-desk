@@ -135,7 +135,7 @@ export default function DashboardGrid({ states }) {
               {s?.trend ? (
                 <div className={`tile-trend ${s.trend === 'improving' ? 'tile-trend-up' : 'tile-trend-down'}`}>
                   <TrendArrow trend={s.trend} />
-                  <span>{s.trend_note || s.trend}</span>
+                  <span>{s.trend}</span>
                 </div>
               ) : null}
               {s?.changed_from_prior ? <div className="tile-badge">changed</div> : null}
