@@ -566,7 +566,10 @@ button.tile.changed {
 
 .tl-scroll {
   overflow-x: auto;
+  overflow-y: hidden;
   -webkit-overflow-scrolling: touch;
+  touch-action: pan-x;
+  overscroll-behavior-x: contain;
   padding-top: 240px;
   margin-top: -240px;
 }
@@ -583,7 +586,7 @@ button.tile.changed {
   display: flex;
   align-items: center;
 }
-.tl-track { display: flex; gap: 4px; height: 14px; width: max-content; }
+.tl-track { display: flex; gap: 4px; height: 14px; width: max-content; touch-action: pan-x; }
 .tl-seg {
   position: relative;
   flex: 0 0 26px;
@@ -594,6 +597,7 @@ button.tile.changed {
   border-radius: 1px;
   opacity: 0.4;
   cursor: pointer;
+  touch-action: pan-x;
   transition: opacity 120ms ease;
 }
 .tl-seg:hover { opacity: 1; z-index: 9; }
