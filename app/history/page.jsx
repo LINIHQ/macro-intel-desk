@@ -11,11 +11,12 @@ const LEGEND = [
   { color: 'var(--r)', label: 'Stressed / disruption' },
 ];
 
-function weekStart(dateStr) {
-  const d = new Date(`${dateStr}T00:00:00Z`);
-  d.setUTCDate(d.getUTCDate() - ((d.getUTCDay() + 6) % 7));
-  return d.toISOString().slice(0, 10);
-}
+// Ticks read as a steady ruler, one label every other segment, rather than marking
+// calendar-week boundaries. Publishing cadence has changed over time (four briefs a
+// week before Aug 20, five after, plus week-ending summaries landing on top of a
+// Friday), so week-start ticks land at uneven visual spacing even though the logic
+// is correct. Evenly-spaced ticks avoid that regardless of how cadence shifts again.
+const TICK_INTERVAL = 2;
 
 export default async function HistoryPage() {
   const briefs = await getAllBriefs(true);
@@ -29,10 +30,6 @@ export default async function HistoryPage() {
     }
   }
   changes.sort((a, b) => (a.date < b.date ? 1 : -1));
-
-  const ticks = briefs.map(
-    (b, i) => i === 0 || weekStart(b.run_date) !== weekStart(briefs[i - 1].run_date)
-  );
 
   const rows = CATEGORIES.map((c) => ({
     key: c.key,
@@ -55,7 +52,12 @@ export default async function HistoryPage() {
     }),
   }));
 
-  const dates = briefs.map((b, i) => (ticks[i] ? fmtDateShort(b.run_date) : ''));
+  // Anchor the interval at the newest brief (the timeline opens scrolled to the right),
+  // so a tick always lands on the most recent segment rather than drifting off it.
+  const lastIdx = briefs.length - 1;
+  const dates = briefs.map((b, i) =>
+    (lastIdx - i) % TICK_INTERVAL === 0 ? fmtDateShort(b.run_date) : ''
+  );
 
   return (
     <div>
@@ -64,7 +66,7 @@ export default async function HistoryPage() {
         Each row is one category, one segment per published brief, oldest to newest. The timeline opens at the most
         recent brief; scroll left for older runs. Bright outlined segments are the briefs where a classification
         changed; dimmed segments carried over unchanged. Tap or hover any segment for that brief's date, status, and
-        the reason behind a change. Date ticks mark the first brief of each week.
+        the reason behind a change. Date ticks appear every other brief for a steady read across the timeline.
       </p>
       <div className="legend">
         {LEGEND.map((l) => (
