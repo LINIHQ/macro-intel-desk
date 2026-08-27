@@ -6,9 +6,10 @@ import { isActive } from '@/components/NavLinks';
 
 const ITEMS = [
   { href: '/', label: 'Live' },
-  { href: '/claims', label: 'Claims' },
-  { href: '/history', label: 'History' },
   { href: '/archive', label: 'Archive' },
+  { href: '/history', label: 'History' },
+  { href: '/claims', label: 'Claims' },
+  { href: '/watch', label: 'Watch' },
   { href: '/sources', label: 'Sources' },
 ];
 
