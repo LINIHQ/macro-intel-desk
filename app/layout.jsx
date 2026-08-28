@@ -15,12 +15,15 @@ export const revalidate = 60;
 const TITLE = 'GenXKrypto | XRP Macro Intelligence Desk';
 const DESCRIPTION = 'Verified XRP and macro intelligence briefs. Evidence over narrative.';
 
-// Default card art, 1200x630, desk-styled v2 (large Evidence over narrative
-// headline, verdict chips, MONITORED dashboard without sparklines). v2 art
-// committed Aug 28, 2026, same day as the v1 swap that replaced the space
-// poster. Used by Discord, Slack, iMessage, LinkedIn, and every unfurl that is
-// not X. Bump the ?v= buster whenever the file changes.
-const OG_IMAGE = 'https://brief.genxkrypto.com/og-card.png?v=5';
+// Default card art, 1200x630, desk-styled v3: large "Evidence over narrative"
+// headline, full five-verdict chip row, no dashboard grid (removed for
+// thumbnail legibility, v3), photographic deep-space background with a glowing
+// data-network motif on the right side echoing the avatar's circuit styling.
+// v3 art committed Aug 28, 2026 after v1 (space poster replacement) and v2
+// (dashboard-grid version, found too dense/boring at real embed size). Used by
+// Discord, Slack, iMessage, LinkedIn, and every unfurl that is not X. Bump the
+// ?v= buster whenever the file changes.
+const OG_IMAGE = 'https://brief.genxkrypto.com/og-card.png?v=6';
 
 // X only, below. X reads twitter:* first and falls back to the og:* equivalent
 // only when the twitter tag is absent, so these two constants override the
@@ -34,15 +37,15 @@ const OG_IMAGE = 'https://brief.genxkrypto.com/og-card.png?v=5';
 // a real word here.
 const X_CARD_TITLE = 'XRP Macro Brief';
 
-// Separate art for X, 1200x600, desk-styled v2 to match the default (Aug 28,
+// Separate art for X, 1200x600, desk-styled v3 to match the default (Aug 28,
 // 2026). Exactly 2:1, so X applies no crop: the full frame renders. The
-// lower-left corner is kept free of content so the fixed title chip lands on
-// empty grid background, and the baked domain sits bottom-right only. X prints
-// "From brief.genxkrypto.com" beneath the card by itself, which is why the
-// domain treatment is lighter here than on the default image. If this art is
-// ever regenerated, keep the lower-left clear and keep the file at exactly 2:1
-// or the crop math from the Aug 18, 2026 notes applies again.
-const X_CARD_IMAGE = 'https://brief.genxkrypto.com/og-card-x.png?v=4';
+// lower-left corner is kept dark and low-detail so the fixed title chip lands
+// on a clean area, and the baked domain sits bottom-right only. X prints "From
+// brief.genxkrypto.com" beneath the card by itself, which is why the domain
+// treatment is lighter here than on the default image. If this art is ever
+// regenerated, keep the lower-left clear and keep the file at exactly 2:1 or
+// the crop math from the Aug 18, 2026 notes applies again.
+const X_CARD_IMAGE = 'https://brief.genxkrypto.com/og-card-x.png?v=5';
 
 export const metadata = {
   metadataBase: new URL('https://brief.genxkrypto.com'),
