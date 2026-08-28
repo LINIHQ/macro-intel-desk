@@ -44,24 +44,6 @@ export default async function LivePage() {
         </div>
         <CrowdGauge />
       </div>
-      {/* TEMPORARY desk notice banner: remove with the Aug 28, 2026 brief publish */}
-      <div
-        className="small"
-        style={{
-          margin: '12px 0 10px',
-          padding: '10px 12px',
-          border: '1px solid rgba(255,255,255,0.35)',
-          borderLeft: '3px solid rgba(255,255,255,0.85)',
-          letterSpacing: '0.02em',
-        }}
-      >
-        <p style={{ margin: 0 }}>
-          <strong>DESK NOTICE (Fri Aug 28):</strong> Today's brief publishes late morning. Fed
-          Chair Kevin Warsh delivers his first Jackson Hole keynote at 10:00am ET, and the desk is
-          holding the run so the brief covers the speech and the initial market reaction instead of
-          previewing it. Expected publish window: 11:30am to 12:30pm ET.
-        </p>
-      </div>
       <div
         className="small mute"
         style={{
