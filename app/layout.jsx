@@ -23,7 +23,7 @@ const DESCRIPTION = 'Verified XRP and macro briefs, published with sourced recei
 // (dashboard-grid version, found too dense/boring at real embed size). Used by
 // Discord, Slack, iMessage, LinkedIn, and every unfurl that is not X. Bump the
 // ?v= buster whenever the file changes.
-const OG_IMAGE = 'https://brief.genxkrypto.com/og-card.png?v=7';
+const OG_IMAGE = 'https://brief.genxkrypto.com/og-card.png?v=8';
 
 // X only, below. X reads twitter:* first and falls back to the og:* equivalent
 // only when the twitter tag is absent, so these two constants override the
@@ -45,7 +45,7 @@ const X_CARD_TITLE = 'XRP Macro Brief';
 // treatment is lighter here than on the default image. If this art is ever
 // regenerated, keep the lower-left clear and keep the file at exactly 2:1 or
 // the crop math from the Aug 18, 2026 notes applies again.
-const X_CARD_IMAGE = 'https://brief.genxkrypto.com/og-card-x.png?v=6';
+const X_CARD_IMAGE = 'https://brief.genxkrypto.com/og-card-x.png?v=7';
 
 export const metadata = {
   metadataBase: new URL('https://brief.genxkrypto.com'),
