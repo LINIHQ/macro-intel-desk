@@ -1,7 +1,6 @@
 import { getLatestBrief } from '@/lib/supabase';
 import { fmtDate, CATEGORIES, stateFor } from '@/lib/format';
 import ShareCard from '@/components/ShareCard';
-import LinkPreviewCard from '@/components/LinkPreviewCard';
 
 export const revalidate = 60;
 
@@ -48,16 +47,6 @@ export default async function CardPage() {
         gauges={gauges}
         items={items}
       />
-
-      <h2 style={{ marginTop: 48 }}>Link preview cards</h2>
-      <p className="page-sub">
-        Static images behind the site link unfurl. These are not daily: download once,
-        commit to public/ as og-card.png and og-card-x.png, then the layout metadata
-        flips to point at them. Default carries the domain; the X variant keeps the
-        bottom band clear so the X title chip lands on empty background.
-      </p>
-      <LinkPreviewCard variant="default" />
-      <LinkPreviewCard variant="x" />
     </div>
   );
 }
