@@ -51,9 +51,9 @@ export default async function WatchPage() {
     <div>
       <h1>Watch list</h1>
       <p className="page-sub">Standing items the desk tracks from brief to brief until they resolve.</p>
-      {active.length ? active.map((i) => <WatchCard key={i.id} item={i} />) : <div className="empty">Nothing open right now.</div>}
-      <h2>XRPL amendments</h2>
       <AmendmentsPanel />
+      <h2>Open items</h2>
+      {active.length ? active.map((i) => <WatchCard key={i.id} item={i} />) : <div className="empty">Nothing open right now.</div>}
       {resolved.length ? (
         <>
           <h2>Resolved</h2>
