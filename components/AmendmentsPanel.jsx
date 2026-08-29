@@ -79,6 +79,7 @@ export default async function AmendmentsPanel() {
           <div className="amend-row" key={r.id}>
             <span className="amend-name">
               {r.name}
+              {r.xls ? <span className="amend-xls-inline small dim mono">{r.xls}</span> : null}
               {atMajority ? <span className="amend-date">majority {fmtEtDate(r.majorityAt)} · earliest activation {fmtEtDate(activation)}</span> : null}
             </span>
             <span className="amend-xls small dim mono">{r.xls || ''}</span>
