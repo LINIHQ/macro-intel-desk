@@ -22,7 +22,7 @@ function fmtEtStamp(d) {
   return `${day}, ${time} ET`;
 }
 
-async function fetchVoting() {
+export async function fetchVoting() {
   try {
     const res = await fetch(XRPSCAN_URL, { next: { revalidate: 3600 } });
     if (!res.ok) return null;
@@ -51,7 +51,7 @@ export default async function AmendmentsPanel() {
 
   if (!rows) {
     return (
-      <div className="amend">
+      <div className="amend" id="amendments">
         <div className="amend-head">
           <span className="amend-title">XRPL amendment voting</span>
         </div>
@@ -63,7 +63,7 @@ export default async function AmendmentsPanel() {
   const majority = rows.filter((r) => r.majorityAt).length;
 
   return (
-    <div className="amend">
+    <div className="amend" id="amendments">
       <div className="amend-head">
         <span className="amend-title">XRPL amendment voting</span>
         <span className="amend-meta">{rows.length} in voting · {majority} at majority · XRPScan, {fmtEtStamp(fetchedAt)}</span>
@@ -97,5 +97,24 @@ export default async function AmendmentsPanel() {
         An amendment activates once it holds 80% validator support for two weeks. Already-enabled amendments are not shown. Votes are counts on the default validator list.
       </p>
     </div>
+  );
+}
+
+// One-line pointer for the Live page: the count that matters plus a link to
+// the full panel. Renders nothing if the fetch fails, so the Live page never
+// shows a broken line for a secondary feature.
+export async function AmendmentsStrip() {
+  const rows = await fetchVoting();
+  if (!rows || !rows.length) return null;
+  const atMajority = rows.filter((r) => r.majorityAt);
+  const lead = atMajority[0];
+  const activation = lead ? new Date(lead.majorityAt.getTime() + TWO_WEEKS_MS) : null;
+  return (
+    <p className="amend-strip">
+      <span className="amend-strip-label">XRPL amendments</span>
+      {rows.length} in voting · {atMajority.length} at majority
+      {lead ? ` (${lead.name}, earliest activation ${fmtEtDate(activation)})` : ''}
+      {' '}<a className="quiet-link" href="/watch#amendments">Live vote table →</a>
+    </p>
   );
 }
