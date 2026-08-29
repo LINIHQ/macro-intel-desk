@@ -23,4 +23,4 @@ On Vercel, set the same two environment variables in the project settings. Pages
 
 All content is written to Supabase by the intelligence desk. This repo contains no brief content; it renders whatever is published. The anon key can only read rows where `published = true` (plus claims and watch items), enforced by row-level security. There are no write policies for the public role, so the key in the browser cannot modify anything.
 
-<!-- deploy trigger: 2026-08-28-b -->
+<!-- deploy trigger: 2026-08-29-a -->
