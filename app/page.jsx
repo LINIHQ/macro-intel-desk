@@ -7,6 +7,7 @@ import Markdown from '@/components/Markdown';
 import CrowdGauge from '@/components/CrowdGauge';
 import ShareBlock from '@/components/ShareBlock';
 import BriefAlertsToggle from '@/components/BriefAlertsToggle';
+import { AmendmentsStrip } from '@/components/AmendmentsPanel';
 
 export const revalidate = 60;
 
@@ -76,6 +77,8 @@ export default async function LivePage() {
           <p>{brief.headline}</p>
         </div>
       ) : null}
+
+      <AmendmentsStrip />
 
       <h2>Top things that matter</h2>
       <p className="small mute" style={{ margin: '2px 0 14px' }}>
