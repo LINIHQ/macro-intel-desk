@@ -15,23 +15,23 @@ export const revalidate = 60;
 const TITLE = 'GenXKrypto | XRP Macro Intelligence Desk';
 
 // Aug 31, 2026: Discord embed slimmed by request. og:site_name and the
-// description metas (both og:description and the plain description tag) were
-// removed so the Discord unfurl renders only the title plus the card image.
-// Discord falls back to the plain description tag when og:description is
-// absent, which is why both had to go. The DESCRIPTION string below now feeds
-// the X card only; restore it to metadata.description and openGraph.description
-// to bring the fuller embed back.
+// description metas (og:description and the plain description tag) were
+// removed. Live test showed Discord then falls back to twitter:description,
+// so the "Verified XRP and macro briefs" line still renders under the title;
+// Phil reviewed that result and kept it deliberately. Do not remove
+// twitter.description without knowing it will strip that line from Discord
+// embeds as well as the X card.
 const DESCRIPTION = 'Verified XRP and macro briefs, published with sourced receipts.';
 
-// Default card art, 1200x630, desk-styled v3: large "Evidence over narrative"
-// headline, full five-verdict chip row, no dashboard grid (removed for
-// thumbnail legibility, v3), photographic deep-space background with a glowing
-// data-network motif on the right side echoing the avatar's circuit styling.
-// v3 art committed Aug 28, 2026 after v1 (space poster replacement) and v2
-// (dashboard-grid version, found too dense/boring at real embed size). Used by
-// Discord, Slack, iMessage, LinkedIn, and every unfurl that is not X. Bump the
-// ?v= buster whenever the file changes.
-const OG_IMAGE = 'https://brief.genxkrypto.com/og-card.png?v=9';
+// Default unfurl image (Discord, Slack, iMessage, LinkedIn, everything not X).
+// As of Aug 31, 2026 this points at /og-banner: a 1200x320 headline band of
+// public/og-card.png served by app/og-banner/route.jsx. Discord scales embed
+// images to the embed width, so the short aspect ratio is what makes the
+// rendered card compact, especially on mobile. The full 1200x630 art
+// (og-card.png v9, art notes in the route file and git history) stays in the
+// repo as the crop source. Bump the ?v= buster here whenever og-card.png
+// changes or the route's crop changes.
+const OG_IMAGE = 'https://brief.genxkrypto.com/og-banner?v=1';
 
 // X only, below. X reads twitter:* first and falls back to the og:* equivalent
 // only when the twitter tag is absent, so these two constants override the
@@ -76,7 +76,7 @@ export const metadata = {
     title: TITLE,
     url: '/',
     type: 'website',
-    images: [{ url: OG_IMAGE, width: 1200, height: 630, alt: 'GenXKrypto XRP Macro Intelligence Desk' }],
+    images: [{ url: OG_IMAGE, width: 1200, height: 320, alt: 'GenXKrypto XRP Macro Intelligence Desk' }],
   },
   twitter: {
     card: 'summary_large_image',
