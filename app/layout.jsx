@@ -24,14 +24,15 @@ const TITLE = 'GenXKrypto | XRP Macro Intelligence Desk';
 const DESCRIPTION = 'Verified XRP and macro briefs, published with sourced receipts.';
 
 // Default unfurl image (Discord, Slack, iMessage, LinkedIn, everything not X).
-// As of Aug 31, 2026 this points at /og-banner: a 1200x320 headline band of
-// public/og-card.png served by app/og-banner/route.jsx. Discord scales embed
-// images to the embed width, so the short aspect ratio is what makes the
-// rendered card compact, especially on mobile. The full 1200x630 art
-// (og-card.png v9, art notes in the route file and git history) stays in the
-// repo as the crop source. Bump the ?v= buster here whenever og-card.png
-// changes or the route's crop changes.
-const OG_IMAGE = 'https://brief.genxkrypto.com/og-banner?v=1';
+// As of Aug 31, 2026 this points at /og-banner: a crop of public/og-card.png
+// served by app/og-banner/route.jsx. Current crop (v2, Phil-reviewed): the
+// full card minus the top brand header, 1200x488, keeping the headline,
+// subline, verdict chips, and domain bar. Discord scales embed images to the
+// embed width, so the shorter aspect ratio is what makes the rendered card
+// more compact. The full 1200x630 art (og-card.png v9, art notes in the route
+// file and git history) stays in the repo as the crop source. Bump the ?v=
+// buster here whenever og-card.png changes or the route's crop changes.
+const OG_IMAGE = 'https://brief.genxkrypto.com/og-banner?v=2';
 
 // X only, below. X reads twitter:* first and falls back to the og:* equivalent
 // only when the twitter tag is absent, so these two constants override the
@@ -76,7 +77,7 @@ export const metadata = {
     title: TITLE,
     url: '/',
     type: 'website',
-    images: [{ url: OG_IMAGE, width: 1200, height: 320, alt: 'GenXKrypto XRP Macro Intelligence Desk' }],
+    images: [{ url: OG_IMAGE, width: 1200, height: 488, alt: 'GenXKrypto XRP Macro Intelligence Desk' }],
   },
   twitter: {
     card: 'summary_large_image',
