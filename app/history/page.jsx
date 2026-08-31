@@ -63,10 +63,10 @@ export default async function HistoryPage() {
     <div>
       <h1>Dashboard history</h1>
       <p className="page-sub">
-        Each row is one category, one segment per published brief, oldest to newest. The timeline opens at the most
-        recent brief; scroll left for older runs. Bright outlined segments are the briefs where a classification
-        changed; dimmed segments carried over unchanged. Tap or hover any segment for that brief's date, status, and
-        the reason behind a change. Date ticks appear every other brief for a steady read across the timeline.
+        Each row is one category, one segment per published brief, oldest to newest. Bright outlined segments are
+        the briefs where a classification changed; dimmed segments carried over unchanged. Tap or hover any segment
+        for that brief's date, status, and the reason behind a change. Date ticks appear every other brief for a
+        steady read across the timeline.
       </p>
       <div className="legend">
         {LEGEND.map((l) => (
@@ -79,6 +79,10 @@ export default async function HistoryPage() {
 
       {briefs.length ? (
         <>
+          <p className="gauge-hint tl-hint">
+            <span className="hint-touch">Opens at the newest brief. Swipe the timeline for older runs.</span>
+            <span className="hint-pointer">Opens at the newest brief. Scroll the timeline for older runs.</span>
+          </p>
           <HistoryTimeline rows={rows} dates={dates} />
 
           {changes.length ? (
