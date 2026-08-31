@@ -639,14 +639,19 @@ button.tile.changed {
    brief, so history sits off-screen to the left. Edge fades signal overflow in
    each direction (toggled by .can-l / .can-r from the component), the hint line
    above the timeline says where it opens, and the newest date tick carries the
-   accent so the anchored view reads as current rather than stale. */
+   accent so the anchored view reads as current rather than stale.
+   The fades start 240px down: .tl-scroll carries padding-top 240 / margin-top
+   -240 so desktop tooltips can overflow upward, and that negative margin
+   collapses through .tl-wrap, extending its box 240px above the visible rows.
+   A top of 0 painted the fade over the page text above (seen live Aug 31);
+   the two 240 constants must stay in sync. */
 .tl-hint { margin: 0 0 10px; }
 .tl-wrap { position: relative; }
 .tl-wrap::before,
 .tl-wrap::after {
   content: "";
   position: absolute;
-  top: 0;
+  top: 240px;
   bottom: 0;
   width: 36px;
   pointer-events: none;
