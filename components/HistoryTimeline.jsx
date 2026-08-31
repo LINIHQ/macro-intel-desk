@@ -8,10 +8,53 @@ export default function HistoryTimeline({ rows, dates }) {
   const scrollRef = useRef(null);
   const panelRef = useRef(null);
   const [sel, setSel] = useState(null);
+  const [edges, setEdges] = useState({ l: false, r: false });
 
+  // Anchor the view at the newest brief and keep the edge fades in sync.
+  // A single scrollLeft set on mount is unreliable on iOS WebKit (it can land
+  // before layout settles and silently lose), so the anchor retries across a
+  // frame and a short timeout, guarded so it never fights a user who has
+  // already started scrolling.
   useEffect(() => {
     const el = scrollRef.current;
-    if (el) el.scrollLeft = el.scrollWidth;
+    if (!el) return;
+
+    const update = () => {
+      setEdges({
+        l: el.scrollLeft > 4,
+        r: el.scrollLeft + el.clientWidth < el.scrollWidth - 4,
+      });
+    };
+
+    let userMoved = false;
+    const markMoved = () => {
+      userMoved = true;
+    };
+
+    const anchor = () => {
+      if (!userMoved) el.scrollLeft = el.scrollWidth;
+      update();
+    };
+
+    el.addEventListener('pointerdown', markMoved, { passive: true });
+    el.addEventListener('touchstart', markMoved, { passive: true });
+    el.addEventListener('wheel', markMoved, { passive: true });
+    el.addEventListener('scroll', update, { passive: true });
+    window.addEventListener('resize', update);
+
+    anchor();
+    const raf = requestAnimationFrame(anchor);
+    const t = setTimeout(anchor, 300);
+
+    return () => {
+      el.removeEventListener('pointerdown', markMoved);
+      el.removeEventListener('touchstart', markMoved);
+      el.removeEventListener('wheel', markMoved);
+      el.removeEventListener('scroll', update);
+      window.removeEventListener('resize', update);
+      cancelAnimationFrame(raf);
+      clearTimeout(t);
+    };
   }, []);
 
   useEffect(() => {
@@ -46,34 +89,36 @@ export default function HistoryTimeline({ rows, dates }) {
 
   return (
     <>
-      <div className="tl-scroll" ref={scrollRef}>
-        <div className="tl-grid">
-          {rows.map((row) => (
-            <div key={row.key} style={{ display: 'contents' }}>
-              <span className="tl-label">{row.label}</span>
-              <div className="tl-track">
-                {row.segs.map((s, i) => {
-                  const isSel = sel && sel.key === row.key && sel.i === i;
-                  return (
-                    <button
-                      key={s.id}
-                      type="button"
-                      className={`tl-seg${s.changed ? ' changed' : ''}${isSel ? ' sel' : ''}`}
-                      data-tip={s.tip}
-                      aria-label={s.tip}
-                      style={{ background: s.color }}
-                      onClick={() => toggle(row.key, i)}
-                    />
-                  );
-                })}
+      <div className={`tl-wrap${edges.l ? ' can-l' : ''}${edges.r ? ' can-r' : ''}`}>
+        <div className="tl-scroll" ref={scrollRef}>
+          <div className="tl-grid">
+            {rows.map((row) => (
+              <div key={row.key} style={{ display: 'contents' }}>
+                <span className="tl-label">{row.label}</span>
+                <div className="tl-track">
+                  {row.segs.map((s, i) => {
+                    const isSel = sel && sel.key === row.key && sel.i === i;
+                    return (
+                      <button
+                        key={s.id}
+                        type="button"
+                        className={`tl-seg${s.changed ? ' changed' : ''}${isSel ? ' sel' : ''}`}
+                        data-tip={s.tip}
+                        aria-label={s.tip}
+                        style={{ background: s.color }}
+                        onClick={() => toggle(row.key, i)}
+                      />
+                    );
+                  })}
+                </div>
               </div>
-            </div>
-          ))}
-          <span className="tl-label" />
-          <div className="tl-dates">
-            {dates.map((d, i) => (
-              <span key={i}>{d}</span>
             ))}
+            <span className="tl-label" />
+            <div className="tl-dates">
+              {dates.map((d, i) => (
+                <span key={i}>{d}</span>
+              ))}
+            </div>
           </div>
         </div>
       </div>
