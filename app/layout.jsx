@@ -13,6 +13,14 @@ const mono = IBM_Plex_Mono({ subsets: ['latin'], weight: ['400', '500', '600', '
 export const revalidate = 60;
 
 const TITLE = 'GenXKrypto | XRP Macro Intelligence Desk';
+
+// Aug 31, 2026: Discord embed slimmed by request. og:site_name and the
+// description metas (both og:description and the plain description tag) were
+// removed so the Discord unfurl renders only the title plus the card image.
+// Discord falls back to the plain description tag when og:description is
+// absent, which is why both had to go. The DESCRIPTION string below now feeds
+// the X card only; restore it to metadata.description and openGraph.description
+// to bring the fuller embed back.
 const DESCRIPTION = 'Verified XRP and macro briefs, published with sourced receipts.';
 
 // Default card art, 1200x630, desk-styled v3: large "Evidence over narrative"
@@ -50,7 +58,6 @@ const X_CARD_IMAGE = 'https://brief.genxkrypto.com/og-card-x.png?v=8';
 export const metadata = {
   metadataBase: new URL('https://brief.genxkrypto.com'),
   title: TITLE,
-  description: DESCRIPTION,
   manifest: '/manifest.webmanifest',
   icons: {
     icon: [
@@ -67,9 +74,7 @@ export const metadata = {
   },
   openGraph: {
     title: TITLE,
-    description: DESCRIPTION,
     url: '/',
-    siteName: 'GenXKrypto XRP Macro Intelligence Desk',
     type: 'website',
     images: [{ url: OG_IMAGE, width: 1200, height: 630, alt: 'GenXKrypto XRP Macro Intelligence Desk' }],
   },
