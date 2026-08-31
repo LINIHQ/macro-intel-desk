@@ -635,6 +635,31 @@ button.tile.changed {
 .tl-dates { display: flex; gap: 4px; font-size: 11px; color: var(--mute); margin-top: 6px; width: max-content; }
 .tl-dates span { flex: 0 0 26px; text-align: left; white-space: nowrap; }
 
+/* Timeline scroll affordances (Aug 31, 2026): the view anchors at the newest
+   brief, so history sits off-screen to the left. Edge fades signal overflow in
+   each direction (toggled by .can-l / .can-r from the component), the hint line
+   above the timeline says where it opens, and the newest date tick carries the
+   accent so the anchored view reads as current rather than stale. */
+.tl-hint { margin: 0 0 10px; }
+.tl-wrap { position: relative; }
+.tl-wrap::before,
+.tl-wrap::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 36px;
+  pointer-events: none;
+  z-index: 8;
+  opacity: 0;
+  transition: opacity 140ms ease;
+}
+.tl-wrap::before { left: 150px; background: linear-gradient(90deg, var(--bg), transparent); }
+.tl-wrap::after { right: 0; background: linear-gradient(270deg, var(--bg), transparent); }
+.tl-wrap.can-l::before { opacity: 1; }
+.tl-wrap.can-r::after { opacity: 1; }
+.tl-dates span:last-child { color: var(--acc); font-weight: 600; }
+
 .tl-panel {
   position: fixed;
   left: 12px;
@@ -930,6 +955,7 @@ button.tile.changed {
 
   .tl-grid { grid-template-columns: 112px max-content; }
   .tl-label { font-size: 11px; padding-right: 10px; }
+  .tl-wrap::before { left: 112px; }
 
   .md table { font-size: 12px; }
   .md th, .md td { padding: 5px 8px; }
