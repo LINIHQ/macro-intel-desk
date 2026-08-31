@@ -2,7 +2,11 @@ import { getLatestBrief } from '@/lib/supabase';
 import { fmtDate, CATEGORIES, stateFor } from '@/lib/format';
 import ShareCard from '@/components/ShareCard';
 
-export const revalidate = 60;
+// The share card is the desk's private pre-drop utility. A stale serve here
+// means a wrong PNG attached to the X parent post, so this page renders
+// dynamically on every request instead of using 60s ISR like public pages.
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 
 export const metadata = {
   title: 'Share card',
