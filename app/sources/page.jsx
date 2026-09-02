@@ -28,9 +28,9 @@ export default function SourcesPage() {
       <h2>Publishing cadence</h2>
       <p>
         A morning brief drops each weekday, Monday through Friday, 9-10am ET. A full week-ending brief publishes
-        Friday after US market close, covering the week as a whole including Friday's session and the weekly flow
-        data the morning brief cannot capture. Breaking developments material enough to warrant it are folded into
-        the next scheduled brief.
+        Saturday morning, dated by the Friday it covers, after Friday's market close and the weekly flow data the
+        morning brief cannot capture. Breaking developments material enough to warrant it are folded into the next
+        scheduled brief.
       </p>
 
       <h2>Source hierarchy</h2>
