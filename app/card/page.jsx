@@ -27,7 +27,7 @@ export default async function CardPage() {
 
   const gauges = CATEGORIES.map((c) => {
     const s = stateFor(brief.dashboard_states, c.key);
-    return { label: c.label, level: s?.level ?? null, value: s?.label ?? '' };
+    return { label: c.label, level: s?.level ?? null, value: s?.label ?? '', trend: s?.trend ?? null };
   });
 
   const items = [...(brief.brief_items || [])]
