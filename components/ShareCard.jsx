@@ -19,6 +19,10 @@ const C = {
 
 const LEVEL_HEX = { 1: '#38d183', 2: '#e8c547', 3: '#ef8e3f', 4: '#ef5350' };
 
+// Matches --g / --r in globals.css: same colors the live tile-trend-up /
+// tile-trend-down classes use.
+const TREND_HEX = { improving: '#38d183', worsening: '#ef5350' };
+
 const VERDICT_HEX = {
   verified: { label: 'VERIFIED', color: '#38d183' },
   partially_verified: { label: 'PARTIALLY VERIFIED', color: '#e8c547' },
@@ -94,10 +98,11 @@ export default function ShareCard({ dateLabel, modeLabel, runDate, gauges, items
     ctx.fillText('EVERY CLAIM GETS A VERDICT', W - PAD, 94);
     ctx.textAlign = 'left';
 
-    // Gauge grid: 4 columns x 2 rows
+    // Gauge grid: 4 columns x 2 rows. tileH carries extra height (vs the
+    // original 84) to fit the trend line without crowding the value.
     const gap = 14;
     const tileW = (W - PAD * 2 - gap * 3) / 4;
-    const tileH = 84;
+    const tileH = 92;
     const gridY = 142;
 
     (gauges || []).slice(0, 8).forEach((g, i) => {
@@ -122,12 +127,23 @@ export default function ShareCard({ dateLabel, modeLabel, runDate, gauges, items
       try { ctx.letterSpacing = '1.5px'; } catch (e) {}
       ctx.font = font(600, 13);
       ctx.fillStyle = C.dim;
-      ctx.fillText(truncate(ctx, (g.label || '').toUpperCase(), tileW - 30), x + 17, y + 29);
+      ctx.fillText(truncate(ctx, (g.label || '').toUpperCase(), tileW - 30), x + 17, y + 26);
 
       try { ctx.letterSpacing = '0.5px'; } catch (e) {}
-      ctx.font = font(700, 20);
+      ctx.font = font(700, 19);
       ctx.fillStyle = lc;
-      ctx.fillText(truncate(ctx, (g.value || '').toUpperCase(), tileW - 30), x + 17, y + 62);
+      ctx.fillText(truncate(ctx, (g.value || '').toUpperCase(), tileW - 30), x + 17, y + 55);
+
+      // Trend line: criterion-gated, same as the live tile. Only drawn when
+      // a run actually wrote a trend to dashboard_states; null stays silent.
+      if (g.trend === 'improving' || g.trend === 'worsening') {
+        const tc = TREND_HEX[g.trend];
+        try { ctx.letterSpacing = '0.3px'; } catch (e) {}
+        ctx.font = font(600, 11);
+        ctx.fillStyle = tc;
+        const arrow = g.trend === 'improving' ? '\u25B2' : '\u25BC';
+        ctx.fillText(truncate(ctx, `${arrow} ${g.trend}`, tileW - 30), x + 17, y + 78);
+      }
     });
 
     // Top 3 section
