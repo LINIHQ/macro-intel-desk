@@ -1,8 +1,30 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { Fragment, useEffect, useRef, useState } from 'react';
 
 const HOVER_MQ = '(hover: hover) and (pointer: fine)';
+
+// The label column is sticky at left: 0 so category names hold their position
+// while the track scrolls under them. Each row used to be wrapped in a
+// <div style={{ display: 'contents' }}> to get the label and track placed as
+// grid items. That wrapper broke sticky in WebKit: position: sticky on an
+// element whose parent is display: contents does not hold in Safari, so on
+// iPhone the labels scrolled away with the track the moment the timeline
+// anchored itself to the newest brief on mount, leaving them clipped mid-word
+// ("Global liquidity" rendering as "ity"). Seen live Sept 4, 2026.
+//
+// Fragment emits no DOM node at all, so the label and track are true direct
+// children of .tl-grid: identical grid placement, and sticky behaves. Do not
+// reintroduce a wrapper element around these two, with display: contents or
+// otherwise, without testing the History page on a real iPhone first.
+const LABEL_TEXT_STYLE = {
+  display: 'block',
+  width: '100%',
+  minWidth: 0,
+  overflow: 'hidden',
+  textOverflow: 'ellipsis',
+  whiteSpace: 'nowrap',
+};
 
 export default function HistoryTimeline({ rows, dates }) {
   const scrollRef = useRef(null);
@@ -93,8 +115,10 @@ export default function HistoryTimeline({ rows, dates }) {
         <div className="tl-scroll" ref={scrollRef}>
           <div className="tl-grid">
             {rows.map((row) => (
-              <div key={row.key} style={{ display: 'contents' }}>
-                <span className="tl-label">{row.label}</span>
+              <Fragment key={row.key}>
+                <span className="tl-label">
+                  <span style={LABEL_TEXT_STYLE}>{row.label}</span>
+                </span>
                 <div className="tl-track">
                   {row.segs.map((s, i) => {
                     const isSel = sel && sel.key === row.key && sel.i === i;
@@ -111,7 +135,7 @@ export default function HistoryTimeline({ rows, dates }) {
                     );
                   })}
                 </div>
-              </div>
+              </Fragment>
             ))}
             <span className="tl-label" />
             <div className="tl-dates">
