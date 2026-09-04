@@ -45,6 +45,31 @@ function truncate(ctx, str, maxWidth) {
   return s.trimEnd() + '\u2026';
 }
 
+// Canvas has no color-mix(), which globals.css uses throughout the tile styles.
+// This mixes a hex toward a hex base by ratio, so the card can reproduce the
+// same borders the live tiles compute in CSS.
+function mix(hex, baseHex, ratio) {
+  const parse = (h) => [
+    parseInt(h.slice(1, 3), 16),
+    parseInt(h.slice(3, 5), 16),
+    parseInt(h.slice(5, 7), 16),
+  ];
+  const [r1, g1, b1] = parse(hex);
+  const [r2, g2, b2] = parse(baseHex);
+  const to = (a, b) => Math.round(a * ratio + b * (1 - ratio));
+  const hx = (n) => n.toString(16).padStart(2, '0');
+  return `#${hx(to(r1, r2))}${hx(to(g1, g2))}${hx(to(b1, b2))}`;
+}
+
+function roundRectPath(ctx, x, y, w, h, r) {
+  if (ctx.roundRect) {
+    ctx.beginPath();
+    ctx.roundRect(x, y, w, h, r);
+    return true;
+  }
+  return false;
+}
+
 export default function ShareCard({ dateLabel, modeLabel, runDate, gauges, items }) {
   const canvasRef = useRef(null);
   const [drawn, setDrawn] = useState(false);
@@ -98,12 +123,14 @@ export default function ShareCard({ dateLabel, modeLabel, runDate, gauges, items
     ctx.fillText('EVERY CLAIM GETS A VERDICT', W - PAD, 94);
     ctx.textAlign = 'left';
 
-    // Gauge grid: 4 columns x 2 rows. tileH carries extra height (vs the
-    // original 84) to fit the trend line without crowding the value.
+    // Gauge grid: 4 columns x 2 rows. tileH went 84 to 92 to seat the trend
+    // line, then 92 to 108 to seat the CHANGED badge beneath it, matching the
+    // live tile's stacking order (value, trend, badge). gridY and the Top 3
+    // lead-in below give back the extra height so footer clearance is unchanged.
     const gap = 14;
     const tileW = (W - PAD * 2 - gap * 3) / 4;
-    const tileH = 92;
-    const gridY = 142;
+    const tileH = 108;
+    const gridY = 138;
 
     (gauges || []).slice(0, 8).forEach((g, i) => {
       const col = i % 4;
@@ -111,6 +138,7 @@ export default function ShareCard({ dateLabel, modeLabel, runDate, gauges, items
       const x = PAD + col * (tileW + gap);
       const y = gridY + row * (tileH + gap);
       const lc = LEVEL_HEX[g.level] || C.mute;
+      const changed = !!g.changed;
 
       ctx.fillStyle = C.panel;
       ctx.fillRect(x, y, tileW, tileH);
@@ -118,9 +146,23 @@ export default function ShareCard({ dateLabel, modeLabel, runDate, gauges, items
       ctx.fillStyle = lc;
       ctx.fillRect(x, y, tileW, tileH);
       ctx.globalAlpha = 1;
-      ctx.strokeStyle = C.line;
-      ctx.lineWidth = 1.5;
-      ctx.strokeRect(x, y, tileW, tileH);
+
+      // Border: live uses color-mix(tile-c 26%, line) normally and 60% on a
+      // changed tile, which also carries an outer glow. Reproduced here.
+      if (changed) {
+        ctx.save();
+        ctx.shadowColor = lc;
+        ctx.shadowBlur = 16;
+        ctx.strokeStyle = mix(lc, C.line, 0.6);
+        ctx.lineWidth = 1.5;
+        ctx.strokeRect(x, y, tileW, tileH);
+        ctx.restore();
+      } else {
+        ctx.strokeStyle = mix(lc, C.line, 0.26);
+        ctx.lineWidth = 1.5;
+        ctx.strokeRect(x, y, tileW, tileH);
+      }
+
       ctx.fillStyle = lc;
       ctx.fillRect(x, y, 4, tileH);
 
@@ -132,7 +174,7 @@ export default function ShareCard({ dateLabel, modeLabel, runDate, gauges, items
       try { ctx.letterSpacing = '0.5px'; } catch (e) {}
       ctx.font = font(700, 19);
       ctx.fillStyle = lc;
-      ctx.fillText(truncate(ctx, (g.value || '').toUpperCase(), tileW - 30), x + 17, y + 55);
+      ctx.fillText(truncate(ctx, (g.value || '').toUpperCase(), tileW - 30), x + 17, y + 56);
 
       // Trend line: criterion-gated, same as the live tile. Only drawn when
       // a run actually wrote a trend to dashboard_states; null stays silent.
@@ -142,12 +184,38 @@ export default function ShareCard({ dateLabel, modeLabel, runDate, gauges, items
         ctx.font = font(600, 11);
         ctx.fillStyle = tc;
         const arrow = g.trend === 'improving' ? '\u25B2' : '\u25BC';
-        ctx.fillText(truncate(ctx, `${arrow} ${g.trend}`, tileW - 30), x + 17, y + 78);
+        ctx.fillText(truncate(ctx, `${arrow} ${g.trend}`, tileW - 30), x + 17, y + 79);
+      }
+
+      // CHANGED badge: mirrors .tile-badge on the live tile. Drawn only when the
+      // run wrote changed_from_prior, so a grid with no badge means nothing moved.
+      // This is the whole point of the card matching live: on the one day a gauge
+      // moves, the card has to say so.
+      if (changed) {
+        try { ctx.letterSpacing = '1px'; } catch (e) {}
+        ctx.font = font(600, 10.5);
+        const bText = 'CHANGED';
+        const bw = ctx.measureText(bText).width + 16;
+        const bh = 19;
+        const bx = x + 17;
+        const by = y + tileH - 27;
+
+        ctx.globalAlpha = 0.6;
+        ctx.strokeStyle = lc;
+        ctx.lineWidth = 1;
+        if (roundRectPath(ctx, bx, by, bw, bh, 2)) {
+          ctx.stroke();
+        } else {
+          ctx.strokeRect(bx, by, bw, bh);
+        }
+        ctx.globalAlpha = 1;
+        ctx.fillStyle = lc;
+        ctx.fillText(bText, bx + 8, by + 13.5);
       }
     });
 
-    // Top 3 section
-    const sectY = gridY + tileH * 2 + gap + 42;
+    // Top 3 section. Lead-in trimmed 42 to 30 to offset the taller tiles.
+    const sectY = gridY + tileH * 2 + gap + 30;
     ctx.strokeStyle = C.line;
     ctx.lineWidth = 1;
     ctx.beginPath();
@@ -163,8 +231,8 @@ export default function ShareCard({ dateLabel, modeLabel, runDate, gauges, items
     ctx.fillText('TOP 3 SIGNALS', PAD + 26, sectY);
 
     // Items: rank, title, verdict chip
-    const rowStart = sectY + 40;
-    const rowGap = 58;
+    const rowStart = sectY + 38;
+    const rowGap = 54;
 
     (items || []).slice(0, 3).forEach((it, i) => {
       const y = rowStart + i * rowGap;
@@ -181,9 +249,7 @@ export default function ShareCard({ dateLabel, modeLabel, runDate, gauges, items
 
       ctx.globalAlpha = 0.13;
       ctx.fillStyle = ver.color;
-      if (ctx.roundRect) {
-        ctx.beginPath();
-        ctx.roundRect(chipX, chipY, chipW, chipH, 2);
+      if (roundRectPath(ctx, chipX, chipY, chipW, chipH, 2)) {
         ctx.fill();
       } else {
         ctx.fillRect(chipX, chipY, chipW, chipH);
@@ -191,9 +257,7 @@ export default function ShareCard({ dateLabel, modeLabel, runDate, gauges, items
       ctx.globalAlpha = 0.6;
       ctx.strokeStyle = ver.color;
       ctx.lineWidth = 1;
-      if (ctx.roundRect) {
-        ctx.beginPath();
-        ctx.roundRect(chipX, chipY, chipW, chipH, 2);
+      if (roundRectPath(ctx, chipX, chipY, chipW, chipH, 2)) {
         ctx.stroke();
       } else {
         ctx.strokeRect(chipX, chipY, chipW, chipH);
