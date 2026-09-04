@@ -25,9 +25,20 @@ export default async function CardPage() {
     );
   }
 
+  // Every field the live DashboardGrid tile renders from dashboard_states has to
+  // come through here, or the card silently under-reports the run. trend was
+  // added Sept 2; changed was missed then because no gauge moved that day, and
+  // caught Sept 4 when Yen Carry went ELEVATED to WATCH and the card showed
+  // nothing. If a new state field is ever added to the live tile, add it here too.
   const gauges = CATEGORIES.map((c) => {
     const s = stateFor(brief.dashboard_states, c.key);
-    return { label: c.label, level: s?.level ?? null, value: s?.label ?? '', trend: s?.trend ?? null };
+    return {
+      label: c.label,
+      level: s?.level ?? null,
+      value: s?.label ?? '',
+      trend: s?.trend ?? null,
+      changed: s?.changed_from_prior ?? false,
+    };
   });
 
   const items = [...(brief.brief_items || [])]
