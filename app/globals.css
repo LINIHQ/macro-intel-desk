@@ -166,6 +166,21 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--acc); outline-o
 }
 
 .site-foot { border-top: 1px solid var(--line); padding: 20px 0 32px; color: var(--mute); font-size: 13px; }
+.site-foot p { margin: 0; }
+.foot-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+  align-items: baseline;
+  margin-top: 10px !important;
+  font-size: 12px;
+}
+.foot-links a {
+  color: var(--mute);
+  transition: color 120ms ease;
+}
+.foot-links a:hover { color: var(--dim); }
+.foot-links span { color: var(--line); }
 
 /* ---------- type ---------- */
 
