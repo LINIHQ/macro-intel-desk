@@ -128,6 +128,15 @@ export default function RootLayout({ children }) {
         <footer className="site-foot">
           <div className="wrap">
             <p>Intelligence, not investment advice. Every consequential claim carries a verification status; unverified means unverified.</p>
+            <p className="foot-links">
+              <Link href="/sources">Sources</Link>
+              <span aria-hidden="true">·</span>
+              <Link href="/privacy">Privacy</Link>
+              <span aria-hidden="true">·</span>
+              <Link href="/terms">Terms</Link>
+              <span aria-hidden="true">·</span>
+              <a href="mailto:support@genxkrypto.com">Contact</a>
+            </p>
           </div>
         </footer>
         <BottomNav />
