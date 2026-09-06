@@ -754,21 +754,23 @@ button.tile.changed {
 .md pre code { background: none; padding: 0; }
 .md blockquote { margin: 0 0 10px; padding: 8px 14px; border-left: 3px solid var(--line); color: var(--dim); }
 .md .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; margin: 0 0 10px; }
-.md table { border-collapse: collapse; width: 100%; margin: 0; font-size: 13.5px; }
-.md th, .md td { border: 1px solid var(--line); padding: 6px 10px; text-align: left; white-space: nowrap; font-size: 13.5px; }
+.md table { border-collapse: collapse; width: 100%; margin: 0; font-size: 13.5px; table-layout: fixed; }
+.md th, .md td { border: 1px solid var(--line); padding: 6px 10px; text-align: left; overflow-wrap: break-word; font-size: 13.5px; }
 .md th { background: var(--panel); font-size: 11.5px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--dim); }
 
-/* iOS WebKit font boosting persisted in brief tables even with the html level
-   rule at the top of this file (first seen Aug 31, 2026 on the dashboard
-   table's third column; recurred Sept 5, 2026 on the Week over week table's
-   Change column, which has far more text per cell than the Category or
-   Status columns next to it). WebKit's autosizer targets exactly that kind
-   of imbalance: a nowrap cell with a longer text run inside a horizontally
-   scrolling wrapper gets boosted relative to its short neighbors even with
-   text-size-adjust set to 100%. Two changes make this the reliable kill:
-   text-size-adjust set to none (a stronger disable signal than 100%), and an
-   explicit font-size directly on td so there is no inherited value for the
-   autosizer to override. */
+/* iOS WebKit font boosting in brief tables (first seen Aug 31, 2026 on the
+   dashboard table; recurred Sept 5, 2026 on the Week over week table's
+   Change column). Two rounds of suppressing the boost after the fact
+   (text-size-adjust: 100%, then none, plus an explicit font-size on td)
+   did not hold on a live device, confirmed by direct screenshot after
+   confirming the CSS had actually deployed. The real trigger, per WebKit's
+   own autosizing heuristic, is the precondition itself: a long, unbroken
+   line of text in a white-space: nowrap cell inside a horizontally
+   scrolling wrapper. Removing nowrap (table now uses table-layout: fixed
+   with overflow-wrap: break-word so long Change text wraps onto multiple
+   lines instead of running past the viewport) eliminates that precondition
+   entirely rather than fighting its effect. text-size-adjust stays set as
+   a secondary safety net; it is not the primary fix here. */
 .md .table-wrap,
 .md table,
 .md th,
