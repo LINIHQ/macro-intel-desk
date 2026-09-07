@@ -10,6 +10,11 @@ import { IMPORTANCE, VERIFICATION } from '@/lib/format';
 // item and this updates with it. briefs.top3 stores only the rank and the one
 // line saying why it ranks there.
 //
+// Each title links to #item-{rank}, the anchor BriefItems puts on that card, so
+// a tap lands on the item itself rather than the top of the section. The whole
+// point of the pointer is saving a mobile reader the scroll; landing them at
+// the section head would not do that.
+//
 // Rows are deliberately lighter than a card: no border box, no body, no
 // sources. This is a table of contents, not a second telling.
 export default function TopThree({ pointers, items }) {
@@ -32,7 +37,7 @@ export default function TopThree({ pointers, items }) {
             <div className="card-head">
               <p className="card-title">
                 <span className="card-rank">{position}.</span>{' '}
-                <a className="quiet-link" href="#ranked-items">
+                <a className="quiet-link" href={`#item-${item.rank}`}>
                   {item.title}
                 </a>
               </p>
