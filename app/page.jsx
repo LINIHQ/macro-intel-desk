@@ -2,8 +2,7 @@ import Link from 'next/link';
 import { getLatestBrief, getStateHistory } from '@/lib/supabase';
 import { fmtDate, fmtRunStamp } from '@/lib/format';
 import DashboardGrid from '@/components/DashboardGrid';
-import BriefItems from '@/components/BriefItems';
-import Markdown from '@/components/Markdown';
+import BriefBody from '@/components/BriefBody';
 import CrowdGauge from '@/components/CrowdGauge';
 import ShareBlock from '@/components/ShareBlock';
 import BriefAlertsToggle from '@/components/BriefAlertsToggle';
@@ -28,6 +27,12 @@ export default async function LivePage() {
     ? `XRP Macro Brief: ${brief.headline}`
     : 'XRP Macro Intelligence Desk';
   const runStamp = fmtRunStamp(brief.created_at, brief.run_date);
+
+  const itemsNote = (
+    <p className="small mute" style={{ margin: '2px 0 14px' }}>
+      Ranked by weight, tagged by verdict. Every item carries its own sources.
+    </p>
+  );
 
   return (
     <div>
@@ -80,16 +85,7 @@ export default async function LivePage() {
 
       <AmendmentsStrip />
 
-      <h2>Top things that matter</h2>
-      <p className="small mute" style={{ margin: '2px 0 14px' }}>
-        Ranked by weight, tagged by verdict. <a className="quiet-link" href="#full-brief">Full detail in the brief below.</a>
-      </p>
-      <BriefItems items={brief.brief_items} />
-
-      <ShareBlock url={shareUrl} text={shareText} variant="inline" />
-
-      <h2 id="full-brief">The brief</h2>
-      <Markdown>{brief.full_brief_md}</Markdown>
+      <BriefBody brief={brief} itemsNote={itemsNote} />
 
       <ShareBlock url={shareUrl} text={shareText} />
 
