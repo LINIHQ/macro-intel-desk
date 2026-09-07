@@ -15,6 +15,14 @@ import Markdown from './Markdown';
 // remains the canonical whole document in the database, but for split briefs the
 // sections above ARE that document, and rendering it again would duplicate
 // every section on the page.
+//
+// Spacing: sections are separate markdown blocks now, not one continuous
+// document, so the rhythm the old single block got for free has to be set here.
+// The first section needs the largest gap because it follows the amendments
+// strip, which is a dense one-line element.
+const SECTION = { marginTop: 30 };
+const FIRST_SECTION = { marginTop: 38 };
+
 export default function BriefBody({ brief, itemsHeading = 'Ranked items', itemsNote = null }) {
   const items = brief?.brief_items ?? [];
   const isSplit = Boolean(brief?.dashboard_md || brief?.top3_md || brief?.watch_next_md);
@@ -35,31 +43,34 @@ export default function BriefBody({ brief, itemsHeading = 'Ranked items', itemsN
   return (
     <>
       {brief.dashboard_md ? (
-        <section id="dashboard-notes">
+        <section id="dashboard-notes" style={FIRST_SECTION}>
+          <h2>Where things stand</h2>
           <Markdown>{brief.dashboard_md}</Markdown>
         </section>
       ) : null}
 
       {brief.what_changed_md ? (
-        <section id="what-changed">
+        <section id="what-changed" style={SECTION}>
           <h2>What changed</h2>
           <Markdown>{brief.what_changed_md}</Markdown>
         </section>
       ) : null}
 
       {brief.top3_md ? (
-        <section id="top-3">
+        <section id="top-3" style={SECTION}>
           <h2>Top 3 things that matter</h2>
           <Markdown>{brief.top3_md}</Markdown>
         </section>
       ) : null}
 
-      <h2 id="ranked-items">{itemsHeading}</h2>
-      {itemsNote}
-      <BriefItems items={items} />
+      <section id="ranked-items" style={SECTION}>
+        <h2>{itemsHeading}</h2>
+        {itemsNote}
+        <BriefItems items={items} />
+      </section>
 
       {brief.watch_next_md ? (
-        <section id="watch-next">
+        <section id="watch-next" style={SECTION}>
           <h2>Watch next</h2>
           <Markdown>{brief.watch_next_md}</Markdown>
         </section>
