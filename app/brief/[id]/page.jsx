@@ -2,8 +2,7 @@ import Link from 'next/link';
 import { getBriefById } from '@/lib/supabase';
 import { fmtDate, fmtRunStamp } from '@/lib/format';
 import DashboardGrid from '@/components/DashboardGrid';
-import BriefItems from '@/components/BriefItems';
-import Markdown from '@/components/Markdown';
+import BriefBody from '@/components/BriefBody';
 import ShareBlock from '@/components/ShareBlock';
 
 export const revalidate = 300;
@@ -38,11 +37,14 @@ export default async function BriefPage({ params }) {
       </div>
       <DashboardGrid states={brief.dashboard_states} />
 
-      <h2>Top things that matter</h2>
-      <BriefItems items={brief.brief_items} />
+      {brief.headline ? (
+        <div className="term-box">
+          <span className="term-prompt">&gt;_</span>
+          <p>{brief.headline}</p>
+        </div>
+      ) : null}
 
-      <h2>The brief</h2>
-      <Markdown>{brief.full_brief_md}</Markdown>
+      <BriefBody brief={brief} />
 
       <ShareBlock url={permalink} text={shareText} />
     </div>
