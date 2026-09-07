@@ -1,4 +1,5 @@
 import BriefItems from './BriefItems';
+import TopThree from './TopThree';
 import Markdown from './Markdown';
 
 // Reading order for a brief page.
@@ -16,6 +17,11 @@ import Markdown from './Markdown';
 // sections above ARE that document, and rendering it again would duplicate
 // every section on the page.
 //
+// Top 3: briefs.top3 (structured) renders chip rows via TopThree, which reads
+// title and both chips off brief_items so the pointer can never disagree with
+// the card. briefs.top3_md is the plain-text archive copy and the fallback for
+// any brief written before the structured column existed.
+//
 // Spacing: sections are separate markdown blocks now, not one continuous
 // document, so the rhythm the old single block got for free has to be set here.
 // The first section needs the largest gap because it follows the amendments
@@ -26,6 +32,7 @@ const FIRST_SECTION = { marginTop: 38 };
 export default function BriefBody({ brief, itemsHeading = 'Ranked items', itemsNote = null }) {
   const items = brief?.brief_items ?? [];
   const isSplit = Boolean(brief?.dashboard_md || brief?.top3_md || brief?.watch_next_md);
+  const hasStructuredTop3 = Array.isArray(brief?.top3) && brief.top3.length > 0;
 
   if (!isSplit) {
     return (
@@ -56,10 +63,17 @@ export default function BriefBody({ brief, itemsHeading = 'Ranked items', itemsN
         </section>
       ) : null}
 
-      {brief.top3_md ? (
+      {hasStructuredTop3 || brief.top3_md ? (
         <section id="top-3" style={SECTION}>
           <h2>Top 3 things that matter</h2>
-          <Markdown>{brief.top3_md}</Markdown>
+          <p className="small mute" style={{ margin: '2px 0 16px' }}>
+            Where to spend attention in the ranked items below.
+          </p>
+          {hasStructuredTop3 ? (
+            <TopThree pointers={brief.top3} items={items} />
+          ) : (
+            <Markdown>{brief.top3_md}</Markdown>
+          )}
         </section>
       ) : null}
 
