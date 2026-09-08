@@ -5,14 +5,22 @@ import Markdown from './Markdown';
 // Reading order for a brief page.
 //
 // Briefs from Sept 7, 2026 onward store their sections in separate columns so
-// the page can place them around the ranked items: dashboard context and what
-// changed come first, the Top 3 points down into the items, the items carry the
-// analysis, and Watch Next closes. Roughly 80% of readers are on mobile, and
-// leading with nine item cards made them build their own sense of priority
-// before the page gave them one.
+// the page can place them around the ranked items. Order is: where things stand,
+// Top 3, what changed, the items, Watch Next. Roughly 80% of readers are on
+// mobile, and leading with nine item cards made them build their own sense of
+// priority before the page gave them one.
 //
-// Briefs published before that date have those columns null. They render the
-// old way, from full_brief_md, below the items. Never render both: full_brief_md
+// Top 3 sits above What changed as of Sept 8, 2026. Both the Discord teaser and
+// the X parent are built to name the Top 3 and withhold it, so the first thing a
+// click-through should hit is the thing it was sold. What changed is a diff, most
+// valuable to a reader already following daily, and it reads as the wider sweep
+// after the headline rather than as the way in. The cost of the swap is that the
+// pointers no longer sit directly above the cards they index, which would matter
+// on a phone if the pointers were only labels; each Top 3 title is an anchor to
+// its own item card, so a tap still lands on the item itself.
+//
+// Briefs published before Sept 7 have those columns null. They render the old
+// way, from full_brief_md, below the items. Never render both: full_brief_md
 // remains the canonical whole document in the database, but for split briefs the
 // sections above ARE that document, and rendering it again would duplicate
 // every section on the page.
@@ -56,13 +64,6 @@ export default function BriefBody({ brief, itemsHeading = 'Ranked items', itemsN
         </section>
       ) : null}
 
-      {brief.what_changed_md ? (
-        <section id="what-changed" style={SECTION}>
-          <h2>What changed</h2>
-          <Markdown>{brief.what_changed_md}</Markdown>
-        </section>
-      ) : null}
-
       {hasStructuredTop3 || brief.top3_md ? (
         <section id="top-3" style={SECTION}>
           <h2>Top 3 things that matter</h2>
@@ -74,6 +75,13 @@ export default function BriefBody({ brief, itemsHeading = 'Ranked items', itemsN
           ) : (
             <Markdown>{brief.top3_md}</Markdown>
           )}
+        </section>
+      ) : null}
+
+      {brief.what_changed_md ? (
+        <section id="what-changed" style={SECTION}>
+          <h2>What changed</h2>
+          <Markdown>{brief.what_changed_md}</Markdown>
         </section>
       ) : null}
 
