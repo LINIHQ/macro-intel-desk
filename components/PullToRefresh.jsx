@@ -14,9 +14,25 @@ const RING = 2 * Math.PI * 8; // r=8 in the 20x20 viewBox
 
 const EASE = 'transform 300ms cubic-bezier(0.2, 0.85, 0.3, 1)';
 
+// Scroll cost rules for this component, learned the hard way on Sept 8, 2026:
+//
+// 1. The non-passive touchmove listener is the expensive one. A listener
+//    registered { passive: false } on document tells WebKit that any touchmove
+//    might call preventDefault, so the compositor cannot start scrolling until
+//    the main thread has run the handler. That taxes EVERY drag on EVERY page,
+//    even the ones where this component does nothing, and it shows up as
+//    jerky scrolling rather than as a broken feature. It is now bound only
+//    after a touch actually starts at scrollY 0, and released the moment the
+//    gesture turns out to be a scroll rather than a pull.
+// 2. Browser tabs get nothing at all: no listeners and no fixed layer. The
+//    feature was already inert there, it was just still charging rent.
+// 3. will-change is applied only while the puck is on screen. Leaving it on
+//    permanently keeps a promoted layer alive above a position: fixed layer
+//    for the entire session.
 export default function PullToRefresh() {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
+  const [enabled, setEnabled] = useState(false);
   const [pull, setPull] = useState(0);
   const [refreshing, setRefreshing] = useState(false);
   const [baseTop, setBaseTop] = useState(0);
@@ -24,16 +40,16 @@ export default function PullToRefresh() {
   const startY = useRef(null);
   const active = useRef(false);
   const armed = useRef(false);
-  const standalone = useRef(false);
   const startedAt = useRef(0);
   const pageEl = useRef(null);
   const busyRef = useRef(false);
   busyRef.current = refreshing;
 
   useEffect(() => {
-    standalone.current =
+    const standalone =
       window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
     pageEl.current = document.querySelector('main');
+    setEnabled(standalone);
   }, []);
 
   // Drive the page offset imperatively so the whole view travels with the finger.
@@ -46,31 +62,53 @@ export default function PullToRefresh() {
   }, []);
 
   useEffect(() => {
+    if (!enabled) return undefined;
+
+    let moveBound = false;
+
+    function bindMove() {
+      if (moveBound) return;
+      document.addEventListener('touchmove', onTouchMove, { passive: false });
+      moveBound = true;
+    }
+    function unbindMove() {
+      if (!moveBound) return;
+      document.removeEventListener('touchmove', onTouchMove, { passive: false });
+      moveBound = false;
+    }
+
+    // The gesture is a scroll, not a pull. Let go of the non-passive listener
+    // right away so the rest of the drag runs on the compositor.
+    function abandon() {
+      active.current = false;
+      armed.current = false;
+      startY.current = null;
+      unbindMove();
+      setPull(0);
+      setPageOffset(0, true);
+    }
+
     function onTouchStart(e) {
-      if (!standalone.current || busyRef.current) return;
+      if (busyRef.current) return;
       if (window.scrollY > 0) return;
       if (!pageEl.current) pageEl.current = document.querySelector('main');
       const rect = pageEl.current ? pageEl.current.getBoundingClientRect() : null;
       if (rect) setBaseTop(Math.max(0, Math.round(rect.top)));
       startY.current = e.touches[0].clientY;
       active.current = true;
+      bindMove();
     }
+
     function onTouchMove(e) {
       if (!active.current || startY.current == null) return;
-      if (window.scrollY > 0) {
-        active.current = false;
-        armed.current = false;
-        setPull(0);
-        setPageOffset(0, true);
-        return;
-      }
       const delta = e.touches[0].clientY - startY.current;
-      if (delta <= 0) {
-        armed.current = false;
-        setPull(0);
-        setPageOffset(0, false);
+      // A few pixels of slop before deciding the finger is heading upward,
+      // so ordinary jitter at the start of a pull does not cancel it.
+      if (window.scrollY > 0 || delta < -6) {
+        abandon();
         return;
       }
+      if (delta <= 0) return;
       e.preventDefault();
       // Resistance curve: easy at first, stiffer the further it goes.
       const damped = Math.min(MAX_PULL, delta * 0.62 - (delta * delta) / 2600);
@@ -78,7 +116,9 @@ export default function PullToRefresh() {
       setPull(damped);
       setPageOffset(damped, false);
     }
+
     function onTouchEnd() {
+      unbindMove();
       if (!active.current) return;
       active.current = false;
       startY.current = null;
@@ -96,17 +136,17 @@ export default function PullToRefresh() {
       armed.current = false;
       setPull(0);
     }
+
     document.addEventListener('touchstart', onTouchStart, { passive: true });
-    document.addEventListener('touchmove', onTouchMove, { passive: false });
-    document.addEventListener('touchend', onTouchEnd);
-    document.addEventListener('touchcancel', onTouchEnd);
+    document.addEventListener('touchend', onTouchEnd, { passive: true });
+    document.addEventListener('touchcancel', onTouchEnd, { passive: true });
     return () => {
+      unbindMove();
       document.removeEventListener('touchstart', onTouchStart);
-      document.removeEventListener('touchmove', onTouchMove);
       document.removeEventListener('touchend', onTouchEnd);
       document.removeEventListener('touchcancel', onTouchEnd);
     };
-  }, [router, setPageOffset]);
+  }, [enabled, router, setPageOffset]);
 
   // Release the parked page only once the data is in and the spinner has been
   // on screen long enough to read as a refresh rather than a flicker.
@@ -127,12 +167,21 @@ export default function PullToRefresh() {
   const ready = progress >= 1;
   const visible = dragging || refreshing;
 
+  // In a browser tab there is no feature here, so there is no fixed layer and
+  // no promoted puck sitting over the page for the whole session either.
+  if (!enabled) return null;
+
   const gap = refreshing ? HOLD : pull;
   const translate = visible ? gap / 2 - PUCK / 2 : -PUCK - 8;
   const scale = refreshing ? 1 : 0.6 + 0.4 * progress;
   const opacity = refreshing ? 1 : Math.min(1, pull / 30);
 
-  const puckClass = ['ptr-puck', ready && !refreshing ? 'ptr-puck-ready' : '', refreshing ? 'ptr-puck-loading' : '']
+  const puckClass = [
+    'ptr-puck',
+    visible ? 'ptr-puck-active' : '',
+    ready && !refreshing ? 'ptr-puck-ready' : '',
+    refreshing ? 'ptr-puck-loading' : '',
+  ]
     .filter(Boolean)
     .join(' ');
 
