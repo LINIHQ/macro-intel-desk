@@ -7,17 +7,32 @@ import ShareBlock from '@/components/ShareBlock';
 
 export const revalidate = 300;
 
-function fmtStamp(iso) {
+// Same stamp treatment as the live page: a time landing on the same ET day as
+// the brief drops its redundant date, because these stamps are uppercase and
+// letter-spaced and wrap badly at 375px.
+function etParts(iso) {
   if (!iso) return null;
   const d = new Date(iso);
   if (Number.isNaN(d.getTime())) return null;
-  return d.toLocaleString('en-US', {
-    month: 'short',
-    day: 'numeric',
-    hour: 'numeric',
-    minute: '2-digit',
-    timeZone: 'America/New_York',
-  });
+  return {
+    date: d.toLocaleDateString('en-US', {
+      month: 'short',
+      day: 'numeric',
+      timeZone: 'America/New_York',
+    }),
+    time: d.toLocaleTimeString('en-US', {
+      hour: 'numeric',
+      minute: '2-digit',
+      timeZone: 'America/New_York',
+    }),
+  };
+}
+
+function stampText(iso, sameDayAsIso) {
+  const p = etParts(iso);
+  if (!p) return null;
+  const ref = etParts(sameDayAsIso);
+  return ref && ref.date === p.date ? p.time : `${p.date}, ${p.time}`;
 }
 
 export default async function BriefPage({ params }) {
@@ -48,10 +63,10 @@ export default async function BriefPage({ params }) {
     ? `XRP Macro Brief: ${brief.headline}`
     : 'XRP Macro Intelligence Desk';
   const runStamp = fmtRunStamp(brief.created_at, brief.run_date);
-  const verifiedStamp = fmtStamp(brief.evidence_verified_through);
-  const updatedStamp =
+  const verifiedText = stampText(brief.evidence_verified_through, brief.created_at);
+  const updatedText =
     brief.last_updated_at && brief.last_updated_at !== brief.created_at
-      ? fmtStamp(brief.last_updated_at)
+      ? stampText(brief.last_updated_at, brief.created_at)
       : null;
 
   return (
@@ -63,11 +78,11 @@ export default async function BriefPage({ params }) {
         </span>
       </div>
 
-      {verifiedStamp || updatedStamp ? (
+      {verifiedText || updatedText ? (
         <p className="page-meta" style={{ marginTop: -6, marginBottom: 14 }}>
-          {verifiedStamp ? `Evidence verified through ${verifiedStamp} ET` : null}
-          {verifiedStamp && updatedStamp ? ' · ' : null}
-          {updatedStamp ? `Last updated ${updatedStamp} ET` : null}
+          {verifiedText ? `Evidence through ${verifiedText} ET` : null}
+          {verifiedText && updatedText ? ' · ' : null}
+          {updatedText ? `updated ${updatedText} ET` : null}
         </p>
       ) : null}
 
