@@ -2,11 +2,42 @@ import Link from 'next/link';
 import { getAllBriefs } from '@/lib/supabase';
 import { fmtDate } from '@/lib/format';
 import DotStrip from '@/components/DotStrip';
+import ArchiveBrowser from '@/components/ArchiveBrowser';
 
 export const revalidate = 60;
 
 export default async function ArchivePage() {
   const briefs = await getAllBriefs(false);
+
+  const items = briefs.map((b) => ({
+    id: b.id,
+    mode: b.brief_mode,
+    haystack: `${fmtDate(b.run_date)} ${b.run_date} ${b.brief_mode} ${b.headline || ''}`.toLowerCase(),
+    node: (
+      <Link href={`/brief/${b.id}`} className="row-item" style={{ color: 'inherit' }}>
+        <span style={{ minWidth: 0 }}>
+          <span className="mono" style={{ fontWeight: 500 }}>
+            {fmtDate(b.run_date)} · {b.brief_mode} brief
+          </span>
+          <br />
+          {/* Headlines run long enough that a list of them stops being scannable.
+              Clamped to two lines here; the full headline is on the brief itself. */}
+          <span
+            className="small dim"
+            style={{
+              display: '-webkit-box',
+              WebkitLineClamp: 2,
+              WebkitBoxOrient: 'vertical',
+              overflow: 'hidden',
+            }}
+          >
+            {b.headline || `${b.brief_mode} brief`}
+          </span>
+        </span>
+        <DotStrip states={b.dashboard_states} labeled />
+      </Link>
+    ),
+  }));
 
   return (
     <div>
@@ -16,20 +47,7 @@ export default async function ArchivePage() {
         ranked items, and sources.
       </p>
       {briefs.length ? (
-        <div className="row-list">
-          {briefs.map((b) => (
-            <Link key={b.id} href={`/brief/${b.id}`} className="row-item" style={{ color: 'inherit' }}>
-              <span>
-                <span className="mono" style={{ fontWeight: 500 }}>
-                  {fmtDate(b.run_date)} · {b.brief_mode} brief
-                </span>
-                <br />
-                <span className="small dim">{b.headline || `${b.brief_mode} brief`}</span>
-              </span>
-              <DotStrip states={b.dashboard_states} labeled />
-            </Link>
-          ))}
-        </div>
+        <ArchiveBrowser items={items} />
       ) : (
         <div className="empty">No published briefs yet.</div>
       )}
