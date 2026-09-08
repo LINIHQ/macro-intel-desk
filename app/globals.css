@@ -610,7 +610,39 @@ button.tile.changed {
 
 /* ---------- history timeline ---------- */
 
+/* The category labels are deliberately NOT inside the horizontal scroller.
+   They were a sticky first grid column until Sept 8, 2026. Sticky was tried
+   twice and failed twice on iOS: on Sept 4 the labels scrolled partway and
+   clipped mid-word, and after that patch they disappeared altogether on
+   Sept 8, leaving eight unlabelled colour rows on a phone. So the dependency
+   is gone rather than patched again: .tl-labels is a static flex column beside
+   .tl-scroll, and only the track scrolls. Do not move the labels back inside
+   .tl-scroll.
+
+   Row alignment is explicit rather than grid-derived: every label box and
+   every track is 14px tall with a 10px gap, declared on both columns below.
+   If either number changes it has to change on both sides. */
+.tl-wrap { position: relative; display: flex; align-items: flex-start; }
+.tl-labels {
+  flex: 0 0 150px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-right: 14px;
+}
+.tl-label {
+  height: 14px;
+  line-height: 14px;
+  font-size: 13px;
+  color: var(--dim);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 .tl-scroll {
+  flex: 1 1 auto;
+  min-width: 0;
   overflow-x: auto;
   overflow-y: hidden;
   -webkit-overflow-scrolling: touch;
@@ -619,19 +651,7 @@ button.tile.changed {
   padding-top: 240px;
   margin-top: -240px;
 }
-.tl-grid { display: grid; grid-template-columns: 150px max-content; gap: 10px 0; align-items: center; }
-.tl-label {
-  font-size: 13px;
-  color: var(--dim);
-  position: sticky;
-  left: 0;
-  z-index: 7;
-  background: var(--bg);
-  padding-right: 14px;
-  align-self: stretch;
-  display: flex;
-  align-items: center;
-}
+.tl-grid { display: flex; flex-direction: column; gap: 10px; width: max-content; }
 .tl-track { display: flex; gap: 4px; height: 14px; width: max-content; touch-action: pan-x; }
 .tl-seg {
   position: relative;
@@ -685,9 +705,9 @@ button.tile.changed {
    -240 so desktop tooltips can overflow upward, and that negative margin
    collapses through .tl-wrap, extending its box 240px above the visible rows.
    A top of 0 painted the fade over the page text above (seen live Aug 31);
-   the two 240 constants must stay in sync. */
+   the two 240 constants must stay in sync. The left fade sits at the label
+   column width, so it moves with .tl-labels flex-basis, not independently. */
 .tl-hint { margin: 0 0 10px; }
-.tl-wrap { position: relative; }
 .tl-wrap::before,
 .tl-wrap::after {
   content: "";
@@ -1010,9 +1030,11 @@ button.tile.changed {
   .card-head { flex-direction: column; align-items: flex-start; gap: 8px; }
   .card-chips { padding-top: 0; }
 
-  .tl-grid { grid-template-columns: 112px max-content; }
-  .tl-label { font-size: 11px; padding-right: 10px; }
-  .tl-wrap::before { left: 112px; }
+  /* 118px holds "Global liquidity" at 11px IBM Plex Mono (0.6em advance, about
+     106px) inside 108px of text box. Keep the fade and the flex-basis equal. */
+  .tl-labels { flex-basis: 118px; padding-right: 10px; }
+  .tl-label { font-size: 11px; }
+  .tl-wrap::before { left: 118px; }
 
   .md table { font-size: 12px; }
   .md th, .md td { padding: 5px 8px; font-size: 12px; }
