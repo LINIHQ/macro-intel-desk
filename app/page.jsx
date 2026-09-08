@@ -10,17 +10,33 @@ import { AmendmentsStrip } from '@/components/AmendmentsPanel';
 
 export const revalidate = 60;
 
-function fmtStamp(iso) {
+// Date and time are split so a stamp landing on the same ET day as the brief can
+// drop its date and show the time alone. The header stamps are uppercase and
+// letter-spaced, which eats width fast: at 375px a full "Evidence verified
+// through Sep 8, 12:00 PM ET" wrapped and orphaned the ET onto its own line.
+function etParts(iso) {
   if (!iso) return null;
   const d = new Date(iso);
   if (Number.isNaN(d.getTime())) return null;
-  return d.toLocaleString('en-US', {
-    month: 'short',
-    day: 'numeric',
-    hour: 'numeric',
-    minute: '2-digit',
-    timeZone: 'America/New_York',
-  });
+  return {
+    date: d.toLocaleDateString('en-US', {
+      month: 'short',
+      day: 'numeric',
+      timeZone: 'America/New_York',
+    }),
+    time: d.toLocaleTimeString('en-US', {
+      hour: 'numeric',
+      minute: '2-digit',
+      timeZone: 'America/New_York',
+    }),
+  };
+}
+
+function stampText(iso, sameDayAsIso) {
+  const p = etParts(iso);
+  if (!p) return null;
+  const ref = etParts(sameDayAsIso);
+  return ref && ref.date === p.date ? p.time : `${p.date}, ${p.time}`;
 }
 
 export default async function LivePage() {
@@ -45,13 +61,16 @@ export default async function LivePage() {
     : 'XRP Macro Intelligence Desk';
   const runStamp = fmtRunStamp(brief.created_at, brief.run_date);
 
-  // Publication time and evidence cutoff are different facts and are shown as
-  // different facts. A brief published in the morning can carry evidence verified
-  // later the same day, and an edit after publication moves neither of the first two.
-  const verifiedStamp = fmtStamp(brief.evidence_verified_through);
-  const updatedStamp =
+  // Publication time, evidence cutoff and last edit are three different facts and
+  // stay three different facts. They used to stack as three separate lines under
+  // the date, which on a phone was four lines of metadata before any content.
+  // Publication and evidence now share a line, since a reader reads them together
+  // (published then, verified through then), and the edit stamp keeps its own line
+  // because it is the one that only sometimes exists.
+  const verifiedText = stampText(brief.evidence_verified_through, brief.created_at);
+  const updatedText =
     brief.last_updated_at && brief.last_updated_at !== brief.created_at
-      ? fmtStamp(brief.last_updated_at)
+      ? stampText(brief.last_updated_at, brief.created_at)
       : null;
 
   const itemsNote = (
@@ -68,19 +87,16 @@ export default async function LivePage() {
           <p className="page-meta">
             {fmtDate(brief.run_date)} · {brief.brief_mode} brief
           </p>
-          {runStamp ? (
+          {runStamp || verifiedText ? (
             <p className="page-meta" style={{ marginTop: 4 }}>
-              Published {runStamp}
+              {runStamp ? `Published ${runStamp}` : null}
+              {runStamp && verifiedText ? ' · ' : null}
+              {verifiedText ? `evidence through ${verifiedText} ET` : null}
             </p>
           ) : null}
-          {verifiedStamp ? (
+          {updatedText ? (
             <p className="page-meta" style={{ marginTop: 4 }}>
-              Evidence verified through {verifiedStamp} ET
-            </p>
-          ) : null}
-          {updatedStamp ? (
-            <p className="page-meta" style={{ marginTop: 4 }}>
-              Last updated {updatedStamp} ET
+              Updated {updatedText} ET
             </p>
           ) : null}
         </div>
