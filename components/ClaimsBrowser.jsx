@@ -11,7 +11,12 @@ import { VERIFICATION } from '@/lib/format';
 // of the record: every claim stays reachable, and clearing the controls returns
 // the full list.
 
-const ORDER = ['unverified', 'partially_verified', 'contradicted', 'opinion', 'verified'];
+// Filter chips run in the same order as the scorecard line above them, so a
+// reader can move from the counts to the filters without re-reading. This is
+// deliberately NOT the sort order: "open questions first" is about which claims
+// deserve attention, and using that ordering for the chips made the two rows
+// disagree for no reason a reader could see.
+const ORDER = ['verified', 'partially_verified', 'unverified', 'contradicted', 'opinion'];
 
 const SORTS = [
   { key: 'open', label: 'Open questions first' },
@@ -70,7 +75,7 @@ export default function ClaimsBrowser({ items = [] }) {
             background: 'rgba(255,255,255,0.04)',
             border: '1px solid rgba(255,255,255,0.18)',
             borderRadius: 2,
-appearance: 'none',
+            appearance: 'none',
           }}
         />
       </div>
