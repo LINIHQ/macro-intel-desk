@@ -62,11 +62,17 @@ function summarize(series, catLabel) {
 // Compact strip drawn inside a tile. Same window and same vertical scale on every
 // tile. The newest segment is drawn at full strength and prior segments are held
 // back, so the current reading is legible without changing what any segment means.
+//
+// preserveAspectRatio is "none" because the mobile rule in globals.css stretches
+// .hist-strip to fill the tile width at a fixed height. Letting it letterbox
+// instead would shrink the bars into a band in the middle of the tile. Stretching
+// rectangles changes their width, never their height, so the one thing a segment
+// encodes (its level) survives the scaling untouched.
 export function HistoryStrip({ series = [], catLabel = 'Gauge' }) {
   const w = 60;
   const h = 24;
   const n = series.length;
-  if (!n) return <div className="hist-strip" style={{ width: w, height: h }} aria-hidden="true" />;
+  if (!n) return <div className="hist-strip" aria-hidden="true" />;
 
   const slot = w / n;
   const gap = slot > 3.2 ? Math.min(1, slot * 0.2) : 0;
@@ -76,8 +82,7 @@ export function HistoryStrip({ series = [], catLabel = 'Gauge' }) {
     <svg
       className="hist-strip"
       viewBox={`0 0 ${w} ${h}`}
-      width={w}
-      height={h}
+      preserveAspectRatio="none"
       role="img"
       aria-label={summarize(series, catLabel)}
     >
