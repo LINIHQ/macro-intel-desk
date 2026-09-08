@@ -350,11 +350,8 @@ h2 {
   opacity: 0.8;
   transition: transform 140ms ease, opacity 120ms ease;
 }
-button.tile:hover .tile-chevron,
 button.tile.open .tile-chevron {
   opacity: 1;
-}
-button.tile.open .tile-chevron {
   transform: rotate(180deg);
 }
 .tile-top { display: flex; align-items: center; gap: 8px; }
@@ -441,14 +438,33 @@ button.tile {
   text-align: left;
   width: 100%;
   cursor: pointer;
+  /* manipulation drops the double-tap-zoom wait, and killing the tap highlight
+     stops iOS painting its own flash over a tile that is only being scrolled past. */
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
   transition: box-shadow 140ms ease, border-color 140ms ease;
 }
-button.tile:hover,
+/* The persistent states. .open is the tile the reader expanded, .changed is the
+   gauge that moved this run, and both are meaningful on every device. */
 button.tile.open,
 button.tile.changed {
   border-color: color-mix(in srgb, var(--tile-c, var(--mute)) 60%, var(--line));
   border-left-color: var(--tile-c, var(--mute));
   box-shadow: 0 0 16px color-mix(in srgb, var(--tile-c, var(--mute)) 28%, transparent);
+}
+/* Hover is pointer-only, deliberately (Sept 8, 2026). iOS applies :hover on
+   touch, so dragging a finger across the gauge grid lit each tile up and made
+   the browser paint a 16px blurred glow on eight large elements mid-gesture.
+   That read as: touch, tile lights, nothing moves, then the scroll finally
+   starts. A hover affordance a touch device cannot use is not worth a stalled
+   scroll, so it is now gated behind an actual pointer. */
+@media (hover: hover) and (pointer: fine) {
+  button.tile:hover {
+    border-color: color-mix(in srgb, var(--tile-c, var(--mute)) 60%, var(--line));
+    border-left-color: var(--tile-c, var(--mute));
+    box-shadow: 0 0 16px color-mix(in srgb, var(--tile-c, var(--mute)) 28%, transparent);
+  }
+  button.tile:hover .tile-chevron { opacity: 1; }
 }
 .tile-detail {
   margin-top: 12px;
@@ -668,12 +684,13 @@ button.tile.changed {
   opacity: 0.4;
   cursor: pointer;
   touch-action: pan-x;
+  -webkit-tap-highlight-color: transparent;
   transition: opacity 120ms ease;
 }
-.tl-seg:hover { opacity: 1; z-index: 9; }
 .tl-seg.changed { opacity: 1; outline: 1px solid var(--text); outline-offset: 1px; }
 .tl-seg.sel { opacity: 1; outline: 2px solid var(--acc); outline-offset: 1px; z-index: 9; }
 @media (hover: hover) and (pointer: fine) {
+  .tl-seg:hover { opacity: 1; z-index: 9; }
   .tl-seg:hover::after {
     content: attr(data-tip);
     position: absolute;
