@@ -1,31 +1,23 @@
 'use client';
 
-import { Fragment, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 const HOVER_MQ = '(hover: hover) and (pointer: fine)';
 
-// The label column is sticky at left: 0 so category names hold their position
-// while the track scrolls under them. Each row used to be wrapped in a
-// <div style={{ display: 'contents' }}> to get the label and track placed as
-// grid items. That wrapper broke sticky in WebKit: position: sticky on an
-// element whose parent is display: contents does not hold in Safari, so on
-// iPhone the labels scrolled away with the track the moment the timeline
-// anchored itself to the newest brief on mount, leaving them clipped mid-word
-// ("Global liquidity" rendering as "ity"). Seen live Sept 4, 2026.
+// The category labels are NOT inside the scroller, on purpose.
 //
-// Fragment emits no DOM node at all, so the label and track are true direct
-// children of .tl-grid: identical grid placement, and sticky behaves. Do not
-// reintroduce a wrapper element around these two, with display: contents or
-// otherwise, without testing the History page on a real iPhone first.
-const LABEL_TEXT_STYLE = {
-  display: 'block',
-  width: '100%',
-  minWidth: 0,
-  overflow: 'hidden',
-  textOverflow: 'ellipsis',
-  whiteSpace: 'nowrap',
-};
-
+// They were a sticky first grid column until Sept 8, 2026. Sticky was tried
+// twice and failed twice on iOS: on Sept 4 the labels scrolled partway and
+// clipped mid-word ("Global liquidity" rendering as "ity"), and after the
+// display: contents wrapper was removed they went away entirely on Sept 8,
+// leaving eight unlabelled colour rows on a phone. A dashboard history with no
+// category names is not a degraded chart, it is not a chart.
+//
+// So the dependency is gone rather than patched again. .tl-labels is a static
+// flex column sitting beside .tl-scroll; only the track scrolls. Row alignment
+// is explicit: each label box and each track is 14px tall with a 10px gap, set
+// in globals.css on both columns. Do not move the labels back inside
+// .tl-scroll, and if either constant changes, change it on both sides.
 export default function HistoryTimeline({ rows, dates }) {
   const scrollRef = useRef(null);
   const panelRef = useRef(null);
@@ -112,32 +104,33 @@ export default function HistoryTimeline({ rows, dates }) {
   return (
     <>
       <div className={`tl-wrap${edges.l ? ' can-l' : ''}${edges.r ? ' can-r' : ''}`}>
+        <div className="tl-labels">
+          {rows.map((row) => (
+            <span className="tl-label" key={row.key} title={row.label}>
+              {row.label}
+            </span>
+          ))}
+        </div>
         <div className="tl-scroll" ref={scrollRef}>
           <div className="tl-grid">
             {rows.map((row) => (
-              <Fragment key={row.key}>
-                <span className="tl-label">
-                  <span style={LABEL_TEXT_STYLE}>{row.label}</span>
-                </span>
-                <div className="tl-track">
-                  {row.segs.map((s, i) => {
-                    const isSel = sel && sel.key === row.key && sel.i === i;
-                    return (
-                      <button
-                        key={s.id}
-                        type="button"
-                        className={`tl-seg${s.changed ? ' changed' : ''}${isSel ? ' sel' : ''}`}
-                        data-tip={s.tip}
-                        aria-label={s.tip}
-                        style={{ background: s.color }}
-                        onClick={() => toggle(row.key, i)}
-                      />
-                    );
-                  })}
-                </div>
-              </Fragment>
+              <div className="tl-track" key={row.key}>
+                {row.segs.map((s, i) => {
+                  const isSel = sel && sel.key === row.key && sel.i === i;
+                  return (
+                    <button
+                      key={s.id}
+                      type="button"
+                      className={`tl-seg${s.changed ? ' changed' : ''}${isSel ? ' sel' : ''}`}
+                      data-tip={s.tip}
+                      aria-label={`${row.label}. ${s.tip}`}
+                      style={{ background: s.color }}
+                      onClick={() => toggle(row.key, i)}
+                    />
+                  );
+                })}
+              </div>
             ))}
-            <span className="tl-label" />
             <div className="tl-dates">
               {dates.map((d, i) => (
                 <span key={i}>{d}</span>
