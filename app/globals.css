@@ -287,9 +287,13 @@ h2 {
   border: 1px solid var(--line);
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45);
   transform: translateY(-40px);
-  will-change: transform, opacity;
   transition: opacity 120ms ease, box-shadow 140ms ease;
 }
+/* will-change applies only while the puck is actually on screen (Sept 8, 2026).
+   Left on permanently it keeps a promoted compositing layer alive above a
+   position: fixed layer for the entire session, which is pure cost on every
+   scroll frame and buys nothing when the puck is parked off-screen. */
+.ptr-puck-active { will-change: transform, opacity; }
 .ptr-puck-ready { box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5); border-color: var(--acc); }
 .ptr-puck-loading { transition: transform 180ms cubic-bezier(0.2, 0.8, 0.3, 1), opacity 120ms ease; }
 .ptr-ring { transform: rotate(-90deg); }
