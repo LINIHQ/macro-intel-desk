@@ -6,7 +6,15 @@
   --text: #e6edf7;
   --body: #a7b6cc;
   --dim: #8294ae;
-  --mute: #566680;
+  /* Sept 8, 2026: --mute raised from #566680 to #6d7d99. On --bg the old value
+     measured about 3.3:1, under the 4.5:1 WCAG AA floor for normal text, and
+     .mute carries most of the 10 to 13px copy on the site: page meta, source
+     labels, tile categories, footer, timeline dates. The new value measures
+     about 4.5:1 and stays clearly below --dim (about 6.1:1) so the three-step
+     text hierarchy (--text, --body/--dim, --mute) still reads as a hierarchy.
+     Do not darken this again without checking the ratio; the muted tier is the
+     one that breaks first on a phone in daylight. */
+  --mute: #6d7d99;
   --g: #38d183;
   --y: #e8c547;
   --o: #ef8e3f;
@@ -173,7 +181,7 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--acc); outline-o
   gap: 4px 10px;
   align-items: baseline;
   margin-top: 10px !important;
-  font-size: 12px;
+  font-size: 12.5px;
 }
 .foot-links a {
   color: var(--mute);
@@ -203,7 +211,7 @@ h2 {
   padding-top: 16px;
   margin: 44px 0 14px;
 }
-.page-sub { color: var(--dim); font-size: 14px; margin: 0 0 26px; }
+.page-sub { color: var(--dim); font-size: 14.5px; margin: 0 0 26px; }
 .page-meta {
   font-size: 12.5px;
   letter-spacing: 0.12em;
@@ -214,7 +222,7 @@ h2 {
 .mono { font-family: var(--font-mono), monospace; }
 .dim { color: var(--dim); }
 .mute { color: var(--mute); }
-.small { font-size: 13px; }
+.small { font-size: 13.5px; }
 
 /* ---------- page head + fear/greed dial ---------- */
 
@@ -299,7 +307,7 @@ h2 {
 
 .gauge-hint {
   margin: -8px 0 10px;
-  font-size: 12px;
+  font-size: 12.5px;
   letter-spacing: 0.04em;
   color: var(--mute);
 }
@@ -307,6 +315,14 @@ h2 {
 @media (hover: hover) and (pointer: fine) {
   .gauge-hint .hint-touch { display: none; }
   .gauge-hint .hint-pointer { display: inline; }
+}
+
+/* The tap/hover swap is reused inside the classification history caption, which
+   sits in a client component rather than under .gauge-hint. */
+.hint-pointer { display: none; }
+@media (hover: hover) and (pointer: fine) {
+  .hint-touch { display: none; }
+  .hint-pointer { display: inline; }
 }
 
 /* ---------- dashboard tiles ---------- */
@@ -341,7 +357,7 @@ button.tile.open .tile-chevron {
 .tile-icon { display: inline-flex; color: var(--tile-c, var(--dim)); flex-shrink: 0; }
 .tile-icon svg { display: block; }
 .tile-cat {
-  font-size: 10px;
+  font-size: 10.5px;
   letter-spacing: 0.13em;
   text-transform: uppercase;
   color: var(--dim);
@@ -369,9 +385,13 @@ button.tile.open .tile-chevron {
   overflow: hidden;
   text-overflow: ellipsis;
 }
-.trend {
-  width: 56px;
-  height: 22px;
+/* Classification history strip (replaced the generated .trend motif on Sept 8,
+   2026). Fixed box so all eight tiles share one window and one scale; the SVG
+   uses preserveAspectRatio="none" so stretching it never changes what a segment
+   means, only how wide it is drawn. */
+.hist-strip {
+  width: 60px;
+  height: 24px;
   flex-shrink: 0;
   color: var(--tile-c, var(--mute));
 }
@@ -392,7 +412,7 @@ button.tile.open .tile-chevron {
   align-items: flex-start;
   gap: 6px;
   margin-top: 8px;
-  font-size: 10px;
+  font-size: 10.5px;
   line-height: 1.5;
   letter-spacing: 0.02em;
   text-align: left;
@@ -435,7 +455,7 @@ button.tile.changed {
 }
 .tile-detail-head { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
 .tile-detail-cat {
-  font-size: 10px;
+  font-size: 10.5px;
   letter-spacing: 0.13em;
   text-transform: uppercase;
   color: var(--dim);
@@ -446,8 +466,9 @@ button.tile.changed {
   text-transform: uppercase;
   color: var(--tile-c, var(--text));
 }
-.tile-detail p { margin: 8px 0 0; font-size: 13px; line-height: 1.65; }
-.tile-detail-link { display: inline-block; margin-top: 10px; font-size: 12px; }
+.tile-detail p { margin: 8px 0 0; font-size: 13.5px; line-height: 1.7; }
+.tile-detail ul { margin: 0 0 6px; font-size: 13.5px; line-height: 1.7; }
+.tile-detail-link { display: inline-block; margin-top: 10px; font-size: 12.5px; }
 
 /* ---------- terminal summary ---------- */
 
@@ -495,7 +516,7 @@ button.tile.changed {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  font-size: 11px;
+  font-size: 11.5px;
   padding: 3px 10px 4px;
   border: 1px solid var(--line);
   border-radius: 2px;
@@ -517,7 +538,7 @@ button.tile.changed {
   margin-top: 12px;
 }
 .src-line-label {
-  font-size: 10px;
+  font-size: 10.5px;
   font-weight: 600;
   letter-spacing: 0.13em;
   text-transform: uppercase;
@@ -525,7 +546,7 @@ button.tile.changed {
   flex-shrink: 0;
 }
 .src-link {
-  font-size: 12px;
+  font-size: 12.5px;
   color: var(--dim);
   text-decoration: underline;
   text-decoration-color: color-mix(in srgb, var(--dim) 45%, transparent);
@@ -573,6 +594,11 @@ button.tile.changed {
 .card-title { font-weight: 600; margin: 0; font-size: 15px; letter-spacing: -0.01em; color: var(--text); flex: 1 1 auto; min-width: 0; }
 .card-chips { display: flex; gap: 8px; flex-shrink: 0; padding-top: 2px; }
 .card-rank { color: var(--acc); font-weight: 600; }
+.card summary { list-style: none; }
+.card summary::-webkit-details-marker { display: none; }
+.card summary::before { content: "▸ "; color: var(--acc); }
+.card details[open] > summary::before { content: "▾ "; }
+.card summary:hover { color: var(--dim); }
 
 .row-list { border: 1px solid var(--line); overflow: hidden; }
 .row-item { display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 14px 16px; border-bottom: 1px solid var(--line); background: var(--panel); transition: background 120ms ease; }
@@ -647,7 +673,7 @@ button.tile.changed {
   .tl-track > .tl-seg:first-child:hover::after { left: 0; transform: none; }
   .tl-track > .tl-seg:last-child:hover::after { left: auto; right: 0; transform: none; }
 }
-.tl-dates { display: flex; gap: 4px; font-size: 11px; color: var(--mute); margin-top: 6px; width: max-content; }
+.tl-dates { display: flex; gap: 4px; font-size: 11.5px; color: var(--mute); margin-top: 6px; width: max-content; }
 .tl-dates span { flex: 0 0 26px; text-align: left; white-space: nowrap; }
 
 /* Timeline scroll affordances (Aug 31, 2026): the view anchors at the newest
@@ -714,14 +740,17 @@ button.tile.changed {
 .tl-panel-close:hover { color: var(--text); }
 .tl-panel-status { margin: 6px 0 0; font-size: 13.5px; color: var(--body); }
 .tl-panel-flag { color: var(--mute); font-size: 12px; }
-.tl-panel-reason { margin: 6px 0 0; font-size: 12.5px; line-height: 1.6; color: var(--dim); }
+.tl-panel-reason { margin: 6px 0 0; font-size: 13px; line-height: 1.65; color: var(--dim); }
 
-.legend { display: flex; gap: 16px; flex-wrap: wrap; font-size: 12px; color: var(--dim); margin: 10px 0 18px; }
+.legend { display: flex; gap: 16px; flex-wrap: wrap; font-size: 12.5px; color: var(--dim); margin: 10px 0 18px; }
 .legend .dot { display: inline-block; margin-right: 5px; vertical-align: middle; }
 
 /* ---------- markdown ---------- */
 
-.md { font-size: 14.5px; color: var(--body); line-height: 1.6; }
+/* Sept 8, 2026: body copy raised from 14.5px and line-height from 1.6. Briefs
+   are long and roughly 80% of readers are on a phone; the monospace face runs
+   visually small for its point size, and long-form reading was the complaint. */
+.md { font-size: 15px; color: var(--body); line-height: 1.72; }
 .md h1 {
   font-size: 16.5px;
   font-weight: 700;
@@ -745,9 +774,9 @@ button.tile.changed {
 }
 .md h2::before { content: ""; width: 14px; height: 3px; background: var(--acc); flex-shrink: 0; }
 .md h3 { font-size: 14.5px; font-weight: 600; color: var(--text); margin: 20px 0 8px; }
-.md p { margin: 0 0 10px; }
-.md ul, .md ol { padding-left: 22px; margin: 0 0 10px; }
-.md li { margin-bottom: 3px; }
+.md p { margin: 0 0 12px; }
+.md ul, .md ol { padding-left: 22px; margin: 0 0 12px; }
+.md li { margin-bottom: 5px; }
 .md li::marker { color: var(--mute); }
 .md code { font-size: 13.5px; background: var(--panel2); padding: 1px 5px; color: var(--text); }
 .md pre { background: var(--panel); border: 1px solid var(--line); padding: 14px; overflow-x: auto; }
@@ -813,7 +842,7 @@ button.tile.changed {
   border-left: 2px solid rgba(255, 255, 255, 0.25);
 }
 .alerts-text {
-  font-size: 13px;
+  font-size: 13.5px;
   color: var(--mute);
   letter-spacing: 0.02em;
   margin: 0;
@@ -974,7 +1003,7 @@ button.tile.changed {
 
   .tile-mid { display: block; }
   .tile-val { font-size: 16px; }
-  .trend { display: block; width: 100%; max-width: 120px; margin-top: 7px; }
+  .hist-strip { display: block; width: 100%; max-width: 130px; height: 26px; margin-top: 7px; }
 
   h1 { font-size: 24px; }
 
@@ -1000,7 +1029,7 @@ button.tile.changed {
 .amend { background: var(--panel); border: 1px solid var(--line); padding: 14px 16px 12px; margin-bottom: 12px; }
 .amend-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 10px; }
 .amend-title { font-size: 12px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: var(--dim); }
-.amend-meta { font-size: 11px; color: var(--mute); letter-spacing: 0.04em; }
+.amend-meta { font-size: 11.5px; color: var(--mute); letter-spacing: 0.04em; }
 .amend-cols, .amend-row { display: grid; grid-template-columns: minmax(0, 1.6fr) 70px 120px minmax(0, 1fr); gap: 12px; align-items: center; }
 .amend-cols { text-transform: uppercase; letter-spacing: 0.08em; font-size: 10.5px; padding: 4px 0 6px; border-bottom: 1px solid var(--line); }
 .amend-row { padding: 8px 0; border-bottom: 1px solid var(--line); }
@@ -1023,4 +1052,4 @@ button.tile.changed {
   .amend-meta { width: 100%; }
 }
 .amend-strip { margin: 14px 0 0; font-size: 12.5px; color: var(--dim); letter-spacing: 0.02em; line-height: 1.6; }
-.amend-strip-label { font-size: 10px; font-weight: 600; letter-spacing: 0.13em; text-transform: uppercase; color: var(--mute); margin-right: 10px; }
+.amend-strip-label { font-size: 10.5px; font-weight: 600; letter-spacing: 0.13em; text-transform: uppercase; color: var(--mute); margin-right: 10px; }
