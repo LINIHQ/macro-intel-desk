@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { CATEGORIES, LEVEL_COLORS, stateFor } from '@/lib/format';
 import { CATEGORY_ICONS } from '@/components/Icons';
-import { HistoryStrip, HistoryDetail } from '@/components/ClassificationHistory';
+import { HistoryStrip, HistoryDetail, HISTORY_CAPTION } from '@/components/ClassificationHistory';
 
 // Level meanings mirror the rubric published on the Sources page. Keep the two in sync.
 // This is the generic definition of a level. It is the fallback, never the answer:
@@ -62,6 +62,7 @@ export default function DashboardGrid({ states, history, criteria = {}, verified
   const detailRef = useRef(null);
 
   const byCategory = history?.byCategory ?? {};
+  const hasHistory = CATEGORIES.some((c) => (byCategory[c.key] ?? []).some(Boolean));
 
   // Clicking anywhere outside the grid or panel, or pressing Escape, closes the panel.
   useEffect(() => {
@@ -156,6 +157,16 @@ export default function DashboardGrid({ states, history, criteria = {}, verified
           );
         })}
       </div>
+
+      {/* One caption for all eight strips rather than a legend per tile. The strips
+          share a window and a scale, so the explanation is shared too, and repeating
+          it eight times would cost more space than the strips themselves. */}
+      {hasHistory ? (
+        <p className="small mute" style={{ margin: '10px 0 0', letterSpacing: '0.02em' }}>
+          {HISTORY_CAPTION}
+        </p>
+      ) : null}
+
       {openCat && openState ? (
         <div ref={detailRef} className="tile-detail" style={{ '--tile-c': openColor }}>
           <div className="tile-detail-head">
