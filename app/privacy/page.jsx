@@ -8,7 +8,8 @@ export default function PrivacyPage() {
       <h1>Privacy</h1>
       <p className="page-sub">
         What this site collects, what it does not, and who touches it. Short version: no accounts, no ads, no
-        trackers, no cookies, and nothing sold to anyone. Effective September 5, 2026.
+        cross-site tracking, no cookies, one cookieless visit counter, and nothing sold to anyone. Effective
+        September 5, 2026, corrected September 8, 2026.
       </p>
 
       <h2>Who is responsible</h2>
@@ -29,7 +30,8 @@ export default function PrivacyPage() {
         </p>
         <p style={{ margin: '0 0 10px' }}>
           There are no ads, no advertising pixels, no affiliate links, no social media tracking widgets, and no
-          third-party analytics scripts.
+          cross-site tracking of any kind. There is one third-party script: Vercel Web Analytics, a cookieless visit
+          counter, described in full in the next section. It is the only analytics on the site.
         </p>
         <p style={{ margin: 0 }}>
           No data from this site is sold, rented, or shared with anyone for marketing purposes. Ever.
@@ -110,6 +112,16 @@ export default function PrivacyPage() {
         updated. If the desk ever adds something material, an analytics change, a monetization feature, anything that
         collects more than it does today, it will be stated plainly here rather than quietly folded in.
       </p>
+
+      <div className="card" style={{ marginTop: 18 }}>
+        <p className="small" style={{ margin: 0 }}>
+          <strong>Correction, September 8, 2026.</strong> The summary above previously said this site runs no
+          third-party analytics scripts, which contradicted the Traffic measurement section on this same page
+          describing Vercel Web Analytics. The wording was wrong, not the practice: Vercel Web Analytics has been in
+          use throughout and is described here unchanged. The summary now says so directly. No data practice changed
+          on this date, and nothing new is being collected.
+        </p>
+      </div>
     </div>
   );
 }
