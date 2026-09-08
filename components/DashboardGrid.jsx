@@ -134,10 +134,16 @@ export default function DashboardGrid({ states, history, criteria = {}, verified
                 <span className="tile-icon">{CATEGORY_ICONS[c.key]}</span>
                 <span className="tile-cat">{c.label}</span>
               </div>
-              <div className="tile-mid">
+              {/* The value gets the full tile width. The history strip used to share
+                  this row, which cost the value roughly a third of its space and
+                  truncated the longer classifications ("UNFAVORAB..."). The strip is
+                  now its own full-width row underneath, where a wide, short shape
+                  reads better anyway. display:block is set inline because .tile-mid
+                  is still flex in globals.css for the desktop breakpoint. */}
+              <div className="tile-mid" style={{ display: 'block' }}>
                 <div className="tile-val">{s ? s.label : '--'}</div>
-                <HistoryStrip series={byCategory[c.key] ?? []} catLabel={c.label} />
               </div>
+              <HistoryStrip series={byCategory[c.key] ?? []} catLabel={c.label} />
               {s?.trend ? (
                 <div className={`tile-trend ${s.trend === 'improving' ? 'tile-trend-up' : 'tile-trend-down'}`}>
                   <TrendArrow trend={s.trend} />
