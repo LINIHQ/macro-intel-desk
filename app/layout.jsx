@@ -131,6 +131,8 @@ export default function RootLayout({ children }) {
             <p className="foot-links">
               <Link href="/sources">Sources</Link>
               <span aria-hidden="true">·</span>
+              <Link href="/methodology">Criteria</Link>
+              <span aria-hidden="true">·</span>
               <Link href="/privacy">Privacy</Link>
               <span aria-hidden="true">·</span>
               <Link href="/terms">Terms</Link>
