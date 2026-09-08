@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { getLatestBrief, getStateHistory } from '@/lib/supabase';
+import { getLatestBrief, getClassificationHistory, getCurrentCriteria } from '@/lib/supabase';
 import { fmtDate, fmtRunStamp } from '@/lib/format';
 import DashboardGrid from '@/components/DashboardGrid';
 import BriefBody from '@/components/BriefBody';
@@ -10,8 +10,25 @@ import { AmendmentsStrip } from '@/components/AmendmentsPanel';
 
 export const revalidate = 60;
 
+function fmtStamp(iso) {
+  if (!iso) return null;
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return null;
+  return d.toLocaleString('en-US', {
+    month: 'short',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: '2-digit',
+    timeZone: 'America/New_York',
+  });
+}
+
 export default async function LivePage() {
-  const [brief, history] = await Promise.all([getLatestBrief(), getStateHistory()]);
+  const [brief, history, criteria] = await Promise.all([
+    getLatestBrief(),
+    getClassificationHistory(),
+    getCurrentCriteria(),
+  ]);
 
   if (!brief) {
     return (
@@ -27,6 +44,15 @@ export default async function LivePage() {
     ? `XRP Macro Brief: ${brief.headline}`
     : 'XRP Macro Intelligence Desk';
   const runStamp = fmtRunStamp(brief.created_at, brief.run_date);
+
+  // Publication time and evidence cutoff are different facts and are shown as
+  // different facts. A brief published in the morning can carry evidence verified
+  // later the same day, and an edit after publication moves neither of the first two.
+  const verifiedStamp = fmtStamp(brief.evidence_verified_through);
+  const updatedStamp =
+    brief.last_updated_at && brief.last_updated_at !== brief.created_at
+      ? fmtStamp(brief.last_updated_at)
+      : null;
 
   const itemsNote = (
     <p className="small mute" style={{ margin: '2px 0 14px' }}>
@@ -45,6 +71,16 @@ export default async function LivePage() {
           {runStamp ? (
             <p className="page-meta" style={{ marginTop: 4 }}>
               Published {runStamp}
+            </p>
+          ) : null}
+          {verifiedStamp ? (
+            <p className="page-meta" style={{ marginTop: 4 }}>
+              Evidence verified through {verifiedStamp} ET
+            </p>
+          ) : null}
+          {updatedStamp ? (
+            <p className="page-meta" style={{ marginTop: 4 }}>
+              Last updated {updatedStamp} ET
             </p>
           ) : null}
         </div>
@@ -74,7 +110,12 @@ export default async function LivePage() {
       <p className="gauge-hint">
         <span className="hint-touch">Tap</span><span className="hint-pointer">Click</span> any gauge for analysis ↓
       </p>
-      <DashboardGrid states={brief.dashboard_states} history={history} />
+      <DashboardGrid
+        states={brief.dashboard_states}
+        history={history}
+        criteria={criteria}
+        verifiedThrough={brief.evidence_verified_through}
+      />
 
       {brief.headline ? (
         <div className="term-box">
@@ -91,7 +132,8 @@ export default async function LivePage() {
 
       <p className="small mute" style={{ marginTop: 28 }}>
         Past briefs live in the <Link href="/archive">archive</Link>. Status shifts over time are on the{' '}
-        <Link href="/history">history</Link> page.
+        <Link href="/history">history</Link> page. Every gauge test and every revision to one is on the{' '}
+        <Link href="/methodology">criterion register</Link>.
       </p>
     </div>
   );
