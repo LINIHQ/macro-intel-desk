@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import StatusChip from '@/components/StatusChip';
 import { VERIFICATION } from '@/lib/format';
 
@@ -90,6 +91,16 @@ export default function SourcesPage() {
         </p>
       </div>
       <p>
+        <strong>Claims are scoped so the badge covers the whole sentence.</strong> A claim is worded narrowly enough
+        that its verdict applies to every part of it. Where a confirmed event contains an unconfirmed detail, the
+        detail is held in the evidence body and does not ride on the verdict. A primary document that is silent on a
+        claim fails to support it, which is Unverified; Contradicted requires reliable evidence against the claim, not
+        the absence of evidence for it. Where an existing claim mixes scopes it is split into separate claims rather
+        than reworded, and the original text stays on the record with a dated note. This rule took effect September 8,
+        2026 and is logged in the changelog on the{' '}
+        <Link href="/methodology">criterion register</Link>.
+      </p>
+      <p>
         Verdicts change when evidence changes, and every change is appended to the public record on the claims page
         rather than overwritten. A verdict that moves against a popular narrative publishes with the same prominence
         as one that supports it.
@@ -122,17 +133,29 @@ export default function SourcesPage() {
         after the fact.
       </p>
       <p>
+        <strong>Criteria get revised, and the revisions are published too.</strong> A test that can be rewritten
+        silently is not really pre-registered. Every criterion the desk has published, current and retired, is on the{' '}
+        <Link href="/methodology">criterion register</Link> with its old wording, the date it took effect, the brief
+        it took effect in, and the reason it changed. Criteria are never edited in place: a revision inserts a new
+        record and stamps the one it replaces. The register was created September 8, 2026 and backfilled from
+        published brief text; where a revision's reason was not recorded at the time, the entry says so rather than
+        supplying one after the fact.
+      </p>
+      <p>
         <strong>Trend arrows.</strong> A small arrow and note on a dashboard tile mean a pre-registered criterion is
         partially met or a tracked level is converging on a trigger. The arrow describes movement toward or away from
         a threshold; the classification itself changes only when the criterion actually fires. No arrow means no
         criterion is in motion.
       </p>
       <p>
-        The trend lines on the dashboard tiles are stylized, not price charts: the slope reflects the current
-        classification. On the risk gauges (yen carry trade, oil shock, Hormuz, bond stress) an upward slope means the
-        risk is running at orange or red. On the condition gauges (liquidity, risk appetite, XRP flows, macro
-        backdrop) an upward slope means healthy, a downward slope means deteriorating, and a level line means a
-        mid-scale reading. The jagged texture is visual styling only.
+        <strong>Classification history on the tiles.</strong> The small bar strip on each dashboard tile is recorded
+        data, not decoration. Each segment is one published brief's classification for that category, oldest on the
+        left and newest on the right, over the same window and the same scale on all eight tiles so they can be read
+        against each other. Higher means more adverse. A flat strip means the classification did not change, and
+        nothing is added to make it look busier. Tap or hover a segment in an expanded tile for its date and status.
+        Segments show what was published at the time and are never backdated; corrections appear in the brief instead.
+        Until September 8, 2026 these strips were a stylized motif whose shape carried no data. That was a mistake on
+        a desk that publishes on evidence, and it was replaced rather than relabeled.
       </p>
       <p>
         The XRP flows gauge is a composite of demand-side signals: ETF flows and institutional holdings, exchange
@@ -158,9 +181,10 @@ export default function SourcesPage() {
         its readers like. That is the point.
       </p>
       <p>
-        Corrections are made by fixing the record and noting the correction. The claim tracker's verdict history is
-        append-only. Archival entries reconstructed from past briefs say so explicitly, and unrecovered sections are
-        omitted rather than rewritten.
+        Corrections are additive. The original text stays on the page and a dated correction note is appended
+        underneath it, so the record cannot be groomed to look like the desk was always right. The claim tracker's
+        verdict history is append-only. Archival entries reconstructed from past briefs say so explicitly, and
+        unrecovered sections are omitted rather than rewritten.
       </p>
 
       <h2>What this is not</h2>
