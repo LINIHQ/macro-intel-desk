@@ -50,7 +50,13 @@ export default async function WatchPage() {
   return (
     <div>
       <h1>Watch list</h1>
-      <p className="page-sub">Standing items the desk tracks from brief to brief until they resolve.</p>
+      {/* The subtitle names both things on this page in the order they appear.
+          It used to describe only the standing items, which left the amendment
+          table sitting above it looking unaccounted for. */}
+      <p className="page-sub">
+        Live XRPL amendment voting, then the standing items the desk tracks from brief to brief
+        until they resolve.
+      </p>
       <AmendmentsPanel />
       <h2>Open items</h2>
       {active.length ? active.map((i) => <WatchCard key={i.id} item={i} />) : <div className="empty">Nothing open right now.</div>}
