@@ -40,6 +40,12 @@ import { LEVEL_COLORS } from '@/lib/format';
 // dashboard_states rows are written once per run and are not edited afterwards, so
 // this is the sequence as it was published at the time. Corrections are additive
 // and appear in the brief, never by backdating a step here.
+//
+// The expanded panel used to repeat a five-sentence explanation of how to read the
+// line under every gauge a reader opened. It was the same text eight times, it
+// pushed the panel far past a phone screen, and it restated the shared caption that
+// already sits under the grid. The full explanation lives once on the Sources page;
+// the panel keeps the line, its dates, and the screen-reader summary.
 
 const LEVEL_WORD = { 1: 'green', 2: 'yellow', 3: 'orange', 4: 'red' };
 
@@ -287,15 +293,6 @@ export function HistoryDetail({ series = [], catLabel = 'Gauge' }) {
         </span>
         <span className="mute">{fmtShort(current.date)}</span>
       </div>
-
-      <p className="small mute" style={{ margin: '8px 0 0' }}>
-        Each step is a run of consecutive briefs carrying the same classification, oldest to newest,
-        on the same window and the same scale as every other gauge. Width is how long that
-        classification held, and the dot marks the newest observation. A single flat line means it
-        never changed. Steps show what was published at the time and are never backdated;
-        corrections appear in the brief instead. This is separate from the trend arrow, which
-        describes movement toward a trigger that has not fired.
-      </p>
     </div>
   );
 }
