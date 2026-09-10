@@ -35,6 +35,10 @@ function stampText(iso, sameDayAsIso) {
   return ref && ref.date === p.date ? p.time : `${p.date}, ${p.time}`;
 }
 
+// Each stamp is kept whole so a narrow screen can only break between stamps,
+// at the separator, never inside one.
+const NOWRAP = { whiteSpace: 'nowrap' };
+
 export default async function BriefPage({ params }) {
   const brief = await getBriefById(params.id);
 
@@ -69,20 +73,36 @@ export default async function BriefPage({ params }) {
       ? stampText(brief.last_updated_at, brief.created_at)
       : null;
 
+  // Evidence cutoff, publication and last edit stay three separate facts. The
+  // evidence stamp leads because it is the one that makes the numbers auditable;
+  // publication and edit share the second line, and ET is written once at the end
+  // of that line when both are present.
+  const pubText = runStamp
+    ? updatedText
+      ? runStamp.replace(/\s*ET$/, '')
+      : runStamp
+    : null;
+
   return (
     <div>
       <div className="card-head" style={{ marginBottom: 14 }}>
         <h1>{fmtDate(brief.run_date)}</h1>
         <span className="mono small mute">
-          {brief.brief_mode} brief{runStamp ? ` · published ${runStamp}` : ''}
+          {brief.brief_mode} brief
+          {verifiedText ? (
+            <>
+              {' · '}
+              <span style={NOWRAP}>evidence through {verifiedText} ET</span>
+            </>
+          ) : null}
         </span>
       </div>
 
-      {verifiedText || updatedText ? (
+      {pubText || updatedText ? (
         <p className="page-meta" style={{ marginTop: -6, marginBottom: 14 }}>
-          {verifiedText ? `Evidence through ${verifiedText} ET` : null}
-          {verifiedText && updatedText ? ' · ' : null}
-          {updatedText ? `updated ${updatedText} ET` : null}
+          {pubText ? <span style={NOWRAP}>Published {pubText}</span> : null}
+          {pubText && updatedText ? ' · ' : null}
+          {updatedText ? <span style={NOWRAP}>Updated {updatedText} ET</span> : null}
         </p>
       ) : null}
 
