@@ -39,6 +39,10 @@ function stampText(iso, sameDayAsIso) {
   return ref && ref.date === p.date ? p.time : `${p.date}, ${p.time}`;
 }
 
+// Each stamp is kept whole so a narrow screen can only break between stamps,
+// at the separator, never inside one.
+const NOWRAP = { whiteSpace: 'nowrap' };
+
 export default async function LivePage() {
   const [brief, history, criteria] = await Promise.all([
     getLatestBrief(),
@@ -62,16 +66,22 @@ export default async function LivePage() {
   const runStamp = fmtRunStamp(brief.created_at, brief.run_date);
 
   // Publication time, evidence cutoff and last edit are three different facts and
-  // stay three different facts. They used to stack as three separate lines under
-  // the date, which on a phone was four lines of metadata before any content.
-  // Publication and evidence now share a line, since a reader reads them together
-  // (published then, verified through then), and the edit stamp keeps its own line
-  // because it is the one that only sometimes exists.
+  // stay three different facts, on two lines. The evidence stamp leads, beside the
+  // date, because it is the one that makes every number in the brief auditable.
+  // Publication and the edit stamp share the second line, with ET written once at
+  // the end when both are present; the edit stamp only appears when an edit
+  // happened. Brief mode is not shown here: on the live page it told the reader
+  // nothing, and it remains on the archive and on each permalink.
   const verifiedText = stampText(brief.evidence_verified_through, brief.created_at);
   const updatedText =
     brief.last_updated_at && brief.last_updated_at !== brief.created_at
       ? stampText(brief.last_updated_at, brief.created_at)
       : null;
+  const pubText = runStamp
+    ? updatedText
+      ? runStamp.replace(/\s*ET$/, '')
+      : runStamp
+    : null;
 
   const itemsNote = (
     <p className="small mute" style={{ margin: '2px 0 14px' }}>
@@ -84,19 +94,20 @@ export default async function LivePage() {
       <div className="page-head">
         <div>
           <h1>Macro dashboard</h1>
-          <p className="page-meta">
-            {fmtDate(brief.run_date)} · {brief.brief_mode} brief
+          <p className="page-meta" style={{ marginBottom: 0 }}>
+            <span style={NOWRAP}>{fmtDate(brief.run_date)}</span>
+            {verifiedText ? (
+              <>
+                {' · '}
+                <span style={NOWRAP}>Evidence through {verifiedText} ET</span>
+              </>
+            ) : null}
           </p>
-          {runStamp || verifiedText ? (
-            <p className="page-meta" style={{ marginTop: 4 }}>
-              {runStamp ? `Published ${runStamp}` : null}
-              {runStamp && verifiedText ? ' · ' : null}
-              {verifiedText ? `evidence through ${verifiedText} ET` : null}
-            </p>
-          ) : null}
-          {updatedText ? (
-            <p className="page-meta" style={{ marginTop: 4 }}>
-              Updated {updatedText} ET
+          {pubText || updatedText ? (
+            <p className="page-meta" style={{ marginTop: 2 }}>
+              {pubText ? <span style={NOWRAP}>Published {pubText}</span> : null}
+              {pubText && updatedText ? ' · ' : null}
+              {updatedText ? <span style={NOWRAP}>Updated {updatedText} ET</span> : null}
             </p>
           ) : null}
         </div>
