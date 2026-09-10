@@ -167,6 +167,13 @@ export default function DashboardGrid({ states, history, criteria = {}, verified
         </p>
       ) : null}
 
+      {/* The panel answers four questions in reading order: why this level, what would
+          move it, how close it is to moving (only when an arrow exists), and when it
+          was last checked, followed by the recorded history. Boilerplate that repeated
+          on every panel (how arrows are gated, how the history line is drawn, why a
+          gauge may lack criteria) was cut because on a phone it pushed the actual
+          answers below the fold. Those explanations live once on the Sources and
+          methodology pages. */}
       {openCat && openState ? (
         <div ref={detailRef} className="tile-detail" style={{ '--tile-c': openColor }}>
           <div className="tile-detail-head">
@@ -179,11 +186,8 @@ export default function DashboardGrid({ states, history, criteria = {}, verified
             ) : null}
           </div>
 
-          {/* 1. Why this status, and what observation supports it. basis_md carries the
-              specific reading behind the level and is written on every gauge every run,
-              holds included. The generic level rubric is the fallback when a run has not
-              recorded one yet, and it is labelled as generic so it cannot be mistaken for
-              evidence. */}
+          {/* 1. Why this status. basis_md is written on every gauge every run, holds
+              included. The generic rubric is the labelled fallback only. */}
           {openState.basis_md ? (
             <p>
               <strong>Why this level:</strong> {openState.basis_md}
@@ -202,18 +206,13 @@ export default function DashboardGrid({ states, history, criteria = {}, verified
             </p>
           ) : null}
 
-          {openState.trend && openState.trend_note ? (
-            <p>
-              <strong>Trend, criterion-gated:</strong> {openState.trend_note} An arrow appears only when a pre-registered movement criterion is partially met or a tracked level is converging on a trigger; the classification itself moves only when the criterion fires.
-            </p>
-          ) : null}
-
           {/* 2. What would change it. Read from the public criterion register, so the tile
-              cannot state a test the register has already superseded. */}
+              cannot state a test the register has already superseded. Placed before the
+              trend note because the test is what the trend is measured against. */}
           {openCrit?.worsen || openCrit?.improve ? (
             <div style={{ margin: '4px 0 0' }}>
               <p style={{ marginBottom: 4 }}>
-                <strong>What would change it, pre-registered:</strong>
+                <strong>What would change it:</strong>
               </p>
               <ul style={{ margin: '0 0 6px', paddingLeft: '1.1em' }}>
                 {openCrit.worsen ? (
@@ -227,28 +226,25 @@ export default function DashboardGrid({ states, history, criteria = {}, verified
                   </li>
                 ) : null}
               </ul>
-              <p className="small mute" style={{ margin: 0 }}>
-                Every revision to these tests, with its old wording, effective date and reason, is on
-                the <Link href="/methodology">criterion register</Link>.
-              </p>
             </div>
           ) : (
-            <p className="small mute">
-              No movement criterion is currently published for this gauge. Criteria are written for
-              gauges at orange or red and for any gauge with a live trigger; where none exists, the
-              register says so rather than implying one. See the{' '}
-              <Link href="/methodology">criterion register</Link>.
-            </p>
+            <p className="small mute">No pre-registered movement test for this gauge.</p>
           )}
 
-          {/* 3. When it was last checked. */}
-          {checked ? (
-            <p className="small mute" style={{ marginTop: 8 }}>
-              Evidence for this reading verified through {checked} ET.
+          {/* 3. How close it is to moving. Only rendered when a run set an arrow. */}
+          {openState.trend && openState.trend_note ? (
+            <p>
+              <strong>Trend:</strong> {openState.trend_note}
             </p>
           ) : null}
 
-          {/* 4. What it has actually been, recorded rather than drawn. */}
+          {/* 4. When it was last checked, and where every revision to the tests lives. */}
+          <p className="small mute" style={{ marginTop: 8 }}>
+            {checked ? `Verified through ${checked} ET · ` : null}
+            <Link href="/methodology">Criterion register</Link>
+          </p>
+
+          {/* 5. What it has actually been, recorded rather than drawn. */}
           <HistoryDetail series={byCategory[openCat.key] ?? []} catLabel={openCat.label} />
 
           <Link className="tile-detail-link" href="/history">
