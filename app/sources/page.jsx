@@ -125,12 +125,13 @@ export default function SourcesPage() {
         sentiment or narrative volume. A category does not move because the news cycle got loud.
       </p>
       <p>
-        <strong>Pre-registered criteria.</strong> Any category sitting at orange or red publishes its "Moves if"
-        conditions in the brief: the specific, checkable evidence (numeric levels or named events) that would move it
-        one level in either direction. When a classification later changes, the recorded reason on the history page
-        states whether a pre-registered criterion fired or whether the move came from evidence that was not
-        pre-registered. The criteria are written before the move, so the desk cannot quietly rationalize a change
-        after the fact.
+        <strong>Pre-registered criteria.</strong> Any category sitting at orange or red, and any category with a live
+        trigger, publishes its movement criteria: the specific, checkable evidence (numeric levels or named events)
+        that would move it one level in either direction. They appear under "What would change it" when a dashboard
+        tile is opened, and in full on the <Link href="/methodology">criterion register</Link>. When a classification
+        later changes, the recorded reason on the history page states whether a pre-registered criterion fired or
+        whether the move came from evidence that was not pre-registered. The criteria are written before the move, so
+        the desk cannot quietly rationalize a change after the fact.
       </p>
       <p>
         <strong>Criteria get revised, and the revisions are published too.</strong> A test that can be rewritten
@@ -148,14 +149,18 @@ export default function SourcesPage() {
         criterion is in motion.
       </p>
       <p>
-        <strong>Classification history on the tiles.</strong> The small bar strip on each dashboard tile is recorded
-        data, not decoration. Each segment is one published brief's classification for that category, oldest on the
-        left and newest on the right, over the same window and the same scale on all eight tiles so they can be read
-        against each other. Higher means more adverse. A flat strip means the classification did not change, and
-        nothing is added to make it look busier. Tap or hover a segment in an expanded tile for its date and status.
-        Segments show what was published at the time and are never backdated; corrections appear in the brief instead.
-        Until September 8, 2026 these strips were a stylized motif whose shape carried no data. That was a mistake on
-        a desk that publishes on evidence, and it was replaced rather than relabeled.
+        <strong>Classification history on the tiles.</strong> The line on each dashboard tile is recorded data, not
+        decoration. It is a step line: each step is a run of consecutive published briefs that carried the same
+        classification for that category, and the width of a step is how long that classification held. Oldest is on
+        the left and newest on the right, over the same window and the same fixed scale on all eight tiles, so they can
+        be read against each other. Higher means more adverse, and the dot marks the newest observation. A single flat
+        line means the classification never changed, and nothing is added to make it look busier. A brief that
+        recorded no level for a category shows as a gap rather than being bridged. Tap or hover the line in an expanded
+        tile for any single brief's date and status. Steps show what was published at the time and are never
+        backdated; corrections appear in the brief instead. The line is separate from the trend arrow: the line shows
+        classifications already recorded, while the arrow describes movement toward a trigger that has not fired.
+        Until September 8, 2026 these strips were a stylized motif whose shape carried no data. That was a mistake on a
+        desk that publishes on evidence, and it was replaced rather than relabeled.
       </p>
       <p>
         The XRP flows gauge is a composite of demand-side signals: ETF flows and institutional holdings, exchange
