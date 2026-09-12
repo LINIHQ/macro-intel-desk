@@ -18,7 +18,7 @@ export default function InstallPage() {
         <div className="card">
           <h3 className="card-title">iOS</h3>
           <ol className="install-steps">
-            <li>Open brief.genxkrypto.com in Safari</li>
+            <li>Open xrpmacro.com in Safari</li>
             <li>If you don&apos;t see a Share icon in the toolbar, tap the &quot;&middot;&middot;&middot;&quot; button next to the address bar first</li>
             <li>Tap the Share button (box with arrow)</li>
             <li>Scroll down and tap &quot;Add to Home Screen&quot;</li>
@@ -28,7 +28,7 @@ export default function InstallPage() {
         <div className="card">
           <h3 className="card-title">Android</h3>
           <ol className="install-steps">
-            <li>Open brief.genxkrypto.com in Chrome</li>
+            <li>Open xrpmacro.com in Chrome</li>
             <li>Tap the three-dot menu in the top right</li>
             <li>Scroll down past Downloads, Bookmarks, and Share until you reach &quot;Install and create shortcut&quot;, then tap it</li>
             <li>Confirm when prompted. XRP Brief will appear on your home screen</li>
