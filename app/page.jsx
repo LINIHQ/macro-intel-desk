@@ -59,7 +59,7 @@ export default async function LivePage() {
     );
   }
 
-  const shareUrl = 'https://brief.genxkrypto.com';
+  const shareUrl = 'https://xrpmacro.com';
   const shareText = brief.headline
     ? `XRP Macro Brief: ${brief.headline}`
     : 'XRP Macro Intelligence Desk';
