@@ -100,7 +100,7 @@ export default function TermsPage() {
       <h2>Contact</h2>
       <p>
         Questions about these terms, or a correction you want to raise, go to{' '}
-        <a href="mailto:support@genxkrypto.com">support@genxkrypto.com</a>. Corrections with receipts are genuinely
+        <a href="mailto:support@xrpmacro.com">support@xrpmacro.com</a>. Corrections with receipts are genuinely
         welcome.
       </p>
     </div>
