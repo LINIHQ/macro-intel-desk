@@ -3,6 +3,7 @@ import { VERIFICATION } from '@/lib/format';
 import StatusChip from '@/components/StatusChip';
 import SourcePills from '@/components/SourcePills';
 import Markdown from '@/components/Markdown';
+import LazyEvidence from '@/components/LazyEvidence';
 import ClaimsScorecard from '@/components/ClaimsScorecard';
 import ClaimsBrowser from '@/components/ClaimsBrowser';
 
@@ -80,16 +81,11 @@ function ClaimCard({ cl }) {
       </p>
       <Markdown>{lead}</Markdown>
 
-      {hasRecord ? (
-        <details style={{ margin: '10px 0 0' }}>
-          <summary className="small mute" style={{ cursor: 'pointer' }}>
-            Full evidence record as published, {entries} entries, oldest first
-          </summary>
-          <div style={{ marginTop: 8 }}>
-            <Markdown>{cl.evidence_md}</Markdown>
-          </div>
-        </details>
-      ) : null}
+      {/* Added Sept 11, 2026: the full record used to render inline here via
+          <Markdown>, server-side, on every claim, every regeneration, whether
+          or not the <details> was ever opened. LazyEvidence defers that parse
+          to the browser and only when a reader actually expands it. */}
+      {hasRecord ? <LazyEvidence evidenceMd={cl.evidence_md} entries={entries} /> : null}
 
       <SourcePills sources={cl.sources} />
       {history.length > 1 ? (
