@@ -16,7 +16,7 @@ export default function PrivacyPage() {
       <p>
         The XRP Macro Intelligence Desk is built and run independently by an individual operator, GenXKrypto. There is
         no company behind it. For privacy questions, contact{' '}
-        <a href="mailto:support@genxkrypto.com">support@genxkrypto.com</a>.
+        <a href="mailto:support@xrpmacro.com">support@xrpmacro.com</a>.
       </p>
 
       <h2>The short version</h2>
@@ -96,7 +96,7 @@ export default function PrivacyPage() {
       </p>
       <p>
         If you enabled brief alerts and want the subscription removed rather than left to expire, turn the toggle off
-        and email <a href="mailto:support@genxkrypto.com">support@genxkrypto.com</a>, and it will be deleted. For
+        and email <a href="mailto:support@xrpmacro.com">support@xrpmacro.com</a>, and it will be deleted. For
         anything else, ask, and you will get an honest answer about what does or does not exist.
       </p>
 
