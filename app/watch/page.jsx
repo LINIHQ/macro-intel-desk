@@ -4,7 +4,11 @@ import StatusChip from '@/components/StatusChip';
 import Markdown from '@/components/Markdown';
 import AmendmentsPanel from '@/components/AmendmentsPanel';
 
-export const revalidate = 60;
+// Widened from 60s (Sept 11, 2026): watch items only change at publish time,
+// and the amendments panel underneath already caches its own XRPScan fetch
+// for an hour, so a 60-second page window bought no real freshness. 300s
+// matches the window already proven safe on brief permalinks.
+export const revalidate = 300;
 
 // Escalated items lead, then open items. Within each group, the most recently
 // touched item sits on top, so an item that moved in the latest run surfaces
