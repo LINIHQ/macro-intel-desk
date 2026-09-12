@@ -79,10 +79,15 @@ export default function BriefAlertsToggle() {
 
       const json = sub.toJSON();
       if (supabase && json && json.endpoint && json.keys) {
+        // origin records which domain this subscription was captured from
+        // (brief.genxkrypto.com or xrpmacro.com), since both serve the same
+        // deployment and a push notification needs to open the installed
+        // app's own origin, not whichever domain happens to be canonical.
         const { error } = await supabase.from('push_subscriptions').insert({
           endpoint: json.endpoint,
           p256dh: json.keys.p256dh,
           auth: json.keys.auth,
+          origin: window.location.origin,
         });
         // 23505 is a duplicate endpoint: already registered, which is fine.
         if (error && error.code !== '23505') {
