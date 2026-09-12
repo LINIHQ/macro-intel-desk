@@ -4,7 +4,11 @@ import { fmtDate } from '@/lib/format';
 import DotStrip from '@/components/DotStrip';
 import ArchiveBrowser from '@/components/ArchiveBrowser';
 
-export const revalidate = 60;
+// Widened from 60s (Sept 11, 2026): the archive only gains a new row at
+// publish time, once or twice a day, and the per-render cost grows with the
+// row count as more briefs publish. 300s matches the window already proven
+// safe on brief permalinks.
+export const revalidate = 300;
 
 export default async function ArchivePage() {
   const briefs = await getAllBriefs(false);
