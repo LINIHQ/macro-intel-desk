@@ -2,7 +2,11 @@ import { getAllBriefs } from '@/lib/supabase';
 import { CATEGORIES, LEVEL_COLORS, fmtDate, fmtDateShort, stateFor } from '@/lib/format';
 import HistoryTimeline from '@/components/HistoryTimeline';
 
-export const revalidate = 60;
+// Widened from 60s (Sept 11, 2026): classification history only gains a new
+// segment at publish time, once or twice a day, and the per-render cost grows
+// with the brief count as more runs publish. 300s matches the window already
+// proven safe on brief permalinks.
+export const revalidate = 300;
 
 const LEGEND = [
   { color: 'var(--g)', label: 'Supportive / normal' },
