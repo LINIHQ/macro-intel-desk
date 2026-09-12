@@ -6,7 +6,12 @@ import Markdown from '@/components/Markdown';
 import ClaimsScorecard from '@/components/ClaimsScorecard';
 import ClaimsBrowser from '@/components/ClaimsBrowser';
 
-export const revalidate = 60;
+// Widened from 60s (Sept 11, 2026): claims only change at publish time, once
+// or twice a day, so a 60-second window bought no real freshness and cost real
+// Active CPU on a route whose per-render cost only grows as the append-only
+// tracker accumulates evidence text. 300s matches the window already proven
+// safe on brief permalinks.
+export const revalidate = 300;
 
 const RANK = { unverified: 0, partially_verified: 1, contradicted: 2, opinion: 3, verified: 4 };
 
