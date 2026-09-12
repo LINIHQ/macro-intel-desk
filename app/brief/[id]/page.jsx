@@ -62,7 +62,7 @@ export default async function BriefPage({ params }) {
     getCriteriaAsOf(brief.run_date),
   ]);
 
-  const permalink = `https://brief.genxkrypto.com/brief/${brief.id}`;
+  const permalink = `https://xrpmacro.com/brief/${brief.id}`;
   const shareText = brief.headline
     ? `XRP Macro Brief: ${brief.headline}`
     : 'XRP Macro Intelligence Desk';
