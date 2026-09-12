@@ -289,7 +289,7 @@ export default function ShareCard({ dateLabel, modeLabel, runDate, gauges, items
     try { ctx.letterSpacing = '1px'; } catch (e) {}
     ctx.font = font(700, 21);
     ctx.fillStyle = C.acc;
-    ctx.fillText('brief.genxkrypto.com', PAD, H - 32);
+    ctx.fillText('xrpmacro.com', PAD, H - 32);
 
     ctx.textAlign = 'right';
     try { ctx.letterSpacing = '1.5px'; } catch (e) {}
