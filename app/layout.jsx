@@ -139,7 +139,7 @@ export default function RootLayout({ children }) {
               <span aria-hidden="true">·</span>
               <Link href="/terms">Terms</Link>
               <span aria-hidden="true">·</span>
-              <a href="mailto:support@genxkrypto.com">Contact</a>
+              <a href="mailto:support@xrpmacro.com">Contact</a>
             </p>
           </div>
         </footer>
