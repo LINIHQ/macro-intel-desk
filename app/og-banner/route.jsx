@@ -39,6 +39,21 @@ export async function GET() {
         />
       </div>
     ),
-    { width: BANNER_W, height: BANNER_H }
+    {
+      width: BANNER_W,
+      height: BANNER_H,
+      // Added Sept 11, 2026: this route was re-rendering the same crop on
+      // every request (Discord unfurls, repeated visits), each one a full
+      // Satori rasterization, real Active CPU for identical output. Caching
+      // is safe here specifically because the request URL is already
+      // version-busted from app/layout.jsx (OG_IMAGE = '.../og-banner?v=2')
+      // and SRC above carries its own ?v= on the source art. Whenever either
+      // changes, the existing "bump the ?v=" habit documented in layout.jsx
+      // produces a new URL, so this cache can never serve stale art; it can
+      // only ever be asked for a URL it hasn't cached yet.
+      headers: {
+        'Cache-Control': 'public, max-age=31536000, immutable',
+      },
+    }
   );
 }
