@@ -9,6 +9,9 @@ import { useMemo, useState } from 'react';
 // stores (quick or full) rather than by an inferred daily/weekly split, because
 // a full brief can publish mid-week and mislabelling it here would misrepresent
 // the record.
+//
+// Styling for the input and the mode pills lives in globals.css (.search-input,
+// .filter-pill) and is shared with ClaimsBrowser, since Sept 13, 2026.
 
 export default function ArchiveBrowser({ items = [] }) {
   const [q, setQ] = useState('');
@@ -45,33 +48,15 @@ export default function ArchiveBrowser({ items = [] }) {
       <div style={{ margin: '0 0 12px' }}>
         <input
           type="search"
+          className="search-input"
           value={q}
           onChange={(e) => setQ(e.target.value)}
           placeholder="Search by date or headline"
           aria-label="Search briefs"
-          style={{
-            width: '100%',
-            padding: '9px 11px',
-            font: 'inherit',
-            fontSize: '0.92em',
-            color: 'inherit',
-            background: 'rgba(255,255,255,0.04)',
-            border: '1px solid rgba(255,255,255,0.18)',
-            borderRadius: 2,
-            appearance: 'none',
-          }}
         />
       </div>
 
-      <div
-        style={{
-          display: 'flex',
-          flexWrap: 'wrap',
-          gap: 6,
-          alignItems: 'center',
-          margin: '0 0 14px',
-        }}
-      >
+      <div className="filter-row" style={{ marginBottom: 14 }}>
         {modes.map((m) => {
           const on = mode === m.key;
           return (
@@ -80,18 +65,7 @@ export default function ArchiveBrowser({ items = [] }) {
               type="button"
               onClick={() => setMode(m.key)}
               aria-pressed={on}
-              style={{
-                font: 'inherit',
-                fontSize: '0.78em',
-                letterSpacing: '0.04em',
-                textTransform: 'uppercase',
-                padding: '4px 9px',
-                cursor: 'pointer',
-                borderRadius: 2,
-                color: on ? 'inherit' : 'var(--mute, rgba(255,255,255,0.6))',
-                background: on ? 'rgba(255,255,255,0.10)' : 'transparent',
-                border: '1px solid rgba(255,255,255,0.18)',
-              }}
+              className={on ? 'filter-pill on' : 'filter-pill'}
             >
               {m.label} {counts[m.key] || 0}
             </button>
