@@ -93,12 +93,21 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--acc); outline-o
   flex-shrink: 0;
 }
 .brand-text { display: block; min-width: 0; }
+/* Sept 13, 2026: wordmark now carries "XRP Macro Intelligence Desk" (28
+   characters) instead of "GenXKrypto" (10). The old 30px/20px sizing was tuned
+   for a single short word that never needed to wrap; at that size the longer
+   phrase does not fit one line in the header row on a phone (avatar, wordmark,
+   X link, and menu button all share it at 375px). Sized down and given real
+   line-height so a wrap to two lines reads as intentional rather than broken,
+   instead of forcing one line via letter-spacing or shrinking further. Confirm
+   on an actual phone after deploy; a wrap that looks cramped is a sign to
+   shorten the string on mobile specifically, not to keep shrinking the font. */
 .brand-main {
   display: block;
   font-weight: 700;
-  font-size: 30px;
-  line-height: 1;
-  letter-spacing: 0.02em;
+  font-size: 21px;
+  line-height: 1.15;
+  letter-spacing: 0.01em;
   background-image: var(--brand-grad);
   -webkit-background-clip: text;
   background-clip: text;
@@ -109,7 +118,7 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--acc); outline-o
   color: var(--mute);
   font-size: 13px;
   letter-spacing: 0.06em;
-  margin-top: 7px;
+  margin-top: 5px;
 }
 .x-link {
   display: inline-flex;
@@ -458,8 +467,12 @@ h2::before {
   .gauge-hint .hint-pointer { display: inline; }
 }
 
-/* The tap/hover swap is reused inside the classification history caption, which
-   sits in a client component rather than under .gauge-hint. */
+/* The tap/hover swap is reused for the one-word Tap/Hover caption inside
+   HistoryDetail (components/ClassificationHistory.jsx), a client component that
+   does not sit under .gauge-hint. The History page's own instructional line used
+   to reuse this same pattern for a full sentence rather than one word; that was
+   removed Sept 13, 2026 in favour of a single sentence that reads correctly on
+   every device, so this standalone rule now serves HistoryDetail only. */
 .hint-pointer { display: none; }
 @media (hover: hover) and (pointer: fine) {
   .hint-touch { display: none; }
@@ -1250,8 +1263,12 @@ button.tile.changed {
   .brand-row { gap: 12px; }
   .brand { gap: 12px; }
   .brand-avatar { width: 44px; height: 44px; }
-  .brand-main { font-size: 20px; letter-spacing: 0.02em; }
-  .brand-sub { font-size: 11px; margin-top: 4px; }
+  /* The wordmark carries the least weight of the three header controls at this
+     width (avatar, wordmark, X icon, menu button all in one row on a 375px
+     screen), so it drops further here than the desktop step above. Still one
+     size up from brand-sub, and still allowed to wrap rather than truncate. */
+  .brand-main { font-size: 15.5px; letter-spacing: 0; }
+  .brand-sub { font-size: 10.5px; margin-top: 3px; }
   .x-link { padding: 8px 9px; }
   .x-link .x-label { display: none; }
   .x-link svg { width: 14px; height: 14px; }
