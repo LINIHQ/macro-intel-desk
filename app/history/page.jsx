@@ -83,9 +83,17 @@ export default async function HistoryPage() {
 
       {briefs.length ? (
         <>
+          {/* Sept 13, 2026: was two device-specific sentences swapped by a CSS
+              hover/pointer media query (Swipe on touch, Scroll on a mouse), the
+              same pattern HistoryDetail uses for its one-word Tap/Hover swap.
+              For a full instructional sentence that pattern is fragile for no
+              real gain: any CSS timing issue, cache staleness, or future edit
+              risks both showing at once, and the two versions differ only in
+              one verb. Replaced with a single sentence that is correct on every
+              input method, so there is nothing left that depends on the media
+              query firing correctly to read right. */}
           <p className="gauge-hint tl-hint">
-            <span className="hint-touch">Opens at the newest brief. Swipe the timeline for older runs.</span>
-            <span className="hint-pointer">Opens at the newest brief. Scroll the timeline for older runs.</span>
+            Opens at the newest brief. Scroll or swipe the timeline for older runs.
           </p>
           <HistoryTimeline rows={rows} dates={dates} />
 
