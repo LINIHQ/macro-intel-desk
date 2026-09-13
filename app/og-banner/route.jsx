@@ -14,7 +14,12 @@ export const runtime = 'edge';
 // full card. If og-card.png is ever regenerated, re-check CROP_TOP against
 // the new art so the band still starts at the kicker line.
 // X unfurls are unaffected: X reads twitter:image (og-card-x.png), not this.
-const SRC = 'https://brief.genxkrypto.com/og-card.png?v=9';
+//
+// Sept 13, 2026: og-card.png regenerated with pill-shaped verdict badges
+// (was square corners), same layout and header position otherwise, so
+// CROP_TOP is unchanged pending Phil's visual check post-deploy. Bumped to
+// v10 to match the new source art.
+const SRC = 'https://brief.genxkrypto.com/og-card.png?v=10';
 const CROP_TOP = 142;
 const BANNER_W = 1200;
 const BANNER_H = 488;
