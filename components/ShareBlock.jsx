@@ -11,10 +11,24 @@ import { useState } from 'react';
 // explicit blank line before it, so the compose box reads as body, blank line,
 // link, the normal shape of a tweet. X still auto-links a bare https:// URL
 // inside the text and counts it against the character limit the same way.
+//
+// Brief headlines are written as one compound sentence: independent clauses
+// joined by semicolons rather than broken into separate sentences (the desk's
+// one-line-teaser convention for the headline field). That reads fine wrapped
+// in a paragraph on the site; pasted whole into a tweet compose box with no
+// line breaks it renders as one unbroken wall of text (seen live Sept 13,
+// 2026, on the same brief that hit the URL-spacing bug above). breakClauses
+// splits on "; " and inserts a blank line after each semicolon, turning the
+// sentence into short paragraphs without touching the wording, the semicolons
+// themselves, or anything about how headlines are written upstream.
+function breakClauses(str) {
+  return str.replace(/;\s+/g, ';\n\n');
+}
+
 export default function ShareBlock({ url, text, variant = 'block' }) {
   const [copied, setCopied] = useState(false);
 
-  const shareText = `${text}\n\n${url}`;
+  const shareText = `${breakClauses(text)}\n\n${url}`;
   const intent = `https://x.com/intent/post?text=${encodeURIComponent(shareText)}&via=GenXKrypto`;
 
   async function copy() {
