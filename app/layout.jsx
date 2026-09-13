@@ -20,7 +20,14 @@ const DOTO_HREF = 'https://fonts.googleapis.com/css2?family=Doto:wght@700&displa
 
 export const revalidate = 60;
 
-const TITLE = 'GenXKrypto | XRP Macro Intelligence Desk';
+// Sept 13, 2026: title dropped the "GenXKrypto |" prefix, per the desk's own
+// identity rule (GenXKrypto is Phil's personal handle, never described as the
+// product; the product is the XRP Macro Intelligence Desk). The header and
+// footer still carry the byline in prose, where there is room to say "by"; the
+// title tag and the link-preview title are the most compressed real estate on
+// the site and are where a second name dilutes the one thing meant to be
+// bookmarked and searched.
+const TITLE = 'XRP Macro Intelligence Desk';
 
 // Aug 31, 2026: Discord embed slimmed by request. og:site_name and the
 // description metas (og:description and the plain description tag) were
@@ -87,7 +94,7 @@ export const metadata = {
     title: TITLE,
     url: '/',
     type: 'website',
-    images: [{ url: OG_IMAGE, width: 1200, height: 488, alt: 'GenXKrypto XRP Macro Intelligence Desk' }],
+    images: [{ url: OG_IMAGE, width: 1200, height: 488, alt: 'XRP Macro Intelligence Desk' }],
   },
   twitter: {
     card: 'summary_large_image',
@@ -115,11 +122,18 @@ export default function RootLayout({ children }) {
         <header className="site-head">
           <div className="wrap">
             <div className="brand-row">
-              <Link href="/" className="brand" aria-label="GenXKrypto home">
+              {/* Sept 13, 2026: wordmark hierarchy flipped. "XRP Macro
+                  Intelligence Desk" leads as the product name; "by GenXKrypto"
+                  sits under it as attribution, matching the footer's existing
+                  "Built and run independently by GenXKrypto" phrasing. The
+                  product name is a much longer string than the old single-word
+                  wordmark, so .brand-main is sized down and allowed to wrap in
+                  globals.css rather than forced onto one line. */}
+              <Link href="/" className="brand" aria-label="XRP Macro Intelligence Desk, by GenXKrypto, home">
                 <img src="/avatar.png" alt="GenXKrypto" className="brand-avatar" width="64" height="64" />
                 <span className="brand-text">
-                  <span className="brand-main">GenXKrypto</span>
-                  <span className="brand-sub">xrp macro intelligence desk</span>
+                  <span className="brand-main">XRP Macro Intelligence Desk</span>
+                  <span className="brand-sub">by GenXKrypto</span>
                 </span>
               </Link>
               <a
