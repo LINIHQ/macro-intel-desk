@@ -18,28 +18,35 @@ function fmtDay(iso) {
   return `${months[m - 1]} ${d}, ${y}`;
 }
 
+// Card panel per criterion (Sept 13, 2026 polish pass), matching the Claims and
+// Ranked Items pattern: .card for the box, .chip pills instead of a coloured
+// left border for status. Direction uses the same --r/--g semantic pair as the
+// tile trend arrows (worsen reads adverse, improve reads favourable); in-force
+// vs retired uses --g vs --mute, the same pairing StatusChip uses for an active
+// vs archived state elsewhere on the site.
 function CriterionRow({ row }) {
+  const dirColor = row.direction === 'worsen' ? 'var(--r)' : 'var(--g)';
+  const statusColor = row.is_current ? 'var(--g)' : 'var(--mute)';
   return (
-    <div
-      style={{
-        borderLeft: `2px solid ${row.is_current ? 'var(--fg, currentColor)' : 'rgba(255,255,255,0.18)'}`,
-        paddingLeft: 12,
-        margin: '0 0 16px',
-        opacity: row.is_current ? 1 : 0.82,
-      }}
-    >
-      <div className="small" style={{ letterSpacing: '0.04em', marginBottom: 4 }}>
-        <strong>{row.direction === 'worsen' ? 'WORSENS' : 'IMPROVES'}</strong>
-        {row.is_current ? (
-          <span> · in force since {fmtDay(row.effective_date)}</span>
-        ) : (
-          <span className="mute">
-            {' '}
-            · in force {fmtDay(row.effective_date)} to {fmtDay(row.superseded_date)}
-          </span>
-        )}
+    <div className="card" style={row.is_current ? undefined : { opacity: 0.82 }}>
+      <div className="card-chips" style={{ marginBottom: 8 }}>
+        <span className="chip" style={{ '--chip-c': dirColor }}>
+          {row.direction === 'worsen' ? 'WORSENS' : 'IMPROVES'}
+        </span>
+        <span className="chip" style={{ '--chip-c': statusColor }}>
+          {row.is_current ? 'IN FORCE' : 'RETIRED'}
+        </span>
       </div>
-      <p style={{ margin: '0 0 6px' }}>{row.criterion_md}</p>
+      <p className="small mute" style={{ margin: '0 0 8px' }}>
+        {row.is_current ? (
+          <>In force since {fmtDay(row.effective_date)}</>
+        ) : (
+          <>
+            In force {fmtDay(row.effective_date)} to {fmtDay(row.superseded_date)}
+          </>
+        )}
+      </p>
+      <p style={{ margin: '0 0 8px' }}>{row.criterion_md}</p>
       {row.change_reason ? (
         <p className="small mute" style={{ margin: 0 }}>
           {row.is_current ? 'Why this test: ' : 'Why it was replaced: '}
@@ -116,12 +123,14 @@ export default async function MethodologyPage() {
       </p>
 
       {covered.map((c) => (
-        <section key={c.key} style={{ margin: '30px 0 0' }}>
-          <h2 style={{ marginBottom: 4 }}>{c.label}</h2>
-          <p className="small mute" style={{ margin: '0 0 12px' }}>
-            {byCat[c.key].filter((r) => r.is_current).length} in force ·{' '}
-            {byCat[c.key].filter((r) => !r.is_current).length} retired
-          </p>
+        <section key={c.key} className="sec-plain">
+          <div className="sec-head">
+            <h2>{c.label}</h2>
+            <span className="sec-meta">
+              {byCat[c.key].filter((r) => r.is_current).length} in force ·{' '}
+              {byCat[c.key].filter((r) => !r.is_current).length} retired
+            </span>
+          </div>
           {byCat[c.key].map((r) => (
             <CriterionRow key={r.id} row={r} />
           ))}
@@ -129,8 +138,10 @@ export default async function MethodologyPage() {
       ))}
 
       {uncovered.length ? (
-        <section style={{ margin: '34px 0 0' }}>
-          <h2 style={{ marginBottom: 6 }}>Gauges with no published criteria</h2>
+        <section className="sec-plain">
+          <div className="sec-head">
+            <h2>Gauges with no published criteria</h2>
+          </div>
           <p className="small mute">
             {uncovered.map((c) => c.label).join(', ')}. These gauges have not sat at orange or red in
             the window the register covers and carried no movement criteria at the time. The gap is
@@ -140,16 +151,20 @@ export default async function MethodologyPage() {
       ) : null}
 
       {changelog.length ? (
-        <section style={{ margin: '34px 0 0' }}>
-          <h2 style={{ marginBottom: 6 }}>Methodology changelog</h2>
+        <section className="sec-plain">
+          <div className="sec-head">
+            <h2>Methodology changelog</h2>
+          </div>
           <p className="small mute" style={{ margin: '0 0 12px' }}>
             Append-only. Material changes to gauge definitions, verdict rules, source rules or
             classification logic increment the version.
           </p>
           {changelog.map((p, i) => (
-            <p key={i} className="small">
-              {p}
-            </p>
+            <div key={i} className="card">
+              <p className="small" style={{ margin: 0 }}>
+                {p}
+              </p>
+            </div>
           ))}
         </section>
       ) : null}
