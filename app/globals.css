@@ -655,6 +655,63 @@ button.tile.changed {
 .src-pill:hover { color: var(--text); border-color: var(--acc); text-decoration: none; }
 .src-pill:hover .ext { color: var(--acc); }
 
+/* ---------- search + filter controls ---------- */
+
+/* Shared by the archive and claim browsers (Sept 13, 2026). Both carried their
+   own inline styles before this and stayed square after the polish pass, so the
+   two controls now live here and cannot drift apart again. The input is 16px on
+   a phone because iOS Safari zooms the whole page on focus for any input under
+   16px, and the zoom persists across navigation. */
+.search-input {
+  display: block;
+  width: 100%;
+  padding: 10px 14px;
+  font: inherit;
+  font-size: 14px;
+  color: var(--text);
+  background: color-mix(in srgb, var(--panel2) 70%, transparent);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-card);
+  appearance: none;
+  -webkit-appearance: none;
+  transition: border-color 120ms ease;
+}
+.search-input::placeholder { color: var(--mute); }
+.search-input:focus {
+  outline: none;
+  border-color: color-mix(in srgb, var(--acc) 65%, var(--line));
+}
+.filter-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+  margin: 0 0 12px;
+}
+.filter-pill {
+  font: inherit;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  line-height: 1.5;
+  padding: 3px 11px;
+  cursor: pointer;
+  border-radius: 999px;
+  color: var(--mute);
+  background: transparent;
+  border: 1px solid var(--line);
+  white-space: nowrap;
+  transition: color 120ms ease, border-color 120ms ease, background 120ms ease;
+}
+.filter-pill:hover { color: var(--dim); border-color: color-mix(in srgb, var(--dim) 45%, var(--line)); }
+.filter-pill.on {
+  color: var(--filter-c, var(--text));
+  background: color-mix(in srgb, var(--filter-c, var(--dim)) 12%, transparent);
+  border-color: color-mix(in srgb, var(--filter-c, var(--dim)) 75%, transparent);
+}
+
 /* ---------- quiet source line ---------- */
 
 .src-line {
@@ -1196,6 +1253,9 @@ button.tile.changed {
   .card { padding: 16px 14px; border-radius: 12px; }
   .card-head { flex-direction: column; align-items: flex-start; gap: 8px; }
   .card-chips { padding-top: 0; }
+
+  /* iOS focus zoom guard: see the .search-input comment above. */
+  .search-input { font-size: 16px; }
 
   /* 118px holds "Global liquidity" at 11px IBM Plex Mono (0.6em advance, about
      106px) inside 108px of text box. Keep the fade and the flex-basis equal. */
