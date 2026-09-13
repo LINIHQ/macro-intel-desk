@@ -1,5 +1,5 @@
 export const metadata = {
-  title: 'Terms | GenXKrypto XRP Macro Intelligence Desk',
+  title: 'Terms of Use',
 };
 
 export default function TermsPage() {
