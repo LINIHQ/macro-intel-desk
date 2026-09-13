@@ -1,5 +1,5 @@
 export const metadata = {
-  title: 'Privacy | GenXKrypto XRP Macro Intelligence Desk',
+  title: 'Privacy',
 };
 
 export default function PrivacyPage() {
