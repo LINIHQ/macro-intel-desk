@@ -35,8 +35,17 @@ import Markdown from './Markdown';
 // LINI Ledger uses for its cards. Spacing between panels lives in globals.css
 // (.sec, .sec-first, .sec-plain), not inline. Ranked items are the exception:
 // they are the product, and boxing seven long cards inside one more box would
-// cost roughly 30px of width per side on a 375px phone, so that section gets
-// the header row only (.sec-plain) and the item cards stand on their own.
+// cost roughly 30px of width per side on a 375px phone, so that section keeps
+// the item cards unboxed, standing on their own.
+//
+// Ranked items header (refined Sept 13, 2026): the section still uses
+// .sec-plain for its outer spacing so the item cards below stay unboxed, but
+// the header row itself (title, item count, the "ranked by weight" note) now
+// sits in its own small .sec panel. Every other section's header lives inside
+// the same bubble as its content; leaving this one floating on the bare page
+// background read as unfinished next to the rest, even though the cards below
+// it were always individually boxed. This gives the header the same visual
+// weight without nesting the item cards inside a second box.
 //
 // The meta stamps state facts the page already has: the evidence cutoff on the
 // dashboard notes, the item count on the ranked list. The other three are fixed
@@ -120,11 +129,13 @@ export default function BriefBody({ brief, itemsHeading = 'Ranked items', itemsN
       ) : null}
 
       <section id="ranked-items" className="sec-plain">
-        <SectionHead
-          title={itemsHeading}
-          meta={itemCount ? `${itemCount} ${itemCount === 1 ? 'item' : 'items'}` : null}
-        />
-        {itemsNote}
+        <div className="sec" style={{ marginBottom: 14 }}>
+          <SectionHead
+            title={itemsHeading}
+            meta={itemCount ? `${itemCount} ${itemCount === 1 ? 'item' : 'items'}` : null}
+          />
+          {itemsNote}
+        </div>
         <BriefItems items={items} />
       </section>
 
