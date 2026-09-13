@@ -5,6 +5,10 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 // Fixed palette mirroring globals.css. The canvas cannot read CSS variables at
 // draw time across all targets, so these are pinned here. If the site palette
 // changes, update both places.
+//
+// Sept 13, 2026: mute corrected from #566680 to #6d7d99, matching the Sept 8
+// contrast fix in globals.css that never got carried over here. This card had
+// been drawing the pre-fix colour for over a month.
 const C = {
   bg: '#070d18',
   panel: '#0c1424',
@@ -13,7 +17,7 @@ const C = {
   text: '#e6edf7',
   body: '#a7b6cc',
   dim: '#8294ae',
-  mute: '#566680',
+  mute: '#6d7d99',
   acc: '#d2a65f',
 };
 
@@ -35,6 +39,15 @@ const W = 1200;
 const H = 675;
 const SCALE = 2;
 const PAD = 44;
+
+// Sept 13, 2026: corner radii matching the on-page polish pass (globals.css
+// --radius / --radius-sm and the 12px tile radius). The card's own outer frame
+// stays square on purpose: this PNG gets attached as an X image, and X applies
+// its own corner mask to attached media, so rounding the outer edge here risks
+// a double-rounded or visibly seamed corner against X's own treatment.
+const TILE_R = 12;
+const PILL_R = 999; // roundRectPath clamps this to half the shape's own height, so it always resolves to a true stadium
+const RANK_R = 7;
 
 function truncate(ctx, str, maxWidth) {
   if (ctx.measureText(str).width <= maxWidth) return str;
@@ -61,10 +74,15 @@ function mix(hex, baseHex, ratio) {
   return `#${hx(to(r1, r2))}${hx(to(g1, g2))}${hx(to(b1, b2))}`;
 }
 
+// Builds a rounded-rect path via the native API when available. r is clamped to
+// half the shorter side, so passing PILL_R (999) on any box always resolves to
+// a true stadium shape rather than an error or an unrounded rect. Returns false
+// when ctx.roundRect is unsupported so callers can fall back to a square rect.
 function roundRectPath(ctx, x, y, w, h, r) {
   if (ctx.roundRect) {
+    const rr = Math.min(r, w / 2, h / 2);
     ctx.beginPath();
-    ctx.roundRect(x, y, w, h, r);
+    ctx.roundRect(x, y, w, h, rr);
     return true;
   }
   return false;
@@ -140,11 +158,22 @@ export default function ShareCard({ dateLabel, modeLabel, runDate, gauges, items
       const lc = LEVEL_HEX[g.level] || C.mute;
       const changed = !!g.changed;
 
-      ctx.fillStyle = C.panel;
-      ctx.fillRect(x, y, tileW, tileH);
+      // Background: rounded to match the live tile (Sept 13, 2026 polish pass).
+      if (roundRectPath(ctx, x, y, tileW, tileH, TILE_R)) {
+        ctx.fillStyle = C.panel;
+        ctx.fill();
+      } else {
+        ctx.fillStyle = C.panel;
+        ctx.fillRect(x, y, tileW, tileH);
+      }
       ctx.globalAlpha = 0.07;
-      ctx.fillStyle = lc;
-      ctx.fillRect(x, y, tileW, tileH);
+      if (roundRectPath(ctx, x, y, tileW, tileH, TILE_R)) {
+        ctx.fillStyle = lc;
+        ctx.fill();
+      } else {
+        ctx.fillStyle = lc;
+        ctx.fillRect(x, y, tileW, tileH);
+      }
       ctx.globalAlpha = 1;
 
       // Border: live uses color-mix(tile-c 26%, line) normally and 60% on a
@@ -155,16 +184,28 @@ export default function ShareCard({ dateLabel, modeLabel, runDate, gauges, items
         ctx.shadowBlur = 16;
         ctx.strokeStyle = mix(lc, C.line, 0.6);
         ctx.lineWidth = 1.5;
-        ctx.strokeRect(x, y, tileW, tileH);
+        if (roundRectPath(ctx, x, y, tileW, tileH, TILE_R)) ctx.stroke();
+        else ctx.strokeRect(x, y, tileW, tileH);
         ctx.restore();
       } else {
         ctx.strokeStyle = mix(lc, C.line, 0.26);
         ctx.lineWidth = 1.5;
-        ctx.strokeRect(x, y, tileW, tileH);
+        if (roundRectPath(ctx, x, y, tileW, tileH, TILE_R)) ctx.stroke();
+        else ctx.strokeRect(x, y, tileW, tileH);
       }
 
-      ctx.fillStyle = lc;
-      ctx.fillRect(x, y, 4, tileH);
+      // Status signal moved from a 4px left strip to a top hairline that fades
+      // out by 92% of the tile width (Sept 13, 2026), matching .tile::before in
+      // globals.css. Clipped to the tile's own rounded path so the hairline
+      // never squares off the corners it sits on.
+      ctx.save();
+      if (roundRectPath(ctx, x, y, tileW, tileH, TILE_R)) ctx.clip();
+      const hairline = ctx.createLinearGradient(x, y, x + tileW * 0.92, y);
+      hairline.addColorStop(0, lc);
+      hairline.addColorStop(1, 'transparent');
+      ctx.fillStyle = hairline;
+      ctx.fillRect(x, y, tileW, 3);
+      ctx.restore();
 
       try { ctx.letterSpacing = '1.5px'; } catch (e) {}
       ctx.font = font(600, 13);
@@ -187,10 +228,11 @@ export default function ShareCard({ dateLabel, modeLabel, runDate, gauges, items
         ctx.fillText(truncate(ctx, `${arrow} ${g.trend}`, tileW - 30), x + 17, y + 79);
       }
 
-      // CHANGED badge: mirrors .tile-badge on the live tile. Drawn only when the
-      // run wrote changed_from_prior, so a grid with no badge means nothing moved.
-      // This is the whole point of the card matching live: on the one day a gauge
-      // moves, the card has to say so.
+      // CHANGED badge: mirrors .tile-badge on the live tile, now a full pill
+      // (Sept 13, 2026), matching the .chip treatment site-wide. Drawn only
+      // when the run wrote changed_from_prior, so a grid with no badge means
+      // nothing moved. This is the whole point of the card matching live: on
+      // the one day a gauge moves, the card has to say so.
       if (changed) {
         try { ctx.letterSpacing = '1px'; } catch (e) {}
         ctx.font = font(600, 10.5);
@@ -203,7 +245,7 @@ export default function ShareCard({ dateLabel, modeLabel, runDate, gauges, items
         ctx.globalAlpha = 0.6;
         ctx.strokeStyle = lc;
         ctx.lineWidth = 1;
-        if (roundRectPath(ctx, bx, by, bw, bh, 2)) {
+        if (roundRectPath(ctx, bx, by, bw, bh, PILL_R)) {
           ctx.stroke();
         } else {
           ctx.strokeRect(bx, by, bw, bh);
@@ -230,15 +272,16 @@ export default function ShareCard({ dateLabel, modeLabel, runDate, gauges, items
     ctx.fillStyle = C.dim;
     ctx.fillText('TOP 3 SIGNALS', PAD + 26, sectY);
 
-    // Items: rank, title, verdict chip
+    // Items: rank box, title, verdict chip
     const rowStart = sectY + 38;
     const rowGap = 54;
+    const rankSize = 28;
 
     (items || []).slice(0, 3).forEach((it, i) => {
       const y = rowStart + i * rowGap;
       const ver = VERDICT_HEX[it.verification] || VERDICT_HEX.opinion;
 
-      // Verdict chip, right aligned
+      // Verdict chip, right aligned. Full pill (Sept 13, 2026), matching .chip.
       try { ctx.letterSpacing = '1.2px'; } catch (e) {}
       ctx.font = font(600, 11);
       const chipTextW = ctx.measureText(ver.label).width;
@@ -249,7 +292,7 @@ export default function ShareCard({ dateLabel, modeLabel, runDate, gauges, items
 
       ctx.globalAlpha = 0.13;
       ctx.fillStyle = ver.color;
-      if (roundRectPath(ctx, chipX, chipY, chipW, chipH, 2)) {
+      if (roundRectPath(ctx, chipX, chipY, chipW, chipH, PILL_R)) {
         ctx.fill();
       } else {
         ctx.fillRect(chipX, chipY, chipW, chipH);
@@ -257,7 +300,7 @@ export default function ShareCard({ dateLabel, modeLabel, runDate, gauges, items
       ctx.globalAlpha = 0.6;
       ctx.strokeStyle = ver.color;
       ctx.lineWidth = 1;
-      if (roundRectPath(ctx, chipX, chipY, chipW, chipH, 2)) {
+      if (roundRectPath(ctx, chipX, chipY, chipW, chipH, PILL_R)) {
         ctx.stroke();
       } else {
         ctx.strokeRect(chipX, chipY, chipW, chipH);
@@ -266,13 +309,27 @@ export default function ShareCard({ dateLabel, modeLabel, runDate, gauges, items
       ctx.fillStyle = ver.color;
       ctx.fillText(ver.label, chipX + 11, y);
 
-      // Rank and title
+      // Rank box (Sept 13, 2026): mirrors .card-rank on the live item cards, an
+      // outlined box with the number centred, replacing the old plain "1." text.
+      const rankX = PAD;
+      const rankY = y - 20;
+      ctx.strokeStyle = mix(C.acc, C.line, 0.55);
+      ctx.lineWidth = 1.5;
+      if (roundRectPath(ctx, rankX, rankY, rankSize, rankSize, RANK_R)) {
+        ctx.stroke();
+      } else {
+        ctx.strokeRect(rankX, rankY, rankSize, rankSize);
+      }
       try { ctx.letterSpacing = '0px'; } catch (e) {}
-      ctx.font = font(600, 18);
+      ctx.font = font(700, 14);
       ctx.fillStyle = C.acc;
-      ctx.fillText(`${it.rank}.`, PAD, y);
+      ctx.textAlign = 'center';
+      ctx.fillText(String(it.rank), rankX + rankSize / 2, y - 3);
+      ctx.textAlign = 'left';
+
+      // Title
       ctx.fillStyle = C.text;
-      const titleX = PAD + 36;
+      const titleX = rankX + rankSize + 14;
       const titleMax = chipX - titleX - 18;
       ctx.fillText(truncate(ctx, it.title || '', titleMax), titleX, y);
     });
