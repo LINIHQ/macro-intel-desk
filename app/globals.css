@@ -305,6 +305,62 @@ h2::before {
 .sec .md > :first-child { margin-top: 0; }
 .sec .md > :last-child { margin-bottom: 0; }
 
+/* ---------- readout strip ---------- */
+
+/* Stat tiles (Sept 13, 2026): the LINI Ledger headline device. Label over a
+   large dot-matrix number over a muted sub line. Doto is loaded as a stylesheet
+   in app/layout.jsx (Next 14.2 predates it in next/font/google) and applies to
+   the value only; decimals in Doto go faint below about 20px, so the value
+   never drops under 22px. Colour on a value is semantic where it is set at all
+   (verdict colours on the claims scorecard, the trend colour on arrows) or the
+   accent gold on the one hero figure. */
+.readout-strip {
+  display: grid;
+  grid-template-columns: repeat(var(--readout-cols, 4), minmax(0, 1fr));
+  gap: 10px;
+}
+.readout-tile {
+  min-width: 0;
+  background: color-mix(in srgb, var(--panel) 85%, transparent);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  box-shadow: var(--shadow-card);
+  padding: 12px 14px 11px;
+}
+.readout-label {
+  margin: 0;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--mute);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.readout-value {
+  margin: 5px 0 0;
+  font-family: "Doto", var(--font-mono), monospace;
+  font-weight: 700;
+  font-size: 26px;
+  line-height: 1.1;
+  letter-spacing: 0.02em;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+/* Phosphor glow on the hero figure only, in the accent, kept faint. */
+.readout-hero {
+  text-shadow: 0 0 14px color-mix(in srgb, var(--acc) 45%, transparent);
+}
+.readout-sub {
+  margin: 4px 0 0;
+  font-size: 11px;
+  line-height: 1.45;
+  color: var(--mute);
+}
+
 /* ---------- page head + fear/greed dial ---------- */
 
 .page-head {
@@ -1253,6 +1309,12 @@ button.tile.changed {
   .card { padding: 16px 14px; border-radius: 12px; }
   .card-head { flex-direction: column; align-items: flex-start; gap: 8px; }
   .card-chips { padding-top: 0; }
+
+  /* Readouts go two across on a phone regardless of the desktop column count;
+     the value drops to 22px, the floor at which Doto decimals still read. */
+  .readout-strip { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+  .readout-tile { padding: 11px 12px 10px; }
+  .readout-value { font-size: 22px; }
 
   /* iOS focus zoom guard: see the .search-input comment above. */
   .search-input { font-size: 16px; }
