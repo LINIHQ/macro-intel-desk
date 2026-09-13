@@ -10,10 +10,19 @@
 // Doto is a display face and decimals go faint at small sizes (a Ledger
 // finding), so it is applied to the value only, at readout size, never to the
 // label or sub line.
+//
+// data-count (Sept 13, 2026) lets globals.css single out the 3-tile case on a
+// phone: mobile always lays the strip out 2 columns wide regardless of --readout-
+// cols, and 3 tiles in a 2-column grid otherwise strands the third tile alone on
+// its own row. See .readout-strip[data-count="3"] in globals.css.
 export default function ReadoutStrip({ items = [], cols }) {
   if (!items.length) return null;
   return (
-    <div className="readout-strip" style={cols ? { '--readout-cols': cols } : undefined}>
+    <div
+      className="readout-strip"
+      data-count={items.length}
+      style={cols ? { '--readout-cols': cols } : undefined}
+    >
       {items.map((it) => (
         <div key={it.label} className="readout-tile">
           <p className="readout-label">{it.label}</p>
