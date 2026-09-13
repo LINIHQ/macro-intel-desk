@@ -1404,6 +1404,12 @@ button.tile.changed {
   .readout-strip { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
   .readout-tile { padding: 11px 12px 10px; }
   .readout-value { font-size: 22px; }
+  /* A 2-column grid strands a 3rd tile alone with empty space beside it (first
+     hit Sept 13, 2026 when XRP spot moved out of BriefStats, leaving exactly 3
+     cells). Only fires for that exact count: 2 tiles stay 2-up, 3 becomes
+     2-up-plus-a-wide-third, 4+ is untouched. See the data-count comment in
+     ReadoutStrip.jsx. */
+  .readout-strip[data-count="3"] .readout-tile:last-child { grid-column: 1 / -1; }
 
   /* iOS focus zoom guard: see the .search-input comment above. */
   .search-input { font-size: 16px; }
