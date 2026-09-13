@@ -16,6 +16,10 @@ import { VERIFICATION } from '@/lib/format';
 // deliberately NOT the sort order: "open questions first" is about which claims
 // deserve attention, and using that ordering for the chips made the two rows
 // disagree for no reason a reader could see.
+//
+// Styling for the input and the filter pills lives in globals.css (.search-input,
+// .filter-pill) and is shared with ArchiveBrowser, since Sept 13, 2026. An active
+// verdict filter passes its semantic colour through --filter-c.
 const ORDER = ['verified', 'partially_verified', 'unverified', 'contradicted', 'opinion'];
 
 const SORTS = [
@@ -62,25 +66,15 @@ export default function ClaimsBrowser({ items = [] }) {
       <div style={{ margin: '0 0 12px' }}>
         <input
           type="search"
+          className="search-input"
           value={q}
           onChange={(e) => setQ(e.target.value)}
           placeholder="Search claims, evidence and sources"
           aria-label="Search claims"
-          style={{
-            width: '100%',
-            padding: '9px 11px',
-            font: 'inherit',
-            fontSize: '0.92em',
-            color: 'inherit',
-            background: 'rgba(255,255,255,0.04)',
-            border: '1px solid rgba(255,255,255,0.18)',
-            borderRadius: 2,
-            appearance: 'none',
-          }}
         />
       </div>
 
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, margin: '0 0 10px' }}>
+      <div className="filter-row" style={{ marginBottom: 10 }}>
         {chips.map((c) => {
           const on = status === c.key;
           return (
@@ -89,19 +83,8 @@ export default function ClaimsBrowser({ items = [] }) {
               type="button"
               onClick={() => setStatus(c.key)}
               aria-pressed={on}
-              className="small"
-              style={{
-                font: 'inherit',
-                fontSize: '0.78em',
-                letterSpacing: '0.04em',
-                textTransform: 'uppercase',
-                padding: '4px 9px',
-                cursor: 'pointer',
-                borderRadius: 2,
-                color: on ? 'inherit' : 'var(--mute, rgba(255,255,255,0.6))',
-                background: on ? 'rgba(255,255,255,0.10)' : 'transparent',
-                border: `1px solid ${on && c.color ? c.color : 'rgba(255,255,255,0.18)'}`,
-              }}
+              className={on ? 'filter-pill on' : 'filter-pill'}
+              style={c.color ? { '--filter-c': c.color } : undefined}
             >
               {c.label} {counts[c.key] || 0}
             </button>
