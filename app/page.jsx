@@ -124,19 +124,19 @@ export default async function LivePage() {
           <CrowdGauge />
         </div>
       </div>
-      <div
-        className="small mute"
-        style={{
-          margin: '10px 0 8px',
-          padding: '6px 12px',
-          borderLeft: '2px solid rgba(255,255,255,0.25)',
-          letterSpacing: '0.02em',
-        }}
-      >
-        <p style={{ margin: 0 }}>
+
+      {/* Sept 13, 2026: the cadence/attribution note and the alerts toggle now
+          share one .sec panel instead of each carrying its own left-accent
+          border. Both predate the polish pass and read as unboxed next to
+          everything else on the page once tiles, cards and section headers all
+          picked up the rounded-panel treatment. The toggle keeps its own
+          .alerts-row styling for the divider between the two, now a top border
+          rather than a second left accent (see globals.css). */}
+      <div className="sec" style={{ margin: '10px 0 22px' }}>
+        <p className="small mute" style={{ margin: 0, letterSpacing: '0.02em' }}>
           Morning brief drops Mon-Fri, 9-10am ET · Week-ending summary Saturday morning
         </p>
-        <p style={{ margin: '7px 0 0' }}>
+        <p className="small mute" style={{ margin: '7px 0 0', letterSpacing: '0.02em' }}>
           {/* Sept 13, 2026: "run independently" trimmed to "run by" since the
               positioning triplet right after it already says "Independent" on
               its own; the two sat one clause apart and read as the same word
@@ -149,8 +149,8 @@ export default async function LivePage() {
           </a>
           {' '}· Free · Independent · Not financial advice
         </p>
+        <BriefAlertsToggle />
       </div>
-      <BriefAlertsToggle />
 
       {/* Hero readouts (Sept 13, 2026): gauges changed, ranked items, trend
           arrows, all drawn from the brief already fetched above. XRP spot moved
