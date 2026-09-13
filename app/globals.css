@@ -1212,15 +1212,21 @@ button.tile.changed {
 
 /* ---------- brief alerts toggle ---------- */
 
+/* Sept 13, 2026: dropped the left-accent border in favour of a top divider,
+   matching the .share-block pattern below. This row now lives inside the same
+   .sec panel as the "built and run by" note on the live page rather than
+   standing alone, and the old left-accent style predates the panel system:
+   it read as unboxed next to everything else on the page once that box was
+   added around it. */
 .alerts-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 12px 18px;
   flex-wrap: wrap;
-  margin: 0 0 22px;
-  padding: 8px 12px 9px;
-  border-left: 2px solid rgba(255, 255, 255, 0.25);
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
 }
 .alerts-text {
   font-size: 13.5px;
