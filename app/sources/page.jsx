@@ -10,14 +10,22 @@ export const metadata = {
   title: 'Sources',
 };
 
-// Sept 13, 2026: every major section now sits in its own .sec panel, matching
+// Sept 13, 2026: every major section sits in its own .sec panel, matching
 // the boxed sections on brief pages (Where things stand, What changed, etc).
 // Before this the page was almost entirely bare prose on the page background
 // with one lone .card for the verdict taxonomy, so next to Live, Claims, and
-// Watch it still read as pre-polish. Verification taxonomy is the exception:
-// it already wraps its taxonomy list in its own .card, so its section uses
-// .sec-plain for the header only, the same pattern Methodology uses for a
-// header followed by card children, to avoid nesting a box inside a box.
+// Watch it still read as pre-polish.
+//
+// Verification taxonomy was first left as .sec-plain (header only) on the
+// theory that boxing it too would nest a card inside a box, the same problem
+// Ranked Items solves for with .sec-plain on brief pages. That reasoning does
+// not transfer here: Ranked Items is avoiding the cost of a box repeated
+// across seven-plus item cards, while this section nests exactly one taxonomy
+// legend once. Left unboxed, the section's intro line and its two closing
+// paragraphs floated on the bare page background while every section around
+// it was a panel, which read as a missed spot rather than a considered
+// exception. Boxed now like the rest; the inner .card reads as an ordinary
+// highlighted callout within it.
 export default function SourcesPage() {
   return (
     <div>
@@ -91,7 +99,7 @@ export default function SourcesPage() {
         </p>
       </section>
 
-      <section className="sec-plain">
+      <section className="sec">
         <div className="sec-head">
           <h2>Verification taxonomy</h2>
         </div>
