@@ -2,12 +2,20 @@
 
 import { useState } from 'react';
 
+// The X compose intent used to pass text, url, and via as three separate query
+// params (text=..., url=..., via=GenXKrypto). X's compose box concatenates all
+// three onto the end of whatever text= already contains with zero separation,
+// so a long headline ran straight into the URL and "via @GenXKrypto" with no
+// line break, reading as one unbroken paragraph (seen live Sept 13, 2026). The
+// url param is dropped and the link is embedded directly in the text with an
+// explicit blank line before it, so the compose box reads as body, blank line,
+// link, the normal shape of a tweet. X still auto-links a bare https:// URL
+// inside the text and counts it against the character limit the same way.
 export default function ShareBlock({ url, text, variant = 'block' }) {
   const [copied, setCopied] = useState(false);
 
-  const intent = `https://x.com/intent/post?text=${encodeURIComponent(text)}&url=${encodeURIComponent(
-    url
-  )}&via=GenXKrypto`;
+  const shareText = `${text}\n\n${url}`;
+  const intent = `https://x.com/intent/post?text=${encodeURIComponent(shareText)}&via=GenXKrypto`;
 
   async function copy() {
     try {
