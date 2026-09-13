@@ -137,7 +137,13 @@ export default async function LivePage() {
           Morning brief drops Mon-Fri, 9-10am ET · Week-ending summary Saturday morning
         </p>
         <p style={{ margin: '7px 0 0' }}>
-          Built and run independently by{' '}
+          {/* Sept 13, 2026: "run independently" trimmed to "run by" since the
+              positioning triplet right after it already says "Independent" on
+              its own; the two sat one clause apart and read as the same word
+              said twice. The triplet itself (Free / Independent / Not
+              financial advice) stays exactly as written, it matches the same
+              line on the daily share card footer. */}
+          Built and run by{' '}
           <a className="quiet-link" href="https://x.com/GenXKrypto" target="_blank" rel="noopener noreferrer">
             GenXKrypto
           </a>
