@@ -1,5 +1,5 @@
 export const metadata = {
-  title: 'Add XRP Brief to Your Phone | GenXKrypto',
+  title: 'Add to Phone or Tablet',
   description: 'Add XRP Brief to your home screen for one-tap access to verified XRP and macro intelligence.',
 };
 
