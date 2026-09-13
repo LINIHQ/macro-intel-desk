@@ -2,8 +2,12 @@ import Link from 'next/link';
 import StatusChip from '@/components/StatusChip';
 import { VERIFICATION } from '@/lib/format';
 
+// Sept 13, 2026: dropped the "GenXKrypto XRP Macro Intelligence Desk" suffix,
+// left over from before the layout's own title lost the "GenXKrypto |" prefix
+// that same day. Matches the short, unsuffixed page titles used elsewhere
+// (see app/methodology/page.jsx's "Criterion register").
 export const metadata = {
-  title: 'Sources | GenXKrypto XRP Macro Intelligence Desk',
+  title: 'Sources',
 };
 
 export default function SourcesPage() {
@@ -55,8 +59,11 @@ export default function SourcesPage() {
       </p>
       <p>
         <strong>Live data feeds:</strong> the Crypto Market Fear &amp; Greed reading on the dashboard is supplied by
-        CoinMarketCap's Fear &amp; Greed Index, with Alternative.me's index as fallback when CMC is unavailable.
-        Sentiment gauges are crowd readings, not desk verdicts, and they carry no evidentiary weight in briefs.
+        CoinMarketCap's Fear &amp; Greed Index, with Alternative.me's index as fallback when CMC is unavailable. The
+        XRP Live Price reading in the page header is supplied by CoinMarketCap, with CoinGecko as fallback, refreshed
+        every 60 seconds; it appears on the live page only, not on brief permalinks, because it is ambient market
+        context rather than part of a brief's own recorded, sourced evidence. Sentiment and live-price readings are
+        not desk verdicts, and they carry no evidentiary weight in briefs.
       </p>
       <p>
         Where a verdict rests on specific sources, briefs and claims display them as clickable links so readers can
