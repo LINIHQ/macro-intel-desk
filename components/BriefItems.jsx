@@ -7,6 +7,10 @@ import { IMPORTANCE, VERIFICATION } from '@/lib/format';
 // link to the specific item rather than the top of the section. scrollMarginTop
 // keeps the card head clear of the viewport edge on arrival, which matters most
 // on mobile where the jump lands with no surrounding context.
+//
+// The rank sits in an outlined box (.card-rank, Sept 13, 2026) rather than as
+// "1." inline text, so the period is gone; a punctuation mark inside a box read
+// as a typo on the phone.
 export default function BriefItems({ items }) {
   const sorted = [...(items || [])].sort((a, b) => a.rank - b.rank);
   if (!sorted.length) return null;
@@ -24,7 +28,8 @@ export default function BriefItems({ items }) {
           >
             <div className="card-head">
               <p className="card-title">
-                <span className="card-rank">{it.rank}.</span> {it.title}
+                <span className="card-rank" aria-label={`Rank ${it.rank}`}>{it.rank}</span>
+                {it.title}
               </p>
               <span className="card-chips">
                 <StatusChip color={imp.color}>{imp.label}</StatusChip>
