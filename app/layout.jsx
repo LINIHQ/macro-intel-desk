@@ -44,11 +44,12 @@ const DESCRIPTION = 'Verified XRP and macro briefs, published with sourced recei
 // full card minus the top brand header, 1200x488, keeping the headline,
 // subline, verdict chips, and domain bar. Discord scales embed images to the
 // embed width, so the shorter aspect ratio is what makes the rendered card
-// more compact. The full 1200x630 art (og-card.png v10, domain updated to
+// more compact. The full 1200x630 art (og-card.png, pill-shaped verdict
+// badges as of Sept 13, 2026 via Cursor commit, domain updated to
 // xrpmacro.com via Cursor commit Sept 12, 2026, art notes in the route file
 // and git history) stays in the repo as the crop source. Bump the ?v=
 // buster here whenever og-card.png changes or the route's crop changes.
-const OG_IMAGE = 'https://xrpmacro.com/og-banner?v=3';
+const OG_IMAGE = 'https://xrpmacro.com/og-banner?v=4';
 
 // X only, below. X reads twitter:* first and falls back to the og:* equivalent
 // only when the twitter tag is absent, so these two constants override the
@@ -62,8 +63,9 @@ const OG_IMAGE = 'https://xrpmacro.com/og-banner?v=3';
 // a real word here.
 const X_CARD_TITLE = 'XRP Macro Brief';
 
-// Separate art for X, 1200x600, desk-styled v3 to match the default (Aug 28,
-// 2026), domain updated to xrpmacro.com via Cursor commit Sept 12, 2026.
+// Separate art for X, 1200x600, desk-styled to match the default. Domain
+// updated to xrpmacro.com via Cursor commit Sept 12, 2026; verdict badges
+// changed from square to pill-shaped via Cursor commit Sept 13, 2026.
 // Exactly 2:1, so X applies no crop: the full frame renders. The
 // lower-left corner is kept dark and low-detail so the fixed title chip lands
 // on a clean area, and the baked domain sits bottom-right only. X prints "From
@@ -71,7 +73,7 @@ const X_CARD_TITLE = 'XRP Macro Brief';
 // treatment is lighter here than on the default image. If this art is ever
 // regenerated, keep the lower-left clear and keep the file at exactly 2:1 or
 // the crop math from the Aug 18, 2026 notes applies again.
-const X_CARD_IMAGE = 'https://xrpmacro.com/og-card-x.png?v=9';
+const X_CARD_IMAGE = 'https://xrpmacro.com/og-card-x.png?v=10';
 
 export const metadata = {
   metadataBase: new URL('https://xrpmacro.com'),
