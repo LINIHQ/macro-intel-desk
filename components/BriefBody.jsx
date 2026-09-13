@@ -30,12 +30,43 @@ import Markdown from './Markdown';
 // the card. briefs.top3_md is the plain-text archive copy and the fallback for
 // any brief written before the structured column existed.
 //
-// Spacing: sections are separate markdown blocks now, not one continuous
-// document, so the rhythm the old single block got for free has to be set here.
-// The first section needs the largest gap because it follows the amendments
-// strip, which is a dense one-line element.
-const SECTION = { marginTop: 30 };
-const FIRST_SECTION = { marginTop: 38 };
+// Section panels (Sept 13, 2026): each surface sits in its own rounded panel
+// with a header row, title left and a short meta stamp right, the same grammar
+// LINI Ledger uses for its cards. Spacing between panels lives in globals.css
+// (.sec, .sec-first, .sec-plain), not inline. Ranked items are the exception:
+// they are the product, and boxing seven long cards inside one more box would
+// cost roughly 30px of width per side on a 375px phone, so that section gets
+// the header row only (.sec-plain) and the item cards stand on their own.
+//
+// The meta stamps state facts the page already has: the evidence cutoff on the
+// dashboard notes, the item count on the ranked list. The other three are fixed
+// labels describing what the surface is for; they never carry data.
+
+function etStamp(iso) {
+  if (!iso) return null;
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return null;
+  const date = d.toLocaleDateString('en-US', {
+    month: 'short',
+    day: 'numeric',
+    timeZone: 'America/New_York',
+  });
+  const time = d.toLocaleTimeString('en-US', {
+    hour: 'numeric',
+    minute: '2-digit',
+    timeZone: 'America/New_York',
+  });
+  return `${date}, ${time} ET`;
+}
+
+function SectionHead({ title, meta }) {
+  return (
+    <div className="sec-head">
+      <h2>{title}</h2>
+      {meta ? <span className="sec-meta">{meta}</span> : null}
+    </div>
+  );
+}
 
 export default function BriefBody({ brief, itemsHeading = 'Ranked items', itemsNote = null }) {
   const items = brief?.brief_items ?? [];
@@ -55,21 +86,24 @@ export default function BriefBody({ brief, itemsHeading = 'Ranked items', itemsN
     );
   }
 
+  const verified = etStamp(brief.evidence_verified_through);
+  const itemCount = items.length;
+
   return (
     <>
       {brief.dashboard_md ? (
-        <section id="dashboard-notes" style={FIRST_SECTION}>
-          <h2>Where things stand</h2>
+        <section id="dashboard-notes" className="sec sec-first">
+          <SectionHead
+            title="Where things stand"
+            meta={verified ? `Evidence through ${verified}` : null}
+          />
           <Markdown>{brief.dashboard_md}</Markdown>
         </section>
       ) : null}
 
       {hasStructuredTop3 || brief.top3_md ? (
-        <section id="top-3" style={SECTION}>
-          <h2>Top 3 things that matter</h2>
-          <p className="small mute" style={{ margin: '2px 0 16px' }}>
-            Where to spend attention in the ranked items below.
-          </p>
+        <section id="top-3" className="sec">
+          <SectionHead title="Top 3 things that matter" meta="Index to the ranked items" />
           {hasStructuredTop3 ? (
             <TopThree pointers={brief.top3} items={items} />
           ) : (
@@ -79,21 +113,24 @@ export default function BriefBody({ brief, itemsHeading = 'Ranked items', itemsN
       ) : null}
 
       {brief.what_changed_md ? (
-        <section id="what-changed" style={SECTION}>
-          <h2>What changed</h2>
+        <section id="what-changed" className="sec">
+          <SectionHead title="What changed" meta="Since the prior brief" />
           <Markdown>{brief.what_changed_md}</Markdown>
         </section>
       ) : null}
 
-      <section id="ranked-items" style={SECTION}>
-        <h2>{itemsHeading}</h2>
+      <section id="ranked-items" className="sec-plain">
+        <SectionHead
+          title={itemsHeading}
+          meta={itemCount ? `${itemCount} ${itemCount === 1 ? 'item' : 'items'}` : null}
+        />
         {itemsNote}
         <BriefItems items={items} />
       </section>
 
       {brief.watch_next_md ? (
-        <section id="watch-next" style={SECTION}>
-          <h2>Watch next</h2>
+        <section id="watch-next" className="sec">
+          <SectionHead title="Watch next" meta="Thresholds and dates" />
           <Markdown>{brief.watch_next_md}</Markdown>
         </section>
       ) : null}
