@@ -10,6 +10,14 @@ import RefreshOnReturn from '@/components/RefreshOnReturn';
 
 const mono = IBM_Plex_Mono({ subsets: ['latin'], weight: ['400', '500', '600', '700'], variable: '--font-mono' });
 
+// Doto, the dot-matrix face on the readout strips (Sept 13, 2026), is loaded as
+// a plain stylesheet rather than through next/font/google: this project pins
+// Next 14.2.15, whose bundled Google Fonts list predates Doto, and next/font
+// fails the build on an unknown family. One weight only; it is used for large
+// numerals and nothing else. display=swap so the number renders in Plex Mono
+// until the face arrives rather than blanking.
+const DOTO_HREF = 'https://fonts.googleapis.com/css2?family=Doto:wght@700&display=swap';
+
 export const revalidate = 60;
 
 const TITLE = 'GenXKrypto | XRP Macro Intelligence Desk';
@@ -96,6 +104,11 @@ export const viewport = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en" className={mono.variable}>
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link rel="stylesheet" href={DOTO_HREF} />
+      </head>
       <body>
         <RefreshOnReturn />
         <PullToRefresh />
