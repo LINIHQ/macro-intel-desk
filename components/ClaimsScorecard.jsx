@@ -1,8 +1,16 @@
+import ReadoutStrip from '@/components/ReadoutStrip';
 import { VERIFICATION } from '@/lib/format';
 
 // Resolution record for the claim tracker, computed at render time from rows the
 // page already fetched. Raw counts, not percentages: with a small sample,
 // percentages read like false precision. Counts read like a ledger.
+//
+// Rendered as a readout strip (Sept 13, 2026): six stat tiles, one per verdict
+// plus the total, each count in the verdict's own colour. A verdict with no
+// claims shows its zero in the muted tier rather than lighting a colour for an
+// empty bucket.
+const ORDER = ['verified', 'partially_verified', 'unverified', 'contradicted', 'opinion'];
+
 export default function ClaimsScorecard({ claims }) {
   if (!claims?.length) return null;
 
@@ -21,22 +29,18 @@ export default function ClaimsScorecard({ claims }) {
     if (h.length > 1) verdictChanges += h.length - 1;
   }
 
-  const order = ['verified', 'partially_verified', 'unverified', 'contradicted', 'opinion'];
+  const tiles = [{ label: 'Claims tracked', value: String(claims.length) }].concat(
+    ORDER.map((k) => ({
+      label: VERIFICATION[k].label,
+      value: String(counts[k]),
+      color: counts[k] > 0 ? VERIFICATION[k].color : 'var(--mute)',
+    }))
+  );
 
   return (
-    <div className="card" style={{ padding: '14px 16px' }}>
-      <div className="mono small" style={{ display: 'flex', flexWrap: 'wrap', columnGap: '18px', rowGap: '6px' }}>
-        <span>
-          <span className="dim">CLAIMS TRACKED</span> <strong>{claims.length}</strong>
-        </span>
-        {order.map((k) => (
-          <span key={k}>
-            <span className="dim">{VERIFICATION[k].label.toUpperCase()}</span>{' '}
-            <strong style={{ color: counts[k] > 0 ? VERIFICATION[k].color : 'var(--mute)' }}>{counts[k]}</strong>
-          </span>
-        ))}
-      </div>
-      <p className="small mute" style={{ margin: '8px 0 0' }}>
+    <div style={{ margin: '0 0 14px' }}>
+      <ReadoutStrip items={tiles} cols={6} />
+      <p className="small mute" style={{ margin: '10px 0 0' }}>
         Verdict changes logged: {verdictChanges}. History is append-only: verdicts move when evidence moves, nothing is deleted.
       </p>
     </div>
