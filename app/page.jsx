@@ -5,6 +5,7 @@ import DashboardGrid from '@/components/DashboardGrid';
 import BriefBody from '@/components/BriefBody';
 import BriefStats from '@/components/BriefStats';
 import CrowdGauge from '@/components/CrowdGauge';
+import LivePrice from '@/components/LivePrice';
 import ShareBlock from '@/components/ShareBlock';
 import BriefAlertsToggle from '@/components/BriefAlertsToggle';
 import { AmendmentsStrip } from '@/components/AmendmentsPanel';
@@ -112,7 +113,16 @@ export default async function LivePage() {
             </p>
           ) : null}
         </div>
-        <CrowdGauge />
+        {/* Sept 13, 2026: LivePrice joins CrowdGauge as a pair of live-context
+            widgets, live page only, never on a brief permalink. Deliberately
+            separate from the brief's own frozen "XRP spot" stamp inside Where
+            things stand: that figure is what the brief's gauges and math were
+            built from and stays auditable at write time; this is what the
+            market is doing right now. See components/LivePrice.jsx. */}
+        <div className="head-widgets">
+          <LivePrice />
+          <CrowdGauge />
+        </div>
       </div>
       <div
         className="small mute"
@@ -136,9 +146,11 @@ export default async function LivePage() {
       </div>
       <BriefAlertsToggle />
 
-      {/* Hero readouts (Sept 13, 2026): spot, gauges changed, ranked items, trend
-          arrows, all drawn from the brief already fetched above. Sits directly
-          over the gauge grid so the page opens on numbers, then colour. */}
+      {/* Hero readouts (Sept 13, 2026): gauges changed, ranked items, trend
+          arrows, all drawn from the brief already fetched above. XRP spot moved
+          out of this strip and up to the live widget pair above; this strip is
+          exclusively the brief's own recorded counts now. Sits directly over
+          the gauge grid so the page opens on numbers, then colour. */}
       <BriefStats brief={brief} />
 
       <p className="gauge-hint">
