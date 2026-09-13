@@ -3,6 +3,7 @@ import { getBriefById, getClassificationHistory, getCriteriaAsOf } from '@/lib/s
 import { fmtDate, fmtRunStamp } from '@/lib/format';
 import DashboardGrid from '@/components/DashboardGrid';
 import BriefBody from '@/components/BriefBody';
+import BriefStats from '@/components/BriefStats';
 import ShareBlock from '@/components/ShareBlock';
 
 export const revalidate = 300;
@@ -105,6 +106,11 @@ export default async function BriefPage({ params }) {
           {updatedText ? <span style={NOWRAP}>Updated {updatedText} ET</span> : null}
         </p>
       ) : null}
+
+      {/* Hero readouts for this brief: the same four cells as the live page,
+          read from this brief's own rows, so an archived page opens on the
+          numbers the desk recorded that day. */}
+      <BriefStats brief={brief} />
 
       <p className="gauge-hint">
         <span className="hint-touch">Tap</span><span className="hint-pointer">Click</span> any gauge for analysis ↓
