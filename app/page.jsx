@@ -3,6 +3,7 @@ import { getLatestBrief, getClassificationHistory, getCurrentCriteria } from '@/
 import { fmtDate, fmtRunStamp } from '@/lib/format';
 import DashboardGrid from '@/components/DashboardGrid';
 import BriefBody from '@/components/BriefBody';
+import BriefStats from '@/components/BriefStats';
 import CrowdGauge from '@/components/CrowdGauge';
 import ShareBlock from '@/components/ShareBlock';
 import BriefAlertsToggle from '@/components/BriefAlertsToggle';
@@ -134,6 +135,12 @@ export default async function LivePage() {
         </p>
       </div>
       <BriefAlertsToggle />
+
+      {/* Hero readouts (Sept 13, 2026): spot, gauges changed, ranked items, trend
+          arrows, all drawn from the brief already fetched above. Sits directly
+          over the gauge grid so the page opens on numbers, then colour. */}
+      <BriefStats brief={brief} />
+
       <p className="gauge-hint">
         <span className="hint-touch">Tap</span><span className="hint-pointer">Click</span> any gauge for analysis ↓
       </p>
