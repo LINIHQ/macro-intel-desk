@@ -27,6 +27,66 @@ const SORTS = [
   { key: 'updated', label: 'Recently updated' },
 ];
 
+// Group headers in the ALL view (Sept 14, 2026).
+//
+// The sort itself is unchanged and stays the default: the claims that deserve a
+// reader's attention are the ones the desk has not landed, and leading with 86
+// mostly settled, mostly favourable verdicts would bury the desk's exposure on
+// the page that exists to show it. What was actually wrong was legibility. In
+// ALL, 137 near-identical cards ran in an unbroken stack whose sequence had no
+// visible cause, so it read as arbitrary rather than as the output of the sort
+// control sitting above it in 13.5px muted text.
+//
+// Two labelled dividers fix that without touching the editorial call. They also
+// double as scroll landmarks, which the stack had none of on a 375px screen.
+// Within each group the cards run in the ORDER subsequence above, so the chip
+// row and the card stack now disagree about nothing except which block leads.
+//
+// Rendered only when status is 'all' and sort is 'open'. Under Recently updated
+// the order is chronological and explains itself; under a single-status filter
+// every card in view is the same verdict and a header would be noise. Counts
+// come from what is actually on screen, so a search that narrows the list
+// narrows the counts with it.
+const GROUPS = {
+  open: { label: 'Open questions', hint: 'verdict not yet settled' },
+  settled: { label: 'Settled', hint: 'verified, contradicted or opinion' },
+};
+
+function GroupHead({ group, count, first }) {
+  const meta = GROUPS[group] || { label: group, hint: '' };
+  return (
+    <div
+      style={{
+        display: 'flex',
+        alignItems: 'baseline',
+        gap: '4px 12px',
+        flexWrap: 'wrap',
+        margin: first ? '0 0 12px' : '30px 0 12px',
+        paddingTop: first ? 0 : 14,
+        borderTop: first ? 'none' : '1px solid var(--line)',
+      }}
+    >
+      <span
+        style={{
+          fontSize: 11,
+          fontWeight: 600,
+          letterSpacing: '0.16em',
+          textTransform: 'uppercase',
+          color: 'var(--dim)',
+          whiteSpace: 'nowrap',
+        }}
+      >
+        {meta.label} <span style={{ color: 'var(--mute)' }}>{count}</span>
+      </span>
+      {meta.hint ? (
+        <span className="mute" style={{ fontSize: 12, letterSpacing: '0.02em' }}>
+          {meta.hint}
+        </span>
+      ) : null}
+    </div>
+  );
+}
+
 export default function ClaimsBrowser({ items = [] }) {
   const [q, setQ] = useState('');
   const [status, setStatus] = useState('all');
@@ -52,6 +112,14 @@ export default function ClaimsBrowser({ items = [] }) {
     });
     return rows;
   }, [items, q, status, sort]);
+
+  const showGroups = status === 'all' && sort === 'open';
+
+  const groupCounts = useMemo(() => {
+    const c = {};
+    for (const it of shown) c[it.group] = (c[it.group] || 0) + 1;
+    return c;
+  }, [shown]);
 
   const chips = [{ key: 'all', label: 'All', color: null }].concat(
     ORDER.filter((k) => counts[k]).map((k) => ({
@@ -100,6 +168,7 @@ export default function ClaimsBrowser({ items = [] }) {
           Showing {shown.length} of {items.length}
         </span>
         <span aria-hidden="true">·</span>
+        <span>Sorted by</span>
         {SORTS.map((s) => (
           <button
             key={s.key}
@@ -113,8 +182,8 @@ export default function ClaimsBrowser({ items = [] }) {
               cursor: 'pointer',
               background: 'none',
               border: 'none',
-              borderBottom: sort === s.key ? '1px solid currentColor' : '1px solid transparent',
-              color: sort === s.key ? 'inherit' : 'var(--mute, rgba(255,255,255,0.6))',
+              borderBottom: sort === s.key ? '1px solid currentColor' : '1px dashed currentColor',
+              color: sort === s.key ? 'var(--text)' : 'var(--mute, rgba(255,255,255,0.6))',
             }}
           >
             {s.label}
@@ -147,7 +216,16 @@ export default function ClaimsBrowser({ items = [] }) {
       </div>
 
       {shown.length ? (
-        shown.map((it) => <div key={it.id}>{it.node}</div>)
+        shown.map((it, i) => {
+          const head =
+            showGroups && (i === 0 || shown[i - 1].group !== it.group) ? it.group : null;
+          return (
+            <div key={it.id}>
+              {head ? <GroupHead group={head} count={groupCounts[head] || 0} first={i === 0} /> : null}
+              {it.node}
+            </div>
+          );
+        })
       ) : (
         <div className="empty">
           No claims match that search. Clear the filters to see all {items.length} tracked claims.
