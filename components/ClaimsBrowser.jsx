@@ -160,6 +160,15 @@ export default function ClaimsBrowser({ items = [] }) {
         })}
       </div>
 
+      {/* A "Sorted by" prefix shipped here earlier on Sept 14, 2026 and came
+          straight back out the same day: at 375px it pushed this row to two
+          lines, stranding the label at the end of the first with both options
+          dropped below. It existed to make the row read as a control rather
+          than a status line, and the group headers below now do that job by
+          making the order self-evident, so the words were buying nothing and
+          costing a wrapped line on the width most readers are on. The dashed
+          underline on the inactive option stays; that is what signals the
+          other option is clickable. */}
       <div
         className="small mute"
         style={{ display: 'flex', flexWrap: 'wrap', gap: 10, alignItems: 'center', margin: '0 0 16px' }}
@@ -168,7 +177,6 @@ export default function ClaimsBrowser({ items = [] }) {
           Showing {shown.length} of {items.length}
         </span>
         <span aria-hidden="true">·</span>
-        <span>Sorted by</span>
         {SORTS.map((s) => (
           <button
             key={s.key}
