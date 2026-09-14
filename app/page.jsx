@@ -31,6 +31,10 @@ function etParts(iso) {
       minute: '2-digit',
       timeZone: 'America/New_York',
     }),
+    weekday: d.toLocaleDateString('en-US', {
+      weekday: 'short',
+      timeZone: 'America/New_York',
+    }),
   };
 }
 
@@ -39,6 +43,50 @@ function stampText(iso, sameDayAsIso) {
   if (!p) return null;
   const ref = etParts(sameDayAsIso);
   return ref && ref.date === p.date ? p.time : `${p.date}, ${p.time}`;
+}
+
+// Week-ending header (Sept 13, 2026). A week-ending summary is dated for the
+// Friday it covers (fmtDate(brief.run_date)) but written and published the
+// next morning. The standard two-line header put "Sep 11" directly above
+// "Published Sep 12" with nothing on the page explaining the gap, so new
+// visitors read it as a stale page rather than the weekly cadence it is.
+// Week-ending mode drops the Friday run date from this header entirely (it
+// still shows on the permalink and archive) and leads with the one date a
+// reader actually needs, publish day, folding each stamp's weekday name in
+// so "Sat" next to "Fri" explains the one-day gap on its own.
+//
+// withDate=true always spells out the date (used for Published, the header's
+// one anchor date). withDate=false is weekday+time only (used for Evidence,
+// which is deliberately date-free next to Saturday's publish date).
+function weStamp(iso, withDate) {
+  const p = etParts(iso);
+  if (!p) return null;
+  return withDate ? `${p.weekday}, ${p.date}, ${p.time}` : `${p.weekday}, ${p.time}`;
+}
+
+// The Updated stamp is nearly always the same Saturday as Published, so it
+// drops its date too, but a correction issued days later (rare, but real
+// under the corrections protocol) still needs its own date rather than
+// silently reading as same-day.
+function weUpdatedStamp(iso, refIso) {
+  const p = etParts(iso);
+  if (!p) return null;
+  const ref = etParts(refIso);
+  const sameDay = ref && ref.date === p.date;
+  return sameDay ? `${p.weekday}, ${p.time}` : `${p.weekday}, ${p.date}, ${p.time}`;
+}
+
+// A week-ending summary is the only brief mode this desk publishes on a
+// different ET calendar date than the one it's dated for (Friday run_date,
+// Saturday created_at). brief_mode === 'full' is required alongside the date
+// check so a same-day full brief run for depth on a weekday never picks up
+// the week-ending header by accident.
+function isWeekEndingBrief(brief) {
+  if (brief.brief_mode !== 'full' || !brief.created_at || !brief.run_date) return false;
+  const etDate = new Date(brief.created_at).toLocaleDateString('en-CA', {
+    timeZone: 'America/New_York',
+  });
+  return etDate !== brief.run_date;
 }
 
 // Each stamp is kept whole so a narrow screen can only break between stamps,
@@ -66,6 +114,7 @@ export default async function LivePage() {
     ? `XRP Macro Brief: ${brief.headline}`
     : 'XRP Macro Intelligence Desk';
   const runStamp = fmtRunStamp(brief.created_at, brief.run_date);
+  const weekEnding = isWeekEndingBrief(brief);
 
   // Publication time, evidence cutoff and last edit are three different facts and
   // stay three different facts, on two lines. The evidence stamp leads, beside the
@@ -85,6 +134,16 @@ export default async function LivePage() {
       : runStamp
     : null;
 
+  // Week-ending stamps: see weStamp/weUpdatedStamp above. Published always
+  // shows in full; Evidence is always weekday+time only; Updated matches
+  // Published's date unless the edit landed on a different day.
+  const wePubText = weekEnding ? weStamp(brief.created_at, true) : null;
+  const weVerifiedText = weekEnding ? weStamp(brief.evidence_verified_through, false) : null;
+  const weUpdatedText =
+    weekEnding && brief.last_updated_at && brief.last_updated_at !== brief.created_at
+      ? weUpdatedStamp(brief.last_updated_at, brief.created_at)
+      : null;
+
   const itemsNote = (
     <p className="small mute" style={{ margin: '2px 0 14px' }}>
       Ranked by weight, tagged by verdict. Every item carries its own sources.
@@ -96,22 +155,49 @@ export default async function LivePage() {
       <div className="page-head">
         <div>
           <h1>Macro dashboard</h1>
-          <p className="page-meta" style={{ marginBottom: 0 }}>
-            <span style={NOWRAP}>{fmtDate(brief.run_date)}</span>
-            {verifiedText ? (
-              <>
-                {' · '}
-                <span style={NOWRAP}>Evidence through {verifiedText} ET</span>
-              </>
-            ) : null}
-          </p>
-          {pubText || updatedText ? (
-            <p className="page-meta" style={{ marginTop: 2 }}>
-              {pubText ? <span style={NOWRAP}>Published {pubText}</span> : null}
-              {pubText && updatedText ? ' · ' : null}
-              {updatedText ? <span style={NOWRAP}>Updated {updatedText} ET</span> : null}
-            </p>
-          ) : null}
+          {weekEnding ? (
+            <>
+              <p className="page-meta" style={{ marginBottom: 0 }}>
+                Week ending summary
+              </p>
+              <p className="page-meta" style={{ marginTop: 2 }}>
+                {wePubText ? (
+                  <span style={NOWRAP}>
+                    Published {wePubText}
+                    {weVerifiedText ? '' : ' ET'}
+                  </span>
+                ) : null}
+                {wePubText && weVerifiedText ? ' · ' : null}
+                {weVerifiedText ? (
+                  <span style={NOWRAP}>Evidence through {weVerifiedText} ET</span>
+                ) : null}
+              </p>
+              {weUpdatedText ? (
+                <p className="page-meta" style={{ marginTop: 2 }}>
+                  <span style={NOWRAP}>Updated {weUpdatedText} ET</span>
+                </p>
+              ) : null}
+            </>
+          ) : (
+            <>
+              <p className="page-meta" style={{ marginBottom: 0 }}>
+                <span style={NOWRAP}>{fmtDate(brief.run_date)}</span>
+                {verifiedText ? (
+                  <>
+                    {' · '}
+                    <span style={NOWRAP}>Evidence through {verifiedText} ET</span>
+                  </>
+                ) : null}
+              </p>
+              {pubText || updatedText ? (
+                <p className="page-meta" style={{ marginTop: 2 }}>
+                  {pubText ? <span style={NOWRAP}>Published {pubText}</span> : null}
+                  {pubText && updatedText ? ' · ' : null}
+                  {updatedText ? <span style={NOWRAP}>Updated {updatedText} ET</span> : null}
+                </p>
+              ) : null}
+            </>
+          )}
         </div>
         {/* Sept 13, 2026: LivePrice joins CrowdGauge as a pair of live-context
             widgets, live page only, never on a brief permalink. Deliberately
