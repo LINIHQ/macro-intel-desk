@@ -2,7 +2,13 @@ import Link from 'next/link';
 import { getCriteriaRegister, getDeskConfig } from '@/lib/supabase';
 import { CATEGORIES } from '@/lib/format';
 
-export const revalidate = 60;
+// Purged on demand at publish by /api/revalidate; the number below is only a
+// backstop for the case where that call never lands.
+//
+// Was 60s. The register is append-only and changes only when a run writes a
+// criterion revision, which is rarer than a publish, so a one-minute timer was
+// rebuilding a static page roughly 1,440 times a day at its limit.
+export const revalidate = 3600;
 
 export const metadata = {
   title: 'Criterion register',
