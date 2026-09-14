@@ -382,14 +382,30 @@ h2::before {
 /* Wraps the Fear & Greed dial and the live price widget as one group, so
    .page-head keeps its original two-child space-between layout (title block,
    widget group) regardless of how many small widgets live inside the group.
-   Sept 13, 2026, added alongside LivePrice. */
+   flex-wrap added Sept 13, 2026 alongside the bubble treatment below: two
+   bordered cards side by side need a bit more combined width than two bare
+   text blocks did, so a very narrow viewport can drop the second bubble to
+   its own line instead of crowding. */
 .head-widgets {
   display: flex;
   align-items: flex-start;
-  gap: 22px;
+  flex-wrap: wrap;
+  gap: 14px;
   flex-shrink: 0;
 }
-.fng { flex-shrink: 0; text-align: right; }
+/* Bubbled (Sept 13, 2026): both header widgets now sit in the same panel
+   material as the readout tiles directly beneath them (background, border,
+   radius, shadow), so the row reads as one family top to bottom instead of
+   two bare text blocks floating above a row of boxed tiles. */
+.fng {
+  flex-shrink: 0;
+  text-align: right;
+  padding: 12px 16px 11px;
+  background: color-mix(in srgb, var(--panel) 85%, transparent);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  box-shadow: var(--shadow-card);
+}
 .fng-label {
   font-size: 10px;
   font-weight: 600;
@@ -416,11 +432,20 @@ h2::before {
 }
 
 /* Live XRP price (Sept 13, 2026). Sibling to the Fear & Greed dial, same label
-   treatment, deliberately NOT styled like the readout strip's Doto tiles below:
-   this sits in the page header as ambient market context, not as part of the
-   brief's own recorded evidence, and it should read as a different kind of
-   thing from the frozen "at write time" figure inside Where things stand. */
-.live-price { flex-shrink: 0; text-align: right; }
+   and now the same bubble treatment, deliberately NOT styled like the readout
+   strip's Doto tiles below in every other respect: this sits in the page
+   header as ambient market context, not as part of the brief's own recorded
+   evidence, and it should read as a different kind of thing from the frozen
+   "at write time" figure inside Where things stand. */
+.live-price {
+  flex-shrink: 0;
+  text-align: right;
+  padding: 12px 16px 11px;
+  background: color-mix(in srgb, var(--panel) 85%, transparent);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  box-shadow: var(--shadow-card);
+}
 .live-price-label {
   display: flex;
   align-items: center;
@@ -473,10 +498,10 @@ h2::before {
   letter-spacing: 0.02em;
 }
 @media (max-width: 600px) {
-  .head-widgets { width: 100%; justify-content: flex-start; gap: 26px; margin-bottom: 22px; }
-  .fng { text-align: left; }
+  .head-widgets { width: 100%; justify-content: flex-start; margin-bottom: 22px; }
+  .fng { text-align: left; padding: 10px 14px 9px; }
   .fng-row { justify-content: flex-start; }
-  .live-price { text-align: left; }
+  .live-price { text-align: left; padding: 10px 14px 9px; }
   .live-price-label { justify-content: flex-start; }
   .live-price-row { justify-content: flex-start; }
 }
