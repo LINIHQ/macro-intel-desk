@@ -1063,20 +1063,31 @@ button.tile.changed {
    see at all). Both scrollbar styling APIs are set together, since no browser
    yet supports both: scrollbar-color/scrollbar-width for Firefox, the
    ::-webkit-scrollbar pseudo-elements for Chrome, Safari and Edge. Thin,
-   accent-coloured, fully rounded, transparent track, so it reads as part of
-   the surface it sits on rather than a system control laid over it. */
+   fully rounded, transparent track, so it reads as part of the surface it
+   sits on rather than a system control laid over it.
+
+   Colour switched from --acc (gold) to --pfp-blue the same day (Phil's call):
+   gold sits directly in the warm yellow/orange family the status system
+   already uses for Neutral/watch and Tightening/elevated, and the brand
+   gradient's other half, pfp-red, collides the same way with Stressed/
+   disruption red. Blue is the one colour on this page guaranteed not to look
+   like it is reporting a classification, since blue is never semantic
+   anywhere on the site (see the ambient glow comment above). Opacity raised
+   from the gold version's 55%/80% to 78%/solid: the page background and panel
+   tones are themselves blue-ish navy, and blue at gold's old strength risked
+   blending into that rather than standing out against it. */
 .tl-scroll {
   scrollbar-width: thin;
-  scrollbar-color: color-mix(in srgb, var(--acc) 55%, transparent) transparent;
+  scrollbar-color: color-mix(in srgb, var(--pfp-blue) 78%, transparent) transparent;
 }
 .tl-scroll::-webkit-scrollbar { height: 6px; }
 .tl-scroll::-webkit-scrollbar-track { background: transparent; }
 .tl-scroll::-webkit-scrollbar-thumb {
-  background: color-mix(in srgb, var(--acc) 55%, transparent);
+  background: color-mix(in srgb, var(--pfp-blue) 78%, transparent);
   border-radius: 999px;
 }
 .tl-scroll::-webkit-scrollbar-thumb:hover {
-  background: color-mix(in srgb, var(--acc) 80%, transparent);
+  background: var(--pfp-blue);
 }
 .tl-grid { display: flex; flex-direction: column; gap: 10px; width: max-content; }
 .tl-track { display: flex; gap: 4px; height: 14px; width: max-content; touch-action: pan-x; }
@@ -1248,20 +1259,22 @@ button.tile.changed {
 .md pre code { background: none; padding: 0; }
 .md blockquote { margin: 0 0 10px; padding: 8px 14px; border-left: 3px solid var(--line); color: var(--dim); }
 .md .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; margin: 0 0 10px; }
-/* Same custom scrollbar as .tl-scroll above, for the same reason: a wide brief
-   table on desktop shows the native scrollbar otherwise, with no theming. */
+/* Same custom scrollbar as .tl-scroll above, same colour and same reason for
+   both: a wide brief table on desktop shows the native scrollbar otherwise,
+   and blue reads clearly against the site's navy surfaces without colliding
+   with the status palette the way gold or brand red would. */
 .md .table-wrap {
   scrollbar-width: thin;
-  scrollbar-color: color-mix(in srgb, var(--acc) 55%, transparent) transparent;
+  scrollbar-color: color-mix(in srgb, var(--pfp-blue) 78%, transparent) transparent;
 }
 .md .table-wrap::-webkit-scrollbar { height: 6px; }
 .md .table-wrap::-webkit-scrollbar-track { background: transparent; }
 .md .table-wrap::-webkit-scrollbar-thumb {
-  background: color-mix(in srgb, var(--acc) 55%, transparent);
+  background: color-mix(in srgb, var(--pfp-blue) 78%, transparent);
   border-radius: 999px;
 }
 .md .table-wrap::-webkit-scrollbar-thumb:hover {
-  background: color-mix(in srgb, var(--acc) 80%, transparent);
+  background: var(--pfp-blue);
 }
 .md table { border-collapse: collapse; width: 100%; margin: 0; font-size: 13.5px; table-layout: fixed; }
 .md th, .md td { border: 1px solid var(--line); padding: 6px 10px; text-align: left; overflow-wrap: break-word; font-size: 13.5px; }
