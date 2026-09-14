@@ -1,5 +1,5 @@
 import { getClaims } from '@/lib/supabase';
-import { VERIFICATION } from '@/lib/format';
+import { VERIFICATION, fmtStampET } from '@/lib/format';
 import StatusChip from '@/components/StatusChip';
 import SourcePills from '@/components/SourcePills';
 import Markdown from '@/components/Markdown';
@@ -115,7 +115,20 @@ function ClaimCard({ cl }) {
 }
 
 export default async function ClaimsPage() {
+  // Captured before the read, so the stamp can never claim to be newer than
+  // the data it describes.
+  const readAt = new Date().toISOString();
   const claims = await getClaims();
+
+  // The newest verdict movement in the record itself, which is a different
+  // fact from when the page was built and answers a different question.
+  // "Read at" tells you how fresh this copy of the page is. "Newest change"
+  // tells you when the desk last moved a verdict, so a page that is genuinely
+  // current does not look suspicious just because nothing changed today.
+  const newestChange = claims.reduce((max, cl) => {
+    const t = cl.updated_at || '';
+    return t > max ? t : max;
+  }, '');
 
   const items = claims.map((cl) => ({
     id: cl.id,
@@ -135,6 +148,30 @@ export default async function ClaimsPage() {
         Every consequential claim the desk has checked, with its current verdict. Verdicts change when evidence
         changes, and the history stays public.
       </p>
+
+      {/* Freshness stamp, added Sept 14, 2026.
+          This page is statically regenerated, so what a reader sees is a copy
+          taken at a point in time rather than a live query. On Sept 14 a failed
+          read cached an empty page and nothing on screen said how old it was.
+          Reads now retry and then throw rather than render empty, so the stale
+          copy that survives is at least correct, but correct-and-old still needs
+          to announce itself: on a public receipts trail, a verdict shown without
+          a timestamp implicitly claims to be current.
+          Each stamp wraps whole so a narrow screen breaks at the separator. */}
+      {claims.length ? (
+        <p className="small mute mono" style={{ margin: '-2px 0 14px' }}>
+          <span style={{ whiteSpace: 'nowrap' }}>Record read {fmtStampET(readAt)}</span>
+          {newestChange ? (
+            <>
+              {' · '}
+              <span style={{ whiteSpace: 'nowrap' }}>
+                newest verdict change {fmtStampET(newestChange)}
+              </span>
+            </>
+          ) : null}
+        </p>
+      ) : null}
+
       <ClaimsScorecard claims={claims} />
       {claims.length ? (
         <ClaimsBrowser items={items} />
