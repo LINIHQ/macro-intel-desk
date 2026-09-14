@@ -394,9 +394,7 @@ h2::before {
    regardless of how many small widgets live inside the group.
    align-items: stretch (Sept 13, 2026) makes both widgets the same height as
    whichever is taller, since Fear & Greed carries a dial graphic the price
-   widget does not; each widget centres its own content vertically inside that
-   shared height (see .fng / .live-price below) rather than leaving dead space
-   at the bottom of the shorter one. */
+   widget does not. */
 .head-widgets {
   display: flex;
   align-items: stretch;
@@ -408,13 +406,21 @@ h2::before {
    material as the readout tiles directly beneath them (background, border,
    radius, shadow), so the row reads as one family top to bottom instead of
    two bare text blocks floating above a row of boxed tiles. display: flex
-   with justify-content: center lets the label+row content sit vertically
-   centred once .head-widgets stretches both boxes to a shared height. */
+   with justify-content: flex-start (changed from center the same day) keeps
+   the label pinned to the top of the box once .head-widgets stretches both
+   widgets to a shared height: centring instead left the shorter widget's
+   label sitting lower than the taller one's, since the two widgets' own
+   content is a different height (the dial adds height Live Price does not
+   have), so a centred label landed at a different vertical position on each.
+   Top-aligning both guarantees the two labels line up on the same row
+   regardless of how much shorter one widget's content is; the row underneath
+   the label is left to land wherever it lands, which is deliberately not
+   equalised the same way. */
 .fng {
   flex-shrink: 0;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   text-align: right;
   padding: 10px 14px;
   background: color-mix(in srgb, var(--panel) 85%, transparent);
@@ -452,12 +458,13 @@ h2::before {
    strip's Doto tiles below in every other respect: this sits in the page
    header as ambient market context, not as part of the brief's own recorded
    evidence, and it should read as a different kind of thing from the frozen
-   "at write time" figure inside Where things stand. */
+   "at write time" figure inside Where things stand. justify-content:
+   flex-start matches .fng above so both labels sit on the same top line. */
 .live-price {
   flex-shrink: 0;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   text-align: right;
   padding: 10px 14px;
   background: color-mix(in srgb, var(--panel) 85%, transparent);
