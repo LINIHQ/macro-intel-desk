@@ -25,7 +25,30 @@ import ClaimsBrowser from '@/components/ClaimsBrowser';
 // public receipts trail is a broken promise.
 export const revalidate = 3600;
 
-const RANK = { unverified: 0, partially_verified: 1, contradicted: 2, opinion: 3, verified: 4 };
+// Sort order for the default "open questions first" view, and the group each
+// verdict belongs to. Within a group the sequence is the taxonomy subsequence
+// (verified, partially verified, unverified, contradicted, opinion), so the
+// card stack and the filter chips above it differ on nothing except which
+// block leads.
+//
+// Contradicted moved from rank 2 into the settled block on Sept 14, 2026. A
+// contradicted claim is closed: the desk checked it and reliable evidence went
+// against it. Ranking it as an open question put 15 settled cards inside a
+// leading block of 47 that claimed to be unresolved, and pushed the first
+// verified verdict roughly three phone screens further down.
+//
+// The block that leads is still the unresolved one, deliberately. Leading with
+// verified would put 86 mostly settled, mostly favourable verdicts at the top
+// of the page whose whole purpose is showing the desk does not bury what it
+// has not landed.
+const RANK = { partially_verified: 0, unverified: 1, verified: 2, contradicted: 3, opinion: 4 };
+const GROUP = {
+  partially_verified: 'open',
+  unverified: 'open',
+  verified: 'settled',
+  contradicted: 'settled',
+  opinion: 'settled',
+};
 
 // Evidence accretes downward: the original assessment is written first and every
 // later correction, upgrade or scope note is appended beneath it with its date.
@@ -134,6 +157,7 @@ export default async function ClaimsPage() {
     id: cl.id,
     status: cl.current_status,
     rank: RANK[cl.current_status] ?? 99,
+    group: GROUP[cl.current_status] || 'settled',
     updatedAt: cl.updated_at || cl.first_seen_date || '',
     haystack: `${cl.claim_text || ''} ${cl.why_it_matters || ''} ${(cl.evidence_md || '').slice(0, 1500)} ${(cl.sources || [])
       .map((s) => s?.label || '')
