@@ -4,11 +4,15 @@ import StatusChip from '@/components/StatusChip';
 import Markdown from '@/components/Markdown';
 import AmendmentsPanel from '@/components/AmendmentsPanel';
 
-// Widened from 60s (Sept 11, 2026): watch items only change at publish time,
-// and the amendments panel underneath already caches its own XRPScan fetch
-// for an hour, so a 60-second page window bought no real freshness. 300s
-// matches the window already proven safe on brief permalinks.
-export const revalidate = 300;
+// Purged on demand at publish by /api/revalidate; the number below is only a
+// backstop for the case where that call never lands.
+//
+// History: 60s until Sept 11, 2026, then 300s. Supabase request logs for a
+// single 24-hour window showed 201 regenerations here against content that
+// changed once, when a brief published. The amendments panel underneath
+// caches its own XRPScan fetch for an hour regardless, so the page timer was
+// never buying freshness for the half of this page that moves most.
+export const revalidate = 3600;
 
 // Escalated items lead, then open items. Within each group, the most recently
 // touched item sits on top, so an item that moved in the latest run surfaces
