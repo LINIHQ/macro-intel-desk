@@ -372,35 +372,51 @@ h2::before {
 
 /* ---------- page head + header widgets (fear/greed, live price) ---------- */
 
+/* Sept 13, 2026: flex-wrap dropped from .page-head. The bubble treatment below
+   made the widget group wide enough that on some desktop/tablet window widths
+   the whole group wrapped onto its own line under the title, adding a chunk of
+   page height that was never part of the design (seen live the same day the
+   bubbles shipped). Wrapping is still exactly right on a genuine phone, where
+   the title and the widgets could never coexist on one line anyway, so it is
+   re-enabled there in the max-width: 600px block below and nowhere else. The
+   title block can still wrap its own text internally if truly squeezed; only
+   the page-head row itself no longer breaks.
+*/
 .page-head {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
   gap: 18px;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
 }
 /* Wraps the Fear & Greed dial and the live price widget as one group, so
-   .page-head keeps its original two-child space-between layout (title block,
-   widget group) regardless of how many small widgets live inside the group.
-   flex-wrap added Sept 13, 2026 alongside the bubble treatment below: two
-   bordered cards side by side need a bit more combined width than two bare
-   text blocks did, so a very narrow viewport can drop the second bubble to
-   its own line instead of crowding. */
+   .page-head keeps its original two-child layout (title block, widget group)
+   regardless of how many small widgets live inside the group.
+   align-items: stretch (Sept 13, 2026) makes both widgets the same height as
+   whichever is taller, since Fear & Greed carries a dial graphic the price
+   widget does not; each widget centres its own content vertically inside that
+   shared height (see .fng / .live-price below) rather than leaving dead space
+   at the bottom of the shorter one. */
 .head-widgets {
   display: flex;
-  align-items: flex-start;
+  align-items: stretch;
   flex-wrap: wrap;
-  gap: 14px;
+  gap: 10px;
   flex-shrink: 0;
 }
 /* Bubbled (Sept 13, 2026): both header widgets now sit in the same panel
    material as the readout tiles directly beneath them (background, border,
    radius, shadow), so the row reads as one family top to bottom instead of
-   two bare text blocks floating above a row of boxed tiles. */
+   two bare text blocks floating above a row of boxed tiles. display: flex
+   with justify-content: center lets the label+row content sit vertically
+   centred once .head-widgets stretches both boxes to a shared height. */
 .fng {
   flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   text-align: right;
-  padding: 12px 16px 11px;
+  padding: 10px 14px;
   background: color-mix(in srgb, var(--panel) 85%, transparent);
   border: 1px solid var(--line);
   border-radius: 12px;
@@ -439,8 +455,11 @@ h2::before {
    "at write time" figure inside Where things stand. */
 .live-price {
   flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   text-align: right;
-  padding: 12px 16px 11px;
+  padding: 10px 14px;
   background: color-mix(in srgb, var(--panel) 85%, transparent);
   border: 1px solid var(--line);
   border-radius: 12px;
@@ -498,10 +517,13 @@ h2::before {
   letter-spacing: 0.02em;
 }
 @media (max-width: 600px) {
+  /* Wrapping the title away from the widgets is restored here only, per the
+     comment on .page-head above. */
+  .page-head { flex-wrap: wrap; }
   .head-widgets { width: 100%; justify-content: flex-start; margin-bottom: 22px; }
-  .fng { text-align: left; padding: 10px 14px 9px; }
+  .fng { text-align: left; padding: 9px 12px; }
   .fng-row { justify-content: flex-start; }
-  .live-price { text-align: left; padding: 10px 14px 9px; }
+  .live-price { text-align: left; padding: 9px 12px; }
   .live-price-label { justify-content: flex-start; }
   .live-price-row { justify-content: flex-start; }
 }
