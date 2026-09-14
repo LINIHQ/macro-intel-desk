@@ -4,11 +4,14 @@ import { fmtDate } from '@/lib/format';
 import DotStrip from '@/components/DotStrip';
 import ArchiveBrowser from '@/components/ArchiveBrowser';
 
-// Widened from 60s (Sept 11, 2026): the archive only gains a new row at
-// publish time, once or twice a day, and the per-render cost grows with the
-// row count as more briefs publish. 300s matches the window already proven
-// safe on brief permalinks.
-export const revalidate = 300;
+// Purged on demand at publish by /api/revalidate; the number below is only a
+// backstop for the case where that call never lands.
+//
+// History: 60s until Sept 11, 2026, then 300s. The archive gains a row only
+// at publish, and its per-render cost grows with every brief that has ever
+// published, so a timer here gets steadily more expensive while buying
+// steadily less.
+export const revalidate = 3600;
 
 export default async function ArchivePage() {
   const briefs = await getAllBriefs(false);
