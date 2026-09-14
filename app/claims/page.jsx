@@ -7,12 +7,23 @@ import LazyEvidence from '@/components/LazyEvidence';
 import ClaimsScorecard from '@/components/ClaimsScorecard';
 import ClaimsBrowser from '@/components/ClaimsBrowser';
 
-// Widened from 60s (Sept 11, 2026): claims only change at publish time, once
-// or twice a day, so a 60-second window bought no real freshness and cost real
-// Active CPU on a route whose per-render cost only grows as the append-only
-// tracker accumulates evidence text. 300s matches the window already proven
-// safe on brief permalinks.
-export const revalidate = 300;
+// Purged on demand at publish by /api/revalidate; the number below is only a
+// backstop for the case where that call never lands.
+//
+// History: 60s until Sept 11, 2026, then 300s. Both were timers, and a timer
+// is the wrong shape for this route entirely. Supabase request logs for a
+// single 24-hour window showed 199 regenerations here against content that
+// changed exactly once, when a brief published. This is also the most
+// expensive route on the site, 135 claims and a 219 kB payload with markdown
+// parsed per card, and it gets more expensive every day because the tracker is
+// append-only by design.
+//
+// 3600 is deliberately not `false`. Fully static would be cheaper still, but
+// it would mean a missed webhook leaves stale verdicts up indefinitely, and on
+// Sept 14, 2026 the publish-time webhook to the push function did exactly that
+// kind of failing. An hour of staleness is a bad day; permanent staleness on a
+// public receipts trail is a broken promise.
+export const revalidate = 3600;
 
 const RANK = { unverified: 0, partially_verified: 1, contradicted: 2, opinion: 3, verified: 4 };
 
