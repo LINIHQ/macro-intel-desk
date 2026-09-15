@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
+import { track } from '@vercel/analytics';
 import { CATEGORIES, LEVEL_COLORS, stateFor } from '@/lib/format';
 import { CATEGORY_ICONS } from '@/components/Icons';
 import { HistoryStrip, HistoryDetail, HISTORY_CAPTION } from '@/components/ClassificationHistory';
@@ -127,6 +128,9 @@ export default function DashboardGrid({ states, history, criteria = {}, verified
               style={{ '--tile-c': color }}
               onClick={() => {
                 if (!s) return;
+                // Opens only, not closes: the question is which gauges readers
+                // dig into, answered by the gauge key.
+                if (!isOpen) track('tile_open', { gauge: c.key });
                 setOpenKey(isOpen ? null : c.key);
               }}
               aria-expanded={isOpen}
