@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { track } from '@vercel/analytics';
 import { supabase } from '@/lib/supabase';
 
 // Public VAPID key for web push. Public by design; the private half lives
@@ -68,6 +69,7 @@ export default function BriefAlertsToggle() {
 
       const permission = await Notification.requestPermission();
       if (permission !== 'granted') {
+        track('alerts', { action: permission === 'denied' ? 'denied' : 'dismissed' });
         setState(permission === 'denied' ? 'denied' : 'off');
         return;
       }
@@ -96,6 +98,7 @@ export default function BriefAlertsToggle() {
           return;
         }
       }
+      track('alerts', { action: 'enabled' });
       setState('on');
     } catch (_) {
       setState('off');
@@ -114,6 +117,7 @@ export default function BriefAlertsToggle() {
     } catch (_) {
       // fall through; local unsubscribe is best-effort
     }
+    track('alerts', { action: 'disabled' });
     setState('off');
   }
 
