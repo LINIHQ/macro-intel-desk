@@ -7,6 +7,7 @@ import MobileMenu from '@/components/MobileMenu';
 import BottomNav from '@/components/BottomNav';
 import PullToRefresh from '@/components/PullToRefresh';
 import RefreshOnReturn from '@/components/RefreshOnReturn';
+import AnalyticsEvents from '@/components/AnalyticsEvents';
 
 const mono = IBM_Plex_Mono({ subsets: ['latin'], weight: ['400', '500', '600', '700'], variable: '--font-mono' });
 
@@ -174,6 +175,7 @@ export default function RootLayout({ children }) {
         </footer>
         <BottomNav />
         <Analytics />
+        <AnalyticsEvents />
       </body>
     </html>
   );
