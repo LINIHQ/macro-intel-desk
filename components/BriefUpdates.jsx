@@ -17,22 +17,35 @@ import Markdown from './Markdown';
 // additive, and a column that holds one update would quietly break that the
 // first time a story moved twice in a day.
 //
-// Colour: a left accent rule in PFP blue. The status scale (green, yellow,
-// orange, red) is reserved for classification and reaches readers through the
-// tiles and chips only, so an update block tinted with any of those would read
-// as a ninth gauge. Blue and cyan are never semantic on this site, which makes
-// PFP blue the one colour available to say "this is new" without saying
-// anything about risk. The block is otherwise the same panel grammar as every
-// other section.
+// Styling: this block deliberately reuses .sec / .sec-head / .sec-meta rather
+// than defining its own classes in globals.css. Every other surface on a brief
+// page is a .sec panel, and an update that invented its own box would drift
+// from the rest the first time the panel treatment changes. Only the two
+// things that make it distinct are set inline, and neither has a competing
+// rule in the stylesheet, so this cannot repeat the Sept 8 bug where an
+// inline width lost to a stylesheet max-width:
+//
+//   1. A 3px left rule in PFP blue, overriding only the left edge of .sec's
+//      1px border.
+//   2. A faint blue tint on the panel fill, so the whole block reads as a
+//      different kind of thing at a glance rather than only at its edge.
+//
+// Blue for both, and not the status palette, for a specific reason: green,
+// yellow, orange and red mean classification on this site and reach readers
+// through the tiles and chips. An update block tinted with any of them would
+// read as a ninth gauge. Blue and cyan are never semantic anywhere here, which
+// makes PFP blue the one colour available to say "this is new" without saying
+// anything about risk. Same reasoning as the ambient glow and the custom
+// scrollbars.
 //
 // The stamp is the update's own time, not the brief's publication time and not
-// last_updated_at. Those are three separate facts and the page already keeps
-// them separate in the header; an update that borrowed one of the others would
-// misdate itself the first time a typo fix touched last_updated_at.
+// last_updated_at. Those are three separate facts and the page header already
+// keeps them separate; an update that borrowed one of the others would misdate
+// itself the first time a typo fix touched last_updated_at.
 //
 // The id is stable at "update" so Discord and X copy can link straight to it
-// (xrpmacro.com/#update). Multiple updates share the one anchor, landing the
-// reader on the newest, which is the one being linked.
+// (xrpmacro.com/#update). Multiple updates share the one anchor and it sits on
+// the newest, which is the one being linked.
 
 function etStamp(iso) {
   if (!iso) return null;
@@ -51,21 +64,29 @@ function etStamp(iso) {
   return `${date}, ${time} ET`;
 }
 
+const PANEL = {
+  borderLeft: '3px solid var(--pfp-blue)',
+  background: 'color-mix(in srgb, var(--pfp-blue) 7%, var(--panel))',
+};
+
 export default function BriefUpdates({ updates }) {
   const rows = Array.isArray(updates) ? updates.filter((u) => u && u.body_md) : [];
   if (!rows.length) return null;
 
   return (
-    <div id="update" className="upd-wrap">
+    <div id="update">
       {rows.map((u, i) => {
         const stamp = etStamp(u.time);
         return (
-          <section className="upd" key={`${u.time || 'u'}-${i}`}>
-            <div className="upd-head">
-              <span className="upd-tag">Update</span>
-              {stamp ? <span className="upd-time">{stamp}</span> : null}
+          <section
+            className={i === 0 ? 'sec sec-first' : 'sec'}
+            style={PANEL}
+            key={`${u.time || 'u'}-${i}`}
+          >
+            <div className="sec-head">
+              <h2>{u.label ? `Update: ${u.label}` : 'Update'}</h2>
+              {stamp ? <span className="sec-meta">{stamp}</span> : null}
             </div>
-            {u.label ? <div className="upd-label">{u.label}</div> : null}
             <Markdown>{u.body_md}</Markdown>
           </section>
         );
