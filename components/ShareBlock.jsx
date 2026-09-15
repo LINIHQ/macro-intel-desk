@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { track } from '@vercel/analytics';
 
 // The X compose intent used to pass text, url, and via as three separate query
 // params (text=..., url=..., via=GenXKrypto). X's compose box concatenates all
@@ -35,6 +36,7 @@ export default function ShareBlock({ url, text, variant = 'block' }) {
     try {
       await navigator.clipboard.writeText(url);
       setCopied(true);
+      track('share', { method: 'copy_link', placement: variant });
       setTimeout(() => setCopied(false), 2000);
     } catch {
       // clipboard unavailable in this context; do nothing
@@ -52,7 +54,13 @@ export default function ShareBlock({ url, text, variant = 'block' }) {
         <span className="share-inline-sep" aria-hidden="true">
           ·
         </span>
-        <a className="quiet-link" href={intent} target="_blank" rel="noopener noreferrer">
+        <a
+          className="quiet-link"
+          href={intent}
+          target="_blank"
+          rel="noopener noreferrer"
+          onClick={() => track('share', { method: 'x_intent', placement: 'inline' })}
+        >
           Share on X
         </a>{' '}
         (prefilled post)
@@ -69,7 +77,13 @@ export default function ShareBlock({ url, text, variant = 'block' }) {
         <button type="button" className="share-cta share-cta-primary" onClick={copy}>
           {copied ? 'Link copied \u2713' : 'Copy link'}
         </button>
-        <a className="share-cta" href={intent} target="_blank" rel="noopener noreferrer">
+        <a
+          className="share-cta"
+          href={intent}
+          target="_blank"
+          rel="noopener noreferrer"
+          onClick={() => track('share', { method: 'x_intent', placement: 'block' })}
+        >
           Share on X <span className="ext" aria-hidden="true">&#8599;</span>
         </a>
       </div>
