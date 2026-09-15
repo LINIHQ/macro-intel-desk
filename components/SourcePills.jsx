@@ -1,3 +1,6 @@
+// Source link clicks are tracked through data attributes read by
+// components/AnalyticsEvents.jsx, so this stays a server component. The event
+// records the outlet's domain only (for example reuters.com), never the full URL.
 export default function SourcePills({ sources }) {
   const list = Array.isArray(sources) ? sources : [];
   const valid = list.filter((s) => s && typeof s.url === 'string' && s.url.startsWith('http'));
@@ -21,7 +24,13 @@ export default function SourcePills({ sources }) {
       .replace(/\s{2,}/g, ' ')
       .trim();
     const base = noVia.replace(/\s*\([^)]*\)\s*$/, '').trim() || noVia;
-    return { url: s.url, full: noVia, base };
+    let host = 'unknown';
+    try {
+      host = new URL(s.url).hostname.replace('www.', '');
+    } catch {
+      // keep 'unknown'
+    }
+    return { url: s.url, full: noVia, base, host };
   });
 
   // Keep the parenthetical qualifier only when needed to tell
@@ -35,7 +44,15 @@ export default function SourcePills({ sources }) {
     <div className="src-line">
       <span className="src-line-label">Sources</span>
       {cleaned.map((c, i) => (
-        <a key={i} className="src-link" href={c.url} target="_blank" rel="noopener noreferrer">
+        <a
+          key={i}
+          className="src-link"
+          href={c.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          data-track="source_click"
+          data-track-host={c.host}
+        >
           {counts[c.base] > 1 ? c.full : c.base}
         </a>
       ))}
