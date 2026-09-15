@@ -1,5 +1,6 @@
 import BriefItems from './BriefItems';
 import TopThree from './TopThree';
+import BriefUpdates from './BriefUpdates';
 import Markdown from './Markdown';
 
 // Reading order for a brief page.
@@ -18,6 +19,13 @@ import Markdown from './Markdown';
 // pointers no longer sit directly above the cards they index, which would matter
 // on a phone if the pointers were only labels; each Top 3 title is an anchor to
 // its own item card, so a tap still lands on the item itself.
+//
+// Post-publish updates (Sept 15, 2026) sit above everything, including Where
+// things stand, on both the split and legacy paths. They are the only thing on
+// the page that is newer than the page, so they lead. See BriefUpdates.jsx for
+// why they are their own column and their own block rather than text prepended
+// to dashboard_md, which is how the first one shipped and why it did not read
+// as new.
 //
 // Briefs published before Sept 7 have those columns null. They render the old
 // way, from full_brief_md, below the items. Never render both: full_brief_md
@@ -81,10 +89,13 @@ export default function BriefBody({ brief, itemsHeading = 'Ranked items', itemsN
   const items = brief?.brief_items ?? [];
   const isSplit = Boolean(brief?.dashboard_md || brief?.top3_md || brief?.watch_next_md);
   const hasStructuredTop3 = Array.isArray(brief?.top3) && brief.top3.length > 0;
+  const updates = brief?.updates;
 
   if (!isSplit) {
     return (
       <>
+        <BriefUpdates updates={updates} />
+
         <h2>Top things that matter</h2>
         {itemsNote}
         <BriefItems items={items} />
@@ -100,6 +111,8 @@ export default function BriefBody({ brief, itemsHeading = 'Ranked items', itemsN
 
   return (
     <>
+      <BriefUpdates updates={updates} />
+
       {brief.dashboard_md ? (
         <section id="dashboard-notes" className="sec sec-first">
           <SectionHead
