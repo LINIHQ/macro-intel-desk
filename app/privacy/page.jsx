@@ -13,8 +13,8 @@ export default function PrivacyPage() {
       <h1>Privacy</h1>
       <p className="page-sub">
         What this site collects, what it does not, and who touches it. Short version: no accounts, no ads, no
-        cross-site tracking, no cookies, one cookieless visit counter, and nothing sold to anyone. Effective
-        September 5, 2026, corrected September 8, 2026.
+        cross-site tracking, no cookies, one cookieless traffic counter, and nothing sold to anyone. Effective
+        September 5, 2026, corrected September 8, 2026, updated September 15, 2026.
       </p>
 
       <section className="sec sec-first">
@@ -42,7 +42,7 @@ export default function PrivacyPage() {
           </p>
           <p style={{ margin: '0 0 10px' }}>
             There are no ads, no advertising pixels, no affiliate links, no social media tracking widgets, and no
-            cross-site tracking of any kind. There is one third-party script: Vercel Web Analytics, a cookieless visit
+            cross-site tracking of any kind. There is one third-party script: Vercel Web Analytics, a cookieless traffic
             counter, described in full in the next section. It is the only analytics on the site.
           </p>
           <p style={{ margin: 0 }}>
@@ -65,6 +65,14 @@ export default function PrivacyPage() {
           referring site, device type, browser, operating system, and a country-level location derived from network
           information. There is no way to look at that data and identify an individual reader, and no attempt is made to
           do so.
+        </p>
+        <p>
+          Since September 15, 2026, the same tool also counts a few anonymous interactions, so the desk can see which
+          parts of the site are actually used: opening a dashboard tile (which gauge), opening a source link (the
+          outlet's domain only, such as reuters.com), using the Copy link or Share on X buttons, turning brief alerts on
+          or off, and installing or opening the site as an installed app (with a coarse device type: iOS, Android, or
+          other). These counts carry no identifier and nothing you type, use the same cookieless method as page visits,
+          and are only ever seen in aggregate.
         </p>
         <p>
           Vercel also keeps standard server request logs, the same kind every web host keeps, as part of operating the
@@ -159,6 +167,13 @@ export default function PrivacyPage() {
             describing Vercel Web Analytics. The wording was wrong, not the practice: Vercel Web Analytics has been in
             use throughout and is described here unchanged. The summary now says so directly. No data practice changed
             on this date, and nothing new is being collected.
+          </p>
+        </div>
+        <div className="card" style={{ marginTop: 10 }}>
+          <p className="small" style={{ margin: 0 }}>
+            <strong>Update, September 15, 2026.</strong> Anonymous interaction counts were added to the existing Vercel
+            Web Analytics, listed in full under Traffic measurement. No new third party, no cookies, and no identifiers
+            were added.
           </p>
         </div>
       </section>
