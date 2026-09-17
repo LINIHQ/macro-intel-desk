@@ -2,6 +2,7 @@ import './globals.css';
 import Link from 'next/link';
 import { IBM_Plex_Mono } from 'next/font/google';
 import { Analytics } from '@vercel/analytics/next';
+import { OG_IMAGE } from '@/lib/embed';
 import NavLinks from '@/components/NavLinks';
 import MobileMenu from '@/components/MobileMenu';
 import BottomNav from '@/components/BottomNav';
@@ -37,6 +38,11 @@ const TITLE = 'XRP Macro Intelligence Desk';
 // Phil reviewed that result and kept it deliberately. Do not remove
 // twitter.description without knowing it will strip that line from Discord
 // embeds as well as the X card.
+//
+// Sept 17, 2026: still true for every route except the home page, which now
+// declares its own og:description carrying the run's teaser (see
+// app/page.jsx generateMetadata and lib/embed.js). This constant remains the
+// site-wide default and the X card's description.
 const DESCRIPTION = 'Verified XRP and macro briefs, published with sourced receipts.';
 
 // Default unfurl image (Discord, Slack, iMessage, LinkedIn, everything not X).
@@ -48,9 +54,13 @@ const DESCRIPTION = 'Verified XRP and macro briefs, published with sourced recei
 // more compact. The full 1200x630 art (og-card.png, pill-shaped verdict
 // badges as of Sept 13, 2026 via Cursor commit, domain updated to
 // xrpmacro.com via Cursor commit Sept 12, 2026, art notes in the route file
-// and git history) stays in the repo as the crop source. Bump the ?v=
-// buster here whenever og-card.png changes or the route's crop changes.
-const OG_IMAGE = 'https://xrpmacro.com/og-banner?v=4';
+// and git history) stays in the repo as the crop source.
+//
+// Sept 17, 2026: the URL itself moved to lib/embed.js, imported above, because
+// app/page.jsx now restates the whole openGraph object for its per-run
+// description and would otherwise carry a second copy of a string with a
+// hand-bumped cache buster in it. Bump the ?v= there, in one place, whenever
+// og-card.png changes or the route's crop changes.
 
 // X only, below. X reads twitter:* first and falls back to the og:* equivalent
 // only when the twitter tag is absent, so these two constants override the
