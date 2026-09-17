@@ -1,5 +1,11 @@
 import Link from 'next/link';
-import { getLatestBrief, getClassificationHistory, getCurrentCriteria } from '@/lib/supabase';
+import {
+  getLatestBrief,
+  getLatestBriefMeta,
+  getClassificationHistory,
+  getCurrentCriteria,
+} from '@/lib/supabase';
+import { buildEmbedDescription, OG_IMAGE } from '@/lib/embed';
 import { fmtDate, fmtRunStamp } from '@/lib/format';
 import DashboardGrid from '@/components/DashboardGrid';
 import BriefBody from '@/components/BriefBody';
@@ -11,6 +17,56 @@ import BriefAlertsToggle from '@/components/BriefAlertsToggle';
 import { AmendmentsStrip } from '@/components/AmendmentsPanel';
 
 export const revalidate = 60;
+
+// Per-run link previews for the live page (Sept 17, 2026).
+//
+// Until now every route served the same static description from app/layout.jsx,
+// so a pasted xrpmacro.com link said the same sentence on any day of the week.
+// Here the home page serves the run's own teaser instead, which is the whole
+// point: a bare link becomes worth posting on its own, because the card carries
+// the day's signals rather than a permanent tagline.
+//
+// Three things to know before changing this.
+//
+// One, Next merges metadata shallowly. This openGraph object REPLACES the
+// layout's rather than extending it, so every field it needs has to be restated
+// here, images included. Drop one and it disappears from the home page's card
+// while every other route keeps it, which is a confusing bug to chase.
+//
+// Two, twitter:* is deliberately absent. The layout's X card tags pass straight
+// through untouched, so the X card renders exactly as it did. The domain test
+// running since Sept 12 has one variable in it and this is not allowed to
+// become a second one.
+//
+// Three, Discord caches an unfurl by exact URL, for anywhere from twenty
+// minutes to several hours, and offers no way to flush it. Posting bare
+// xrpmacro.com every morning will show the previous run's card. Post a dated
+// parameter instead (xrpmacro.com/?b=0917): the query string changes the cache
+// key without changing the page.
+export async function generateMetadata() {
+  let brief = null;
+  try {
+    brief = await getLatestBriefMeta();
+  } catch {
+    // A failed read here must not take the page down with it. Falling through
+    // leaves the layout's static description in place: stale, but true.
+    return {};
+  }
+  if (!brief) return {};
+
+  const description = buildEmbedDescription(brief.teaser_md, brief.headline);
+
+  return {
+    description,
+    openGraph: {
+      title: 'XRP Macro Intelligence Desk',
+      description,
+      url: '/',
+      type: 'website',
+      images: [{ url: OG_IMAGE, width: 1200, height: 488, alt: 'XRP Macro Intelligence Desk' }],
+    },
+  };
+}
 
 // Date and time are split so a stamp landing on the same ET day as the brief can
 // drop its date and show the time alone. The header stamps are uppercase and
