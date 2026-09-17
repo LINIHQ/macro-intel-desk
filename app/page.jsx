@@ -26,7 +26,7 @@ export const revalidate = 60;
 // point: a bare link becomes worth posting on its own, because the card carries
 // the day's signals rather than a permanent tagline.
 //
-// Three things to know before changing this.
+// Four things to know before changing this.
 //
 // One, Next merges metadata shallowly. This openGraph object REPLACES the
 // layout's rather than extending it, so every field it needs has to be restated
@@ -38,11 +38,16 @@ export const revalidate = 60;
 // running since Sept 12 has one variable in it and this is not allowed to
 // become a second one.
 //
-// Three, Discord caches an unfurl by exact URL, for anywhere from twenty
-// minutes to several hours, and offers no way to flush it. Posting bare
-// xrpmacro.com every morning will show the previous run's card. Post a dated
-// parameter instead (xrpmacro.com/?b=0917): the query string changes the cache
-// key without changing the page.
+// Three, the social card and the search-engine description are not the same
+// string. The card leads with the 📡 masthead (lib/embed.js EMBED_LEAD); the
+// plain <meta name="description"> that Google reads does not, because there a
+// masthead is noise sitting in front of the only line that does any work.
+//
+// Four, Discord caches an unfurl by exact URL, for anywhere from twenty minutes
+// to several hours, and offers no way to flush it. Posting bare xrpmacro.com
+// every morning will show the previous run's card. Post a dated parameter
+// instead (xrpmacro.com/?b=0917): the query string changes the cache key
+// without changing the page.
 export async function generateMetadata() {
   let brief = null;
   try {
@@ -54,13 +59,14 @@ export async function generateMetadata() {
   }
   if (!brief) return {};
 
-  const description = buildEmbedDescription(brief.teaser_md, brief.headline);
+  const cardDescription = buildEmbedDescription(brief.teaser_md, brief.headline);
+  const metaDescription = buildEmbedDescription(brief.teaser_md, brief.headline, { lead: false });
 
   return {
-    description,
+    description: metaDescription,
     openGraph: {
       title: 'XRP Macro Intelligence Desk',
-      description,
+      description: cardDescription,
       url: '/',
       type: 'website',
       images: [{ url: OG_IMAGE, width: 1200, height: 488, alt: 'XRP Macro Intelligence Desk' }],
