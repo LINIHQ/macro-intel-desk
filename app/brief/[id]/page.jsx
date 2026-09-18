@@ -67,11 +67,17 @@ export default async function BriefPage({ params }) {
   const shareText = brief.headline
     ? `XRP Macro Brief: ${brief.headline}`
     : 'XRP Macro Intelligence Desk';
-  const runStamp = fmtRunStamp(brief.created_at, brief.run_date);
-  const verifiedText = stampText(brief.evidence_verified_through, brief.created_at);
+
+  // Sept 18, 2026: Published reads the go-live time, not the staging insert.
+  // briefs.published_at is set by a database trigger on the first
+  // false-to-true flip; rows published before the column existed have it null
+  // and fall back to created_at, their only recorded time. See app/page.jsx.
+  const publishedIso = brief.published_at || brief.created_at;
+  const runStamp = fmtRunStamp(publishedIso, brief.run_date);
+  const verifiedText = stampText(brief.evidence_verified_through, publishedIso);
   const updatedText =
-    brief.last_updated_at && brief.last_updated_at !== brief.created_at
-      ? stampText(brief.last_updated_at, brief.created_at)
+    brief.last_updated_at && brief.last_updated_at !== publishedIso
+      ? stampText(brief.last_updated_at, publishedIso)
       : null;
 
   // Evidence cutoff, publication and last edit stay three separate facts. The
