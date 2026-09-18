@@ -74,6 +74,19 @@ export async function generateMetadata() {
   };
 }
 
+// Publication time (Sept 18, 2026). Briefs are staged with published = false
+// and flipped live after review, so created_at is when the row was staged, not
+// when readers could see it. On Sept 18 the header read "Published 9:53 AM"
+// (the insert) for a brief that went live at 10:00, beside an evidence stamp
+// that therefore looked later than publication. briefs.published_at is set by
+// a database trigger on the first false-to-true flip and never moves after.
+// Rows published before the column existed have it null and fall back to
+// created_at, which was their only recorded time; no flip times are guessed
+// into the archive.
+function publishedIsoOf(brief) {
+  return brief.published_at || brief.created_at;
+}
+
 // Date and time are split so a stamp landing on the same ET day as the brief can
 // drop its date and show the time alone. The header stamps are uppercase and
 // letter-spaced, which eats width fast: at 375px a full "Evidence verified
@@ -140,12 +153,13 @@ function weUpdatedStamp(iso, refIso) {
 
 // A week-ending summary is the only brief mode this desk publishes on a
 // different ET calendar date than the one it's dated for (Friday run_date,
-// Saturday created_at). brief_mode === 'full' is required alongside the date
+// Saturday publication). brief_mode === 'full' is required alongside the date
 // check so a same-day full brief run for depth on a weekday never picks up
 // the week-ending header by accident.
 function isWeekEndingBrief(brief) {
-  if (brief.brief_mode !== 'full' || !brief.created_at || !brief.run_date) return false;
-  const etDate = new Date(brief.created_at).toLocaleDateString('en-CA', {
+  const pubIso = publishedIsoOf(brief);
+  if (brief.brief_mode !== 'full' || !pubIso || !brief.run_date) return false;
+  const etDate = new Date(pubIso).toLocaleDateString('en-CA', {
     timeZone: 'America/New_York',
   });
   return etDate !== brief.run_date;
@@ -175,7 +189,8 @@ export default async function LivePage() {
   const shareText = brief.headline
     ? `XRP Macro Brief: ${brief.headline}`
     : 'XRP Macro Intelligence Desk';
-  const runStamp = fmtRunStamp(brief.created_at, brief.run_date);
+  const publishedIso = publishedIsoOf(brief);
+  const runStamp = fmtRunStamp(publishedIso, brief.run_date);
   const weekEnding = isWeekEndingBrief(brief);
 
   // Publication time, evidence cutoff and last edit are three different facts and
@@ -185,10 +200,10 @@ export default async function LivePage() {
   // the end when both are present; the edit stamp only appears when an edit
   // happened. Brief mode is not shown here: on the live page it told the reader
   // nothing, and it remains on the archive and on each permalink.
-  const verifiedText = stampText(brief.evidence_verified_through, brief.created_at);
+  const verifiedText = stampText(brief.evidence_verified_through, publishedIso);
   const updatedText =
-    brief.last_updated_at && brief.last_updated_at !== brief.created_at
-      ? stampText(brief.last_updated_at, brief.created_at)
+    brief.last_updated_at && brief.last_updated_at !== publishedIso
+      ? stampText(brief.last_updated_at, publishedIso)
       : null;
   const pubText = runStamp
     ? updatedText
@@ -199,11 +214,11 @@ export default async function LivePage() {
   // Week-ending stamps: see weStamp/weUpdatedStamp above. Published always
   // shows in full; Evidence is always weekday+time only; Updated matches
   // Published's date unless the edit landed on a different day.
-  const wePubText = weekEnding ? weStamp(brief.created_at, true) : null;
+  const wePubText = weekEnding ? weStamp(publishedIso, true) : null;
   const weVerifiedText = weekEnding ? weStamp(brief.evidence_verified_through, false) : null;
   const weUpdatedText =
-    weekEnding && brief.last_updated_at && brief.last_updated_at !== brief.created_at
-      ? weUpdatedStamp(brief.last_updated_at, brief.created_at)
+    weekEnding && brief.last_updated_at && brief.last_updated_at !== publishedIso
+      ? weUpdatedStamp(brief.last_updated_at, publishedIso)
       : null;
 
   const itemsNote = (
