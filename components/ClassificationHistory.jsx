@@ -178,11 +178,9 @@ function Steps({ spans, series, xw, h, pad, weight, dim = null }) {
 // reserves space for the tile's expand chevron, which is absolutely positioned at
 // the bottom right and would otherwise sit on top of the line.
 //
-// maxWidth is set explicitly because globals.css still carries an earlier
-// .hist-strip rule with max-width: 130px from the mobile breakpoint. An inline
-// width does not override a stylesheet max-width, so without this the strip is
-// silently clamped to 130px at every screen size. When those stale rules come out
-// of globals.css this line goes with them.
+// The strip owns its whole box inline. The stylesheet .hist-strip rules that
+// once sized it (and a mobile max-width that silently clamped it to 130px)
+// were deleted Sept 24, 2026, so nothing in globals.css constrains it now.
 export function HistoryStrip({ series = [], catLabel = 'Gauge' }) {
   const w = 100;
   const h = 28;
@@ -196,7 +194,6 @@ export function HistoryStrip({ series = [], catLabel = 'Gauge' }) {
 
   return (
     <svg
-      className="hist-strip"
       viewBox={`0 0 ${w} ${h}`}
       preserveAspectRatio="none"
       role="img"
@@ -204,7 +201,6 @@ export function HistoryStrip({ series = [], catLabel = 'Gauge' }) {
       style={{
         display: 'block',
         width: '100%',
-        maxWidth: 'none',
         height: 28,
         marginTop: 9,
         marginBottom: 11,
