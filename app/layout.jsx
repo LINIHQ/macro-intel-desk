@@ -90,6 +90,11 @@ export const metadata = {
   metadataBase: new URL('https://xrpmacro.com'),
   title: TITLE,
   manifest: '/manifest.webmanifest',
+  // Sept 24, 2026: RSS autodiscovery for app/feed.xml. Sits in the page head only;
+  // no effect on the openGraph or twitter blocks, which stay exactly as tested.
+  alternates: {
+    types: { 'application/rss+xml': '/feed.xml' },
+  },
   icons: {
     icon: [
       { url: '/favicon-16.png', sizes: '16x16', type: 'image/png' },
@@ -180,6 +185,8 @@ export default function RootLayout({ children }) {
               <Link href="/terms">Terms</Link>
               <span aria-hidden="true">·</span>
               <a href="mailto:support@xrpmacro.com">Contact</a>
+              <span aria-hidden="true">·</span>
+              <a href="/feed.xml">RSS</a>
             </p>
           </div>
         </footer>
