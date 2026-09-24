@@ -215,6 +215,15 @@ export default function SourcesPage() {
           favorable while XRP falls. It displayed as "XRP macro environment" until August 21, 2026; the rename changed
           the display label only, and the category's criteria, scale, and full history are unchanged.
         </p>
+        <p>
+          The yen carry / RCT gauge tracks the trade that borrows cheap yen to fund positions elsewhere. Many readers
+          call an unwind of that trade the reverse carry trade, or RCT. In desk terms, an RCT is what this gauge's red
+          level, UNWIND, measures, and the desk calls one only when the pre-registered criteria on the{' '}
+          <Link href="/methodology">criterion register</Link> fire, not because commentary predicts one. What an unwind
+          would mean for XRP is analysis, and briefs treat it that way. The gauge displayed as "Yen carry trade" until
+          September 24, 2026; the rename changed the display label only, and the category's criteria, scale, and full
+          history are unchanged.
+        </p>
       </section>
 
       <section className="sec">
