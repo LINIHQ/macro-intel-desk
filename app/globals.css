@@ -680,16 +680,10 @@ button.tile.open .tile-chevron {
   overflow: hidden;
   text-overflow: ellipsis;
 }
-/* Classification history strip (replaced the generated .trend motif on Sept 8,
-   2026). Fixed box so all eight tiles share one window and one scale; the SVG
-   uses preserveAspectRatio="none" so stretching it never changes what a segment
-   means, only how wide it is drawn. */
-.hist-strip {
-  width: 60px;
-  height: 24px;
-  flex-shrink: 0;
-  color: var(--tile-c, var(--mute));
-}
+/* Classification history strip: sized inline by components/ClassificationHistory.jsx
+   (full tile width, 28px). The stylesheet rules that used to size it, 60x24 on
+   desktop and a 130px max-width on mobile, were removed Sept 24, 2026; they had
+   been overridden inline since Sept 8 and only existed to be defeated. */
 .tile-badge {
   align-self: flex-start;
   margin-top: 9px;
@@ -1506,7 +1500,6 @@ button.tile.changed {
 
   .tile-mid { display: block; }
   .tile-val { font-size: 16px; }
-  .hist-strip { display: block; width: 100%; max-width: 130px; height: 26px; margin-top: 7px; }
 
   h1 { font-size: 24px; }
 
