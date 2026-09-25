@@ -1,4 +1,5 @@
 // Live XRPL amendment voting, fetched server-side and cached for 15 minutes.
+// The header shows when the data was read (ET) and the ledger it came from.
 //
 // Three reads, each doing the one job it is reliable for:
 //   1. Majorities and the enabled set come from the ledger's own Amendments
@@ -33,6 +34,22 @@ function fmtEtDate(d) {
   return d.toLocaleDateString('en-US', { timeZone: 'America/New_York', month: 'short', day: 'numeric' });
 }
 
+function fmtEtStamp(d) {
+  const tz = { timeZone: 'America/New_York' };
+  const day = d.toLocaleDateString('en-US', { ...tz, month: 'short', day: 'numeric' });
+  const time = d.toLocaleTimeString('en-US', { ...tz, hour: 'numeric', minute: '2-digit' });
+  return `${day}, ${time} ET`;
+}
+
+// When the source actually served this response. Read from the response's
+// own Date header, which Next's data cache stores with the body, so it stays
+// true on cached renders instead of reporting when the page happened to build.
+function servedAt(res) {
+  const h = res.headers?.get?.('date');
+  const d = h ? new Date(h) : null;
+  return d && !Number.isNaN(d.getTime()) ? d : null;
+}
+
 function shortHash(id) {
   return `${id.slice(0, 8)}…`;
 }
@@ -63,7 +80,7 @@ async function fetchLedgerAmendments() {
     }
   }
   const enabled = new Set((j.node.Amendments || []).map((s) => String(s).toUpperCase()));
-  return { ledgerIndex: j.ledger_index ?? null, majorities, enabled };
+  return { ledgerIndex: j.ledger_index ?? null, readAt: servedAt(res), majorities, enabled };
 }
 
 // 2. rippled `feature`: live vote counts as the node sees them.
@@ -100,7 +117,9 @@ async function fetchXrpscanList() {
   if (!res.ok) return null;
   const all = await res.json();
   if (!Array.isArray(all)) return null;
-  return new Map(all.map((a) => [String(a.amendment_id).toUpperCase(), a]));
+  const map = new Map(all.map((a) => [String(a.amendment_id).toUpperCase(), a]));
+  map.readAt = servedAt(res);
+  return map;
 }
 
 const isNum = (v) => typeof v === 'number' && Number.isFinite(v);
@@ -182,6 +201,7 @@ export async function fetchVoting() {
   return {
     rows,
     ledgerIndex: ledger?.ledgerIndex ?? null,
+    readAt: ledger ? ledger.readAt : list?.readAt ?? null,
     majoritySource: ledger ? 'ledger' : 'xrpscan',
     votesSource,
   };
@@ -201,11 +221,12 @@ export default async function AmendmentsPanel() {
     );
   }
 
-  const { rows, ledgerIndex, majoritySource, votesSource } = data;
+  const { rows, ledgerIndex, readAt, majoritySource, votesSource } = data;
   const majority = rows.filter((r) => r.majorityAt).length;
+  const when = readAt ? `updated ${fmtEtStamp(readAt)}` : null;
   const stamp = majoritySource === 'ledger' && ledgerIndex
-    ? `ledger ${Number(ledgerIndex).toLocaleString('en-US')}`
-    : 'XRPScan list, ledger read unavailable';
+    ? [when, `ledger ${Number(ledgerIndex).toLocaleString('en-US')}`].filter(Boolean).join(' · ')
+    : [when, 'XRPScan list, ledger read unavailable'].filter(Boolean).join(' · ');
 
   return (
     <div className="amend" id="amendments">
