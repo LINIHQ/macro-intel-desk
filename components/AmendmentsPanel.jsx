@@ -270,6 +270,11 @@ export default async function AmendmentsPanel() {
       <p className="small mute" style={{ margin: '10px 0 0' }}>
         An amendment activates once it holds 80% validator support for two weeks. Majority dates are read from the ledger&apos;s own Amendments object; vote counts from {votesSource}. Already-enabled amendments are not shown.
       </p>
+      <p className="small mute" style={{ margin: '6px 0 0' }}>
+        Data courtesy of{' '}
+        <a className="quiet-link" href="https://xrpscan.com/amendments" target="_blank" rel="noopener noreferrer">XRPScan</a>
+        , which serves the ledger read and amendment details.
+      </p>
     </div>
   );
 }
