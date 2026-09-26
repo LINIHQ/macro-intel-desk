@@ -9,6 +9,8 @@ import BottomNav from '@/components/BottomNav';
 import PullToRefresh from '@/components/PullToRefresh';
 import RefreshOnReturn from '@/components/RefreshOnReturn';
 import AnalyticsEvents from '@/components/AnalyticsEvents';
+import ThemeToggle from '@/components/ThemeToggle';
+import { THEME_KEY } from '@/lib/theme';
 
 const mono = IBM_Plex_Mono({ subsets: ['latin'], weight: ['400', '500', '600', '700'], variable: '--font-mono' });
 
@@ -19,6 +21,13 @@ const mono = IBM_Plex_Mono({ subsets: ['latin'], weight: ['400', '500', '600', '
 // numerals and nothing else. display=swap so the number renders in Plex Mono
 // until the face arrives rather than blanking.
 const DOTO_HREF = 'https://fonts.googleapis.com/css2?family=Doto:wght@700&display=swap';
+
+// Light mode (Sept 26, 2026). Runs in <head> before the body paints, so a
+// reader who chose light never sees the cached dark page flash first. Dark
+// stays the default: with nothing stored, this does nothing. Wrapped in
+// try/catch because storage can throw in private windows. See
+// components/ThemeToggle.jsx for the switch itself.
+const THEME_BOOT = `(function(){try{if(localStorage.getItem('${THEME_KEY}')==='light'){document.documentElement.setAttribute('data-theme','light');}}catch(e){}})();`;
 
 export const revalidate = 60;
 
@@ -128,8 +137,9 @@ export const viewport = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className={mono.variable}>
+    <html lang="en" className={mono.variable} suppressHydrationWarning>
       <head>
+        <script dangerouslySetInnerHTML={{ __html: THEME_BOOT }} />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link rel="stylesheet" href={DOTO_HREF} />
@@ -166,12 +176,24 @@ export default function RootLayout({ children }) {
                 </svg>
                 <span className="x-label">@GenXKrypto</span>
               </a>
+              {/* Desktop and tablet placement: beside the X link, the same
+                  size and material. Hidden at phone width, where the header
+                  row is full; phones get the row at the top of <main>. */}
+              <ThemeToggle className="theme-toggle-head" />
               <MobileMenu />
             </div>
             <NavLinks />
           </div>
         </header>
-        <main className="wrap main">{children}</main>
+        <main className="wrap main">
+          {/* Phone placement: its own slim right-aligned row directly under
+              the hamburger, on every page, so it never competes with a page
+              title for width at 375px. Hidden above 600px. */}
+          <div className="theme-row">
+            <ThemeToggle />
+          </div>
+          {children}
+        </main>
         <footer className="site-foot">
           <div className="wrap">
             <p>Intelligence, not investment advice. Every consequential claim carries a verification status; unverified means unverified.</p>
