@@ -1570,3 +1570,110 @@ button.tile.changed {
 }
 .amend-strip { margin: 14px 0 0; font-size: 12.5px; color: var(--dim); letter-spacing: 0.02em; line-height: 1.6; }
 .amend-strip-label { font-size: 10.5px; font-weight: 600; letter-spacing: 0.13em; text-transform: uppercase; color: var(--mute); margin-right: 10px; }
+
+/* ---------- light mode (Sept 26, 2026) ---------- */
+
+/* Opt-in only. Dark stays the default and every rule above is untouched: light
+   mode is this block alone, switched on by data-theme="light" on <html> (set
+   by components/ThemeToggle.jsx and restored before first paint by the inline
+   script in app/layout.jsx). Nearly every colour on the site already reads a
+   token, so the theme is mostly the token set below plus a few overrides for
+   the handful of places that hardcode a dark-tuned shadow or wash.
+
+   Contrast, measured against --bg (#f3f5f9) and --panel (#fff), the same WCAG
+   AA 4.5:1 floor the dark palette holds to:
+     --text 16.6  --body 10.8  --dim 7.3  --mute 5.2
+     --g 4.9  --y 5.0  --o 5.1  --r 5.2  --acc 5.0
+   The dark status colours cannot be reused here: dark --y measures about
+   1.5:1 on a light page and dark --g about 1.8:1. These are deeper versions of
+   the same four hues so a tile still reads green / yellow / orange / red.
+   Do not lighten any of them without re-measuring. Blue stays decorative. */
+:root { color-scheme: dark; }
+:root[data-theme="light"] {
+  color-scheme: light;
+  --bg: #f3f5f9;
+  --panel: #ffffff;
+  --panel2: #e9edf3;
+  --line: #d3dae5;
+  --text: #0d1626;
+  --body: #2b384d;
+  --dim: #445268;
+  --mute: #5a687e;
+  --g: #127a47;
+  --y: #866400;
+  --o: #a94c0a;
+  --r: #c42b2b;
+  --acc: #8a6219;
+  --shadow-card:
+    0 1px 2px rgba(13, 22, 38, 0.06),
+    0 10px 28px -20px rgba(13, 22, 38, 0.28);
+}
+:root[data-theme="light"] body::before {
+  background:
+    radial-gradient(900px 560px at -6% -10%, rgba(47, 125, 246, 0.08), transparent 60%),
+    radial-gradient(820px 560px at 106% 2%, rgba(229, 72, 77, 0.05), transparent 58%);
+}
+:root[data-theme="light"] .m-scrim { background: rgba(13, 22, 38, 0.32); }
+:root[data-theme="light"] .m-menu,
+:root[data-theme="light"] .tl-panel,
+:root[data-theme="light"] .tl-hover-tip,
+:root[data-theme="light"] .ptr-puck {
+  box-shadow: 0 10px 28px rgba(13, 22, 38, 0.16);
+}
+/* The phosphor glow on the hero readout is a dark-screen effect; on white it
+   reads as a smudge. */
+:root[data-theme="light"] .readout-hero { text-shadow: none; }
+/* Installed iPhone app: appleWebApp statusBarStyle is black-translucent, which
+   always draws the clock and battery in white over whatever sits under them.
+   On a white header they would vanish, so in light mode the status-bar strip
+   keeps the dark panel colour. Only applies to the home-screen app. */
+@media (display-mode: standalone) {
+  :root[data-theme="light"] .site-head {
+    box-shadow: inset 0 env(safe-area-inset-top, 0px) 0 0 #0c1424;
+  }
+}
+
+/* ---------- light / dark toggle ---------- */
+
+/* Same material as .x-link so it reads as part of the header family. Both
+   labels are in the markup; CSS shows the one that names what a tap does. */
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  font: inherit;
+  font-size: 12.5px;
+  line-height: 1.4;
+  min-height: 32px;
+  padding: 4px 11px 5px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  color: var(--dim);
+  background: var(--panel2);
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  transition: color 120ms ease, border-color 120ms ease;
+}
+.theme-toggle:hover { color: var(--text); border-color: var(--acc); }
+.theme-toggle > span { display: inline-flex; align-items: center; gap: 7px; white-space: nowrap; }
+.theme-toggle svg { display: block; flex-shrink: 0; }
+.theme-toggle .tt-to-dark { display: none; }
+:root[data-theme="light"] .theme-toggle .tt-to-light { display: none; }
+:root[data-theme="light"] .theme-toggle .tt-to-dark { display: inline-flex; }
+
+/* Phone row: hidden on desktop, where the header copy is used instead. */
+.theme-row { display: none; }
+
+@media (max-width: 600px) {
+  .theme-toggle-head { display: none; }
+  /* Right-aligned under the hamburger: .wrap gives both the same right edge.
+     The negative top margin pulls it up into .main's 34px top padding so the
+     row costs about 30px of height rather than 60. 40px tall for the thumb. */
+  .theme-row {
+    display: flex;
+    justify-content: flex-end;
+    margin: -22px 0 10px;
+  }
+  .theme-row .theme-toggle { min-height: 40px; padding: 6px 13px 7px; }
+}
