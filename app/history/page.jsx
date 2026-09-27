@@ -68,9 +68,12 @@ export default async function HistoryPage() {
 
   return (
     <div>
-      <h1>Dashboard history</h1>
+      {/* Sept 26, 2026: was "Dashboard history". The tiles, the tap hint and the
+          stats strip all call these gauges, so the page title now does too. The
+          nav label stays "History". */}
+      <h1>Gauge history</h1>
       <p className="page-sub">
-        Each row is one category, one segment per published brief, oldest to newest. Bright outlined segments are
+        Each row is one gauge, one segment per published brief, oldest to newest. Bright outlined segments are
         the briefs where a classification changed; dimmed segments carried over unchanged. Tap or hover any segment
         for that brief's date, status, and the reason behind a change. Date ticks appear every other brief for a
         steady read across the timeline.
