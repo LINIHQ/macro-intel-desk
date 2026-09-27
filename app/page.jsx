@@ -179,7 +179,7 @@ export default async function LivePage() {
   if (!brief) {
     return (
       <div>
-        <h1>Macro dashboard</h1>
+        <h1>The Brief</h1>
         <div className="empty">No published briefs yet. The first brief will appear here.</div>
       </div>
     );
@@ -231,7 +231,14 @@ export default async function LivePage() {
     <div>
       <div className="page-head">
         <div>
-          <h1>Macro dashboard</h1>
+          {/* Sept 26, 2026: page title "Macro dashboard" became "The Brief".
+              Every other page is titled by what it holds (Claim tracker, Watch
+              list, Brief archive), and this page holds the latest brief, of
+              which the gauges are one section. The old name was repeating
+              "Macro" from the masthead directly above it and told a first-time
+              visitor to expect a widget page. "Macro dashboard" now labels the
+              gauge section below, the thing it always described. */}
+          <h1>The Brief</h1>
           {weekEnding ? (
             <>
               <p className="page-meta" style={{ marginBottom: 0 }}>
@@ -313,6 +320,13 @@ export default async function LivePage() {
           {' '}· Free · Independent · Not financial advice
         </p>
         <BriefAlertsToggle />
+      </div>
+
+      {/* Sept 26, 2026: section label for the stats strip and gauge grid, the
+          same .sec-head treatment as every section header on the brief below.
+          The permalink carries the same label so the two pages read alike. */}
+      <div className="sec-head">
+        <h2>Macro dashboard</h2>
       </div>
 
       {/* Hero readouts (Sept 13, 2026): gauges changed, ranked items, trend
