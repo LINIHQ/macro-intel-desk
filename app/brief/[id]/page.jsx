@@ -113,6 +113,14 @@ export default async function BriefPage({ params }) {
         </p>
       ) : null}
 
+      {/* Sept 26, 2026: same section label as the live page, where the page
+          title became "The Brief" and "Macro dashboard" moved down to name the
+          stats strip and gauge grid. The permalink keeps its date as its title:
+          it is one entry in the archive. */}
+      <div className="sec-head">
+        <h2>Macro dashboard</h2>
+      </div>
+
       {/* Hero readouts for this brief: the same four cells as the live page,
           read from this brief's own rows, so an archived page opens on the
           numbers the desk recorded that day. */}
