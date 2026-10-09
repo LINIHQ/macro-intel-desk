@@ -7,6 +7,10 @@ export const metadata = {
 // nests inside the Changes section as a callout, the same pattern as a
 // single nested .card elsewhere on the site: it directly follows and
 // concerns the Changes section rather than standing as its own topic.
+//
+// Oct 9, 2026: tagged-link landing counts added (components/AnalyticsEvents.jsx,
+// Supabase table utm_visits). Described under Traffic measurement and in the
+// processors section, with a dated Update card under Changes.
 export default function PrivacyPage() {
   return (
     <div>
@@ -14,7 +18,7 @@ export default function PrivacyPage() {
       <p className="page-sub">
         What this site collects, what it does not, and who touches it. Short version: no accounts, no ads, no
         cross-site tracking, no cookies, one cookieless traffic counter, and nothing sold to anyone. Effective
-        September 5, 2026, corrected September 8, 2026, updated September 15, 2026.
+        September 5, 2026, corrected September 8, 2026, updated October 9, 2026.
       </p>
 
       <section className="sec sec-first">
@@ -43,7 +47,9 @@ export default function PrivacyPage() {
           <p style={{ margin: '0 0 10px' }}>
             There are no ads, no advertising pixels, no affiliate links, no social media tracking widgets, and no
             cross-site tracking of any kind. There is one third-party script: Vercel Web Analytics, a cookieless traffic
-            counter, described in full in the next section. It is the only analytics on the site.
+            counter, described in full in the next section. It is the only third-party analytics on the site; the desk
+            also keeps its own anonymous count of visits that arrive through its own tagged links, described in the same
+            section.
           </p>
           <p style={{ margin: 0 }}>
             No data from this site is sold, rented, or shared with anyone for marketing purposes. Ever.
@@ -73,6 +79,16 @@ export default function PrivacyPage() {
           or off, and installing or opening the site as an installed app (with a coarse device type: iOS, Android, or
           other). These counts carry no identifier and nothing you type, use the same cookieless method as page visits,
           and are only ever seen in aggregate.
+        </p>
+        <p>
+          Since October 9, 2026, the desk also counts visits that arrive through its own tagged links, the ones it posts
+          with labels such as <code>utm_source=x</code> in the address, so it can tell which of its posts actually send
+          readers here. Only those tagged arrivals are counted; an ordinary visit records nothing. Each one is counted
+          as a Vercel interaction as above and stored as a single row in the desk's database holding the time, the
+          link's labels, the page type you landed on, and the same coarse device type (iOS, Android, or other). No
+          identifier, address, or anything you type is stored. To stop a page refresh from counting twice, your
+          browser keeps a small note in session storage, which is not a cookie and is cleared when you close the tab.
+          The public site can add these rows but cannot read them back.
         </p>
         <p>
           Vercel also keeps standard server request logs, the same kind every web host keeps, as part of operating the
@@ -119,9 +135,9 @@ export default function PrivacyPage() {
         </div>
         <p>
           <strong>Vercel</strong> hosts the site and provides the traffic measurement described above.{' '}
-          <strong>Supabase</strong> provides the database that stores published briefs and, if you opt in, push
-          subscriptions. Both are United States based infrastructure providers operating under their own privacy terms.
-          No other third party receives anything.
+          <strong>Supabase</strong> provides the database that stores published briefs, the anonymous tagged-link
+          counts, and, if you opt in, push subscriptions. Both are United States based infrastructure providers operating
+          under their own privacy terms. No other third party receives anything.
         </p>
       </section>
 
@@ -132,7 +148,8 @@ export default function PrivacyPage() {
         <p>
           You have rights of access, correction, deletion, and objection regarding personal data about you. In practice
           the desk holds almost nothing that could be linked to you: analytics data is aggregated and cannot be traced
-          back to an individual, and a push subscription record contains no identifying information.
+          back to an individual, tagged-link counts carry no identifier, and a push subscription record contains no
+          identifying information.
         </p>
         <p>
           If you enabled brief alerts and want the subscription removed rather than left to expire, turn the toggle off
@@ -174,6 +191,13 @@ export default function PrivacyPage() {
             <strong>Update, September 15, 2026.</strong> Anonymous interaction counts were added to the existing Vercel
             Web Analytics, listed in full under Traffic measurement. No new third party, no cookies, and no identifiers
             were added.
+          </p>
+        </div>
+        <div className="card" style={{ marginTop: 10 }}>
+          <p className="small" style={{ margin: 0 }}>
+            <strong>Update, October 9, 2026.</strong> The desk now counts visits that arrive through its own tagged
+            links, described under Traffic measurement. Each is stored as one anonymous row in the desk's existing
+            database. No new third party, no cookies, and no identifiers were added.
           </p>
         </div>
       </section>
