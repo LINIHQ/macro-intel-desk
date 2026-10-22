@@ -40,8 +40,10 @@ function stampText(iso, sameDayAsIso) {
 // at the separator, never inside one.
 const NOWRAP = { whiteSpace: 'nowrap' };
 
+// Next 16: params is a Promise and must be awaited (Oct 22, 2026 upgrade).
 export default async function BriefPage({ params }) {
-  const brief = await getBriefById(params.id);
+  const { id } = await params;
+  const brief = await getBriefById(id);
 
   if (!brief) {
     return (
